@@ -1,0 +1,11 @@
+.row .col-2 {
+    padding-top: 16px;
+}
+
+ul.list-group p {
+    margin: 0;
+}
+
+div.price p {
+    margin-top: 24px;
+}
