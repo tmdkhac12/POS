@@ -1,0 +1,136 @@
+:root{
+    --white-color: #fff;
+    --black-color: #000;
+    --text-color: #333;
+    --main-color:#7BC4DC;
+    --point-color:#b3dbe9;
+}
+
+*{
+    box-sizing: inherit;
+}
+
+html{
+    font-size:62.5%;
+    line-height: 1.6rem;
+    font-family: 'Roboto',sans-serif;
+    box-sizing: border-box;
+}
+
+.grid{
+    width: 1200px;
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+.grid__full-width{
+    width: 100%;
+}
+.grid__row{
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: -5px;
+    margin-right: -5px;
+}
+.grid__column-2{
+    padding-left: 5px;
+    padding-right: 5px;
+    width: 16.6667%;
+}
+.grid__column-2-4{
+    padding-left: 5px;
+    padding-right: 5px;
+    width: 20%;
+}
+.grid__column-10{
+    padding-left: 5px;
+    padding-right: 5px;
+    width: 83.3333%;
+}
+/* Button style */
+.btn {
+    min-width: 124px;
+    height: 34px;
+    text-decoration: none;
+    border: none;
+    border-radius: 2px;
+    font-size: 1.5rem;
+    padding: 0 12px;
+    outline: none;
+    cursor: pointer;
+    color: var(--text-color);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1.6rem;
+}
+/* Number icon style */
+.number_icon{
+    background-color: var(--white-color);
+    width: 2.3rem;
+    height: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 1rem;
+    border: 2px solid #5fb2ce;
+    color: var(--main-color);
+    font-size: 1.3rem;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+/* Selection */
+.select_input{
+    position: relative;
+    min-width: 200px;
+     height: 34px;
+     padding: 0 12px;
+     border-radius: 2px;
+     background-color: var(--white-color);
+     display: flex;
+     align-items: center;
+     justify-content: space-between; 
+}
+.select_input:hover .select_input_list{
+    display: block;
+}
+.select_input::before{
+    content: "";
+    width: 100%;
+    height: 100%;   
+    position: absolute;
+    top: 50%;
+    left: 0;
+}
+.select_input_list{
+    position: absolute;
+    z-index: 1;
+    left: 0;
+    right: 0;
+    top: 25px;
+    border-radius: 2px;
+    background-color: var(--white-color);
+    padding: 10px 16px;
+    list-style: none;
+    display: none ;
+}
+.select_input_link{
+    font-size: 1.4rem;
+    color: var(--text-color);
+    text-decoration: none;
+    display: block;
+    padding: 10px 0;
+}
+.select_input_link:hover{
+    color: var(--main-color);
+}
+/* Animation */
+@keyframes fadeIn {
+    from{
+        opacity: 0;
+    }
+    to{
+        opacity: 1;
+    }
+}
