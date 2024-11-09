@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản lý Web Bán Thức Ăn Nhanh</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="reponsive.css" />
+    <script src="main.js"></script>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <ul class="menu-bar">
+          <li>
+            <a href="#quan-ly-nhan-vien" class="tab-link">Quản Lý Nhân Viên</a>
+          </li>
+          <li><a href="#doanh-thu" class="tab-link">Doanh Thu</a></li>
+          <li>
+            <a href="#danh-gia-khach-hang" class="tab-link"
+              >Đánh Giá Của Khách Hàng</a
+            >
+          </li>
+          <li><a href="#cai-dat">Cài Đặt</a></li>
+        </ul>
+      </nav>
+    </header>
+    <section id="quan-ly-nhan-vien" class="hidden">
+      <h2>Quản Lý Nhân Viên</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>STT</th>
+            <th>Tên Nhân Viên</th>
+            <th>Chức Vụ</th>
+            <th>Email</th>
+            <th>Số Điện Thoại</th>
+            <th>Tình Trạng</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>Nguyễn Văn A</td>
+            <td>Quản Lý</td>
+            <td>nguyenvana@gmail.com</td>
+            <td>0123456789</td>
+            <td>Hoạt động</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Nguyễn Văn B</td>
+            <td>Nhân Viên</td>
+            <td>nguyenvanb@gmail.com</td>
+            <td>0123456789</td>
+            <td>Hoạt động</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="btn-group">
+        <button class="btn btn-primary" id="btn-add-nhan-vien">Thêm</button>
+        <button class="btn btn-success" id="btn-edit-nhan-vien">Sửa</button>
+        <button class="btn btn-danger" id="btn-delete-nhan-vien">Xóa</button>
+      </div>
+    </section>
+    <section id="doanh-thu" class="hidden">
+      <!-- nội dung của section doanh thu -->
+      <h2>Doanh Thu</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>STT</th>
+            <th>Ngày</th>
+            <th>Doanh Thu</th>
+            <th>Tổng Doanh Thu</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>2023-03-01</td>
+            <td>100.000.000</td>
+            <td>500.000.000</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>2023-03-02</td>
+            <td>200.000.000</td>
+            <td>700.000.000</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="btn-group">
+        <button class="btn btn-primary" id="btn-add-doanh-thu">Thêm</button>
+        <button class="btn btn-success" id="btn-edit-doanh-thu">Sửa</button>
+        <button class="btn btn-danger" id="btn-delete-doanh-thu">Xóa</button>
+      </div>
+    </section>
+
+    <section id="danh-gia-khach-hang" class="hidden">
+      <!-- nội dung của section đánh giá khách hàng -->
+      <h2>Đánh Giá Của Khách Hàng</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>STT</th>
+            <th>Tên Khách Hàng</th>
+            <th>Đánh Giá</th>
+            <th>Bình Luận</th>
+            <th>Ngày Đánh Giá</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>Nguyễn Văn C</td>
+            <td>5 sao</td>
+            <td>Rất hài lòng</td>
+            <td>2023-03-01</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Nguyễn Văn D</td>
+            <td>4 sao</td>
+            <td>Tốt</td>
+            <td>2023-03-02</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>Nguyễn Văn f</td>
+            <td>4 sao</td>
+            <td>Tốt</td>
+            <td>2023-03-09</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="btn-group">
+        <button class="btn btn-primary" id="btn-add-danh-gia-khach-hang">
+          Thêm
+        </button>
+        <button class="btn btn-success" id="btn-edit-danh-gia-khach-hang">
+          Sửa
+        </button>
+        <button class="btn btn-danger" id="btn-delete-danh-gia-khach-hang">
+          Xóa
+        </button>
+      </div>
+    </section>
+  </body>
+</html>
