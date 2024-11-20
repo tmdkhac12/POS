@@ -56,7 +56,7 @@ POS/
 ## Hướng dẫn cài đặt
 
 ### 1. Cài đặt Node.JS
-Nếu máy tính của bạn đã có Node.JS, có thể bỏ qua phần này và đến với phần tiếp theo, nếu chưa có thì [cài đặt NodeJS](#https://nodejs.org/en) theo hướng dẫn sau nhé  
+Nếu máy tính của bạn đã có Node.JS, có thể bỏ qua phần này và đến với phần tiếp theo, nếu chưa có thì [cài đặt Node.JS](https://nodejs.org/en) theo hướng dẫn sau nhé  
 
 ### 2. Cài đặt dự án 
 Đầu tiên, bạn cần clone repository về máy tính của mình:
