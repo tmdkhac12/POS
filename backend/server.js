@@ -5,6 +5,7 @@ const dotenv = require("dotenv");
 
 // Static modules
 const initiator = require("./configs/initiator");
+const configViewEngine = require("./configs/viewEngine");
 
 dotenv.config();
 const app = express();
@@ -14,6 +15,9 @@ initiator.initStaticFilesServing(app);
 
 // Define routers for specified routes 
 initiator.initRouters(app);
+
+// Config View Engine
+configViewEngine(app); 
 
 // Catch invalid client request url 
 app.get("*", function (req, res) {

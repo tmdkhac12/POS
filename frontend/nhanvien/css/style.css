@@ -9,3 +9,11 @@ ul.list-group p {
 div.price p {
     margin-top: 24px;
 }
+
+.card .card-header {
+    background: #999999;
+}
+
+.card .card-body {
+    background: #D4D4D4;
+}

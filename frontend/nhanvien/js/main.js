@@ -1,31 +1,36 @@
 let tableNumber = 1;
 
-function addTableCard() {
-    document.write(`
-        <div class="col-2">
-            <div class="card shadow-sm">
-                <div class="card-header d-flex justify-content-between bg-secondary">
-                    <p class="card-text m-0 font-weight-light text-white-50">Xem chi tiết</p>
-                    <a href="#" class="stretched-link">
-                        <i style="font-size:16px" class="fa text-white">&#xf142;</i>
-                    </a>
-                </div>
-                <div class="card-body py-5">
-                    <p class="card-text text-center font-weight-bolder">Bàn ${tableNumber}</p>
-                </div>
-            </div>
-        </div>    
-    `);
+function addTableCard(container) {
+    // Define a table
+    const cardTable = document.createElement("div");
+    cardTable.classList.add("col-2");
 
+    // Add table content 
+    cardTable.innerHTML = `
+        <div class="card shadow-sm" id="${tableNumber}">
+            <div class="card-header d-flex justify-content-between">
+                <p class="card-text m-0 font-weight-light text-white">Bàn trống</p>
+                <a href="/nhanvien/chitiet/${tableNumber}" class="stretched-link">
+                    <i style="font-size:16px" class="fa text-white">&#xf142;</i>
+                </a>
+            </div>
+            <div class="card-body py-5">
+                <p class="card-text text-center font-weight-bolder text-white">Bàn ${tableNumber}</p>
+            </div>
+        </div>
+    `;
+
+    // Append it to container 
+    container.append(cardTable);
     tableNumber++;
 }
 
-function addOnClickCardsEvent() {
-    const tableCards = document.querySelectorAll(".card-header a.stretched-link");
+function addTableCards(number) {
+    // Find tables container element 
+    const tablesContainer = document.querySelector(".container-fluid .row");
 
-    for (let i = 0; i < tableCards.length; i++) {
-        tableCards[i].addEventListener("click", function() {
-            showModalForTable(table1Data);
-        })
+    // Add each table into container 
+    for (let i = 0; i < number; i++) {
+        addTableCard(tablesContainer);        
     }
 }

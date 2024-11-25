@@ -78,6 +78,7 @@ Dự án sử dụng các biến môi trường để lưu trữ thông tin nh�
 - Mở file .env và cấu hình các thông số phù hợp
 ```
 PORT=your_port
+...
 DATABASE_URL=your_db_url
 ```
 

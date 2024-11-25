@@ -33,21 +33,8 @@
     </nav>
 
     <div class="container-fluid">
-        <!-- 1 Row 6 Columns -->
         <div class="row">
-            <script> addTableCard(); </script>
-            <script> addTableCard(); </script>
-            <script> addTableCard(); </script>
-            <script> addTableCard(); </script>
-            <script> addTableCard(); </script>
-            <script> addTableCard(); </script>
-        </div>
-
-        <!-- 1 Row 6 Columns -->
-        <div class="row">
-            <script> addTableCard(); </script>
-            <script> addTableCard(); </script>
-            <script> addTableCard(); </script>
+            <!-- Table cards container -->
         </div>
     </div>
 
@@ -86,8 +73,13 @@
         </div>
     </div>
 
-    <script defer>
-        addOnClickCardsEvent();
+    <div class="test">
+        <!-- <%= typeof tableQuantity %> -->
+    </div>
+
+    <script>
+        const tableQuantity = "<%= tableQuantity %>";
+        addTableCards(parseInt(tableQuantity));
     </script>
 </body>
 

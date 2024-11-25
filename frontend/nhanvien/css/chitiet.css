@@ -1,0 +1,24 @@
+html, body {
+    height: 100%;
+}
+
+.fa-arrow-left { 
+    color: white;
+}
+
+.row .col-3 {
+    padding-top: 16px;
+}
+
+.card-body p {
+    margin: 0;
+}
+
+.food-card-item p {
+    font-size: 14px;
+}
+
+.card-footer p {
+    margin: 0;
+    padding-bottom: 10px;
+}

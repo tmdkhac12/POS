@@ -1,10 +1,14 @@
 const express = require("express");
-const path = require("path");
+const nhanvienController = require("../controller/nhanvienController");
 
 const nhanvienRouter = express.Router();
 
 nhanvienRouter.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "../../frontend/nhanvien/index.html"));
+    nhanvienController.getHomePage(req, res);
+})
+
+nhanvienRouter.get("/chitiet/:id", (req, res) => {
+    nhanvienController.getChiTietPage(req, res);
 })
 
 module.exports = nhanvienRouter;
