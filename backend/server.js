@@ -24,6 +24,10 @@ app.get("*", function (req, res) {
     res.send("Invalid URL, 404 not Found");
 })
 
+//Load menu
+const khachhangRouter = require("./routes/khachhang");
+app.use("/khachhang",khachhangRouter);
+
 // Running server 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
