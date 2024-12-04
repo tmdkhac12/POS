@@ -1,3 +1,4 @@
+//const { response } = require("express");
 
 
 let menu = document.querySelector('.category')
@@ -48,6 +49,7 @@ window.onclick = function(event){
     }
 }
 
+//Hiển thị chi tiết sản phẩm
 function detailModal(){        
     const modal = document.querySelector('.modal');
     const detail_modal = document.querySelector('.detail_product');
@@ -70,6 +72,19 @@ function detailModal(){
                 document.querySelector('.item_description').textContent = product.Mota;
                 document.querySelector('.item_price_detail').textContent = product.DonGia + 'đ';
                 document.querySelector('.item_img').src = `images/${product.Hinh}`;
+
+                //Chức năng thêm bớt số lượng
+                const reduceBtn = document.querySelector('.reduce_btn_detail');
+                const addBtn = document.querySelector('.add_btn_detail');
+                const quantity = document.querySelector('.item_quantity');
+                reduceBtn.onclick = function() {
+                    if(parseInt(quantity.value) != 1){
+                        quantity.value = parseInt(quantity.value) - 1;
+                    }                        
+                }
+                addBtn.onclick = function() {
+                    quantity.value = parseInt(quantity.value) + 1;                       
+                }        
 
                 // Open detail product item modal
                 modal.style.display = 'flex';        
@@ -106,48 +121,100 @@ function renderProduct(product){
             </div>`
     )
     .join('');
-    
+    detailModal();
 }
 
-function loadFilterProduct(){    
-    document.querySelector('.category_list').addEventListener('click',function(event){
-        const category_all = this.querySelector('.category_item').textContent;        
-        const category = event.target.textContent;                        
-        fetch(`/khachhang/category?category=${category}&category_all=${category_all}`)
-            .then((response) => response.json())
-            .then(data => {
-                renderProduct(data); //Hiển thị danh sách
-            })
-            .catch(error => console.error('Lỗi khi tải dữ liệu:', error));
-        document.querySelector('.category_item_active').classList.remove('category_item_active');
-        event.target.classList.add('category_item_active');                
-    })    
+//Hàm hiển thị trang khi phân trang
+function renderPage(currentPage, totalPages,category,priceSort){    
+    const currPageDisplay = document.querySelector('.page_current');
+    currPageDisplay.textContent = currentPage;    
+
+    const totalPageDisplay = document.querySelector('.total_page');
+    totalPageDisplay.textContent = totalPages;
+
+    //Cập nhật trạng thái nút prev
+    const prevBtn = document.querySelector('.page_prev');
+    if(currentPage == 1){
+        prevBtn.disable = true;
+        prevBtn.classList.add('page_btn_disable');
+    }
+    else{
+        prevBtn.disable = false;
+        prevBtn.classList.remove('page_btn_disable');
+        prevBtn.onclick = () => fetchData(category,priceSort,currentPage - 1);
+    }
+
+    //Cập nhật trạng thái nút next
+    const nextBtn = document.querySelector('.page_next');
+    if(currentPage == totalPages){
+        nextBtn.disable = true;
+        nextBtn.classList.add('page_btn_disable');
+    }
+    else{
+        nextBtn.disable = false;
+        nextBtn.classList.remove('page_btn_disable');
+        nextBtn.onclick = () => fetchData(category,priceSort,currentPage + 1);
+    }
 }
 
-function fetchAndRenderProducts(){
-    // Gọi API lấy dữ liệu món ăn
-    fetch("/khachhang/monan")
+//tìm kiếm
+function fetchAndSendInput(input){
+    fetch(`/khachhang/search?input=${input}`)
     .then(response => response.json())
     .then(data => {
-        const container = document.querySelector(".product").querySelector(".grid__row");
-        data.forEach(item => {
-            //Load món ăn
-            const productItem = `
-                <div class="grid__column-2-4 ">                                    
-                    <div class="product_item" id=${item.MaMonAn}>
-                        <div class="product_item_img" style="background-image: url('images/${item.Hinh}');"></div>
-                        <h4 class="product_item_name">${item.TenMonAn}</h4>
-                        <div class="item_price">
-                            <span class="price">${item.DonGia}đ</span>
-                        </div>
-                    </div>   
-                </div>                                                    
-            `;
-            container.innerHTML += productItem;                                                
-        });
-        detailModal();
+        renderProduct(data);
+        document.querySelector('.category_item_active').classList.remove('category_item_active');
+        document.querySelector('.select_input_label').textContent = 'Giá';
     })
     .catch(error => console.error("Lỗi khi tải dữ liệu:", error));
+}
+
+function fetchData(category,priceSort,page=1){
+    fetch(`/khachhang/category?category=${category}&priceSort=${priceSort}&page=${page}`)
+            .then((response) => response.json())
+            .then(data => {
+                renderProduct(data.product); //Hiển thị danh sách
+                renderPage(data.currentPage,data.totalPages,category,priceSort); //Hiển thị trang                
+            })
+            .catch(error => console.error('Lỗi khi tải dữ liệu:', error));
+}
+
+//Load sản phẩm khi tìm kiếm
+function searchProduct(){    
+    document.querySelector('.search_input').addEventListener('keydown',function(event) {
+        if(event.key == 'Enter'){
+            const input = this.value;            
+            fetchAndSendInput(input);
+        }
+    })
+    document.querySelector('.search_btn').addEventListener('click',function() {
+        const input = document.querySelector('.search_input').value;
+        console.log(input);
+        fetchAndSendInput(input);
+    })
+}
+
+//Load sản phẩm khi lọc
+function loadFilterProduct(){    
+    let category = 'Tất cả';
+    let priceSort = 'MaMonAn ASC';
+    let currentPage = 1;
+    //Lọc theo danh mục
+    document.querySelector('.category_list').addEventListener('click',function(event){              
+        category = event.target.textContent; 
+        const active = document.querySelector('.category_item_active');
+        if(active) active.classList.remove('category_item_active');
+        event.target.classList.add('category_item_active');                
+        fetchData(category,priceSort,currentPage);
+    })
+    
+    //Lọc theo giá
+    document.querySelector(".select_input_list").addEventListener('click',function(event) {
+        document.querySelector('.select_input_label').textContent = event.target.textContent;
+        if(event.target.textContent == 'Giá : Thấp đến cao') priceSort = 'DonGia ASC';
+        else if(event.target.textContent == 'Giá : Cao đến thấp') priceSort = 'DonGia DESC';        
+        fetchData(category,priceSort,currentPage);
+    })
 }
 
 //Load danh mục khi mở trang
@@ -165,16 +232,17 @@ function fetchAndRenderCategory(){
                 container.innerHTML += productItem;                                                
                 existItem.push(item.DanhMuc);                                                    
             }
-        });
-        loadFilterProduct();
+        });             
     })
     .catch(error => console.error("Lỗi khi tải dữ liệu:", error));
 }
 
-//Gọi 2 hàm load
+//Gọi các hàm load
 document.addEventListener('DOMContentLoaded',function(){
-    fetchAndRenderProducts();
-    fetchAndRenderCategory();
+    fetchAndRenderCategory();    
+    loadFilterProduct();
+    searchProduct();
+    fetchData('Tất cả','MaMonAn ASC',1)
 });
 
 

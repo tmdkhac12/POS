@@ -403,12 +403,21 @@
 }
 .select_input_label{
     font-size: 1.4rem;
+    padding-left: 5px;
 }
 .select_input_icon{
     font-size: 1.4rem;
     color: rgb(131, 131, 131);   
     position: relative;
     top: 1px;
+}
+.select_input_item{
+    font-size: 1.4rem;
+    cursor: pointer;
+    padding: 10px 5px;
+}
+.select_input_item:hover{
+    background-color: #f8f8f8;
 }
 .filter_page{
     display: flex;
@@ -435,6 +444,8 @@
     display: flex;
     background-color: var(--white-color);
     text-decoration: none;
+    border: none;
+    cursor: pointer;
 }
 .page_btn_disable{
     cursor: default;
