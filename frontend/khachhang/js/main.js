@@ -1,6 +1,5 @@
 //const { response } = require("express");
 
-
 let menu = document.querySelector('.category')
 menu.onclick = function() {
     document.querySelector('.grid_menu').style.display = 'block';
@@ -37,8 +36,6 @@ pay_close_btn.onclick = function() {
     modal.style.display = 'none';
     pay_modal.style.display = 'none';
 }
-
-
 
 //Close modal
 window.onclick = function(event){
@@ -128,10 +125,8 @@ function renderProduct(product){
 function renderPage(currentPage, totalPages,category,priceSort){    
     const currPageDisplay = document.querySelector('.page_current');
     currPageDisplay.textContent = currentPage;    
-
     const totalPageDisplay = document.querySelector('.total_page');
     totalPageDisplay.textContent = totalPages;
-
     //Cập nhật trạng thái nút prev
     const prevBtn = document.querySelector('.page_prev');
     if(currentPage == 1){
@@ -143,7 +138,6 @@ function renderPage(currentPage, totalPages,category,priceSort){
         prevBtn.classList.remove('page_btn_disable');
         prevBtn.onclick = () => fetchData(category,priceSort,currentPage - 1);
     }
-
     //Cập nhật trạng thái nút next
     const nextBtn = document.querySelector('.page_next');
     if(currentPage == totalPages){
@@ -168,7 +162,6 @@ function fetchAndSendInput(input){
     })
     .catch(error => console.error("Lỗi khi tải dữ liệu:", error));
 }
-
 function fetchData(category,priceSort,page=1){
     fetch(`/khachhang/category?category=${category}&priceSort=${priceSort}&page=${page}`)
             .then((response) => response.json())
@@ -217,6 +210,92 @@ function loadFilterProduct(){
     })
 }
 
+async function addToOrder(MaMonAn) {
+    const id_order = 1; // Giả sử ID hóa đơn hiện tại là 1
+    const soluong = 1; // Mặc định số lượng là 1
+
+    try {
+        const response = await fetch('/api/khachhang/order/add', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id_order, MaMonAn, soluong }),
+        });
+
+        if (response.ok) {
+            alert('Món ăn đã được thêm vào hóa đơn!');
+            loadOrderDetails(id_order); // Cập nhật chi tiết hóa đơn
+        } else {
+            throw new Error('Lỗi khi thêm món vào hóa đơn!');
+        }
+    } catch (error) {
+        console.error(error.message);
+    }
+}
+
+async function loadOrderDetails(id_order) {
+    try {
+        const orderDetails = await fetch(`/api/khachhang/order/details?id_order=${id_order}`).then(res => res.json());
+        const orderContainer = document.querySelector('.grid_ordered .ordered_list');
+
+        if (!orderDetails || orderDetails.length === 0) {
+            orderContainer.innerHTML = '<p>Hóa đơn hiện tại không có món ăn nào.</p>';
+            return;
+        }
+
+        orderContainer.innerHTML = orderDetails.map(item => `
+            <div class="ordered_item">
+                <img src="images/${item.Hinh}" alt="${item.TenMonAn}" class="ordered_item_img">
+                <div class="ordered_item_content">
+                    <h5 class="ordered_item_name">${item.TenMonAn}</h5>
+                    <div class="ordered_item_price">${item.gia}đ x ${item.soluong}</div>
+                    <button class="btn ordered_item_remove" onclick="removeFromOrder(${id_order}, ${item.MaMonAn})">Hủy món</button>
+                </div>
+            </div>
+        `).join('');
+    } catch (error) {
+        console.error('Lỗi khi tải chi tiết hóa đơn:', error);
+    }
+}
+
+async function removeFromOrder(id_order, MaMonAn) {
+    try {
+        const response = await fetch(`/api/khachhang/order/remove/${id_order}/${MaMonAn}`, {
+            method: 'DELETE',
+        });
+
+        if (response.ok) {
+            alert('Món ăn đã được xóa khỏi hóa đơn!');
+            loadOrderDetails(id_order); // Cập nhật chi tiết hóa đơn
+        } else {
+            throw new Error('Lỗi khi xóa món khỏi hóa đơn!');
+        }
+    } catch (error) {
+        console.error(error.message);
+    }
+}
+
+async function checkoutOrder() {
+    const id_order = 1; // Giả sử ID hóa đơn hiện tại là 1
+
+    try {
+        const response = await fetch('/api/khachhang/order/checkout', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id_order }),
+        });
+
+        if (response.ok) {
+            alert('Thanh toán thành công!');
+            loadOrderDetails(id_order); // Làm mới danh sách chi tiết hóa đơn
+        } else {
+            throw new Error('Lỗi khi thanh toán!');
+        }
+    } catch (error) {
+        console.error(error.message);
+    }
+}
+
+
 //Load danh mục khi mở trang
 function fetchAndRenderCategory(){
     // Gọi API lấy dữ liệu danh mục
@@ -237,11 +316,38 @@ function fetchAndRenderCategory(){
     .catch(error => console.error("Lỗi khi tải dữ liệu:", error));
 }
 
+// Tải danh sách món ăn
+function loadMenu() {
+    fetch('/api/khachhang/monan')
+        .then((response) => response.json())
+        .then((data) => {
+            const menuContainer = document.querySelector('.grid_menu .product .grid__row');
+            menuContainer.innerHTML = ''; // Xóa nội dung cũ
+            data.forEach((item) => {
+                const productHTML = `
+                    <div class="product_item">
+                        <img src="${item.image_url}" alt="${item.TenMonAn}" class="product_item_img">
+                        <h4 class="product_item_name">${item.TenMonAn}</h4>
+                        <div class="product_item_price">${item.Gia}đ</div>
+                        <button class="btn product_add_btn" onclick="addToOrder(${item.MaMonAn})">Đặt món</button>
+                    </div>
+                `;
+                menuContainer.innerHTML += productHTML;
+            });
+        })
+        .catch((error) => console.error('Lỗi khi tải menu:', error));
+}
+
 //Gọi các hàm load
 document.addEventListener('DOMContentLoaded',function(){
     fetchAndRenderCategory();    
     loadFilterProduct();
     searchProduct();
+    addToOrder();
+    loadOrderDetails();
+    removeFromOrder();
+    checkoutOrder();
+    loadMenu()
     fetchData('Tất cả','MaMonAn ASC',1)
 });
 
