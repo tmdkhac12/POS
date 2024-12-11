@@ -37,6 +37,7 @@ Hệ thống POS (Point of Sale) của dự án này là một hệ thống qu�
 POS/
 ├── backend/
 │   ├── configs/        # Chứa các files cấu hình cho server và các modules 
+│   ├── controllers/    # Chứa các files controller cho các routes 
 │   ├── database/       # Chứa thư các files khởi tạo database 
 │   ├── routes/         # Chứa các files định tuyến và API cho các routes 
 │   └── .env            # Chứa các biến môi trường cần thiết
