@@ -1,20 +1,71 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const tabLinks = document.querySelectorAll(".tab-link");
-  const sections = document.querySelectorAll(".hidden");
+// Hiển thị form "Thêm Món Ăn"
+document.getElementById("btn-add-product").addEventListener("click", () => {
+  document.getElementById("add-product-form").style.display = "block";
+  document.getElementById("overlay").style.display = "block";
+});
 
-  tabLinks.forEach((link) => {
-    link.addEventListener("click", (e) => {
-      e.preventDefault();
+// Đóng form khi nhấn "Hủy"
+document.getElementById("cancel-add-product").addEventListener("click", () => {
+  document.getElementById("add-product-form").style.display = "none";
+  document.getElementById("overlay").style.display = "none";
+});
 
-      // Xóa class 'show' khỏi tất cả các section
-      sections.forEach((s) => s.classList.remove("show"));
+// Đóng form khi click ra ngoài overlay
+document.getElementById("overlay").addEventListener("click", () => {
+  document.getElementById("add-product-form").style.display = "none";
+  document.getElementById("overlay").style.display = "none";
+});
 
-      // Lấy id từ thuộc tính href của link và chọn section tương ứng
-      const id = link.getAttribute("href");
-      const section = document.querySelector(id);
+// Gửi dữ liệu sản phẩm đến server
+document
+  .getElementById("product-form")
+  .addEventListener("submit", async function (event) {
+    event.preventDefault(); // Ngăn form reload trang
+    const formData = new FormData(this);
 
-      // Thêm class 'show' vào section được nhấp vào
-      section.classList.add("show");
-    });
+    try {
+      const response = await fetch("/admin/sanpham", {
+        method: "POST",
+        body: formData,
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        alert("Thêm sản phẩm thành công!");
+        location.reload(); // Reload trang sau khi thêm thành công
+      } else {
+        alert("Thêm sản phẩm thất bại: " + result.message);
+      }
+    } catch (error) {
+      console.log("Error adding product:", error);
+      console.error("Error adding product:", error);
+      alert("Lỗi trong quá trình thêm sản phẩm.");
+    }
+  });
+document.querySelectorAll(".btn-delete").forEach((button) => {
+  button.addEventListener("click", async function () {
+    const MaMonAn = this.getAttribute("data-id");
+
+    // Xác nhận xóa sản phẩm
+    const confirmDelete = confirm("Bạn có chắc chắn muốn xóa món ăn này?");
+    if (!confirmDelete) return;
+
+    try {
+      // Gửi yêu cầu xóa tới server
+      const response = await fetch(`/admin/sanpham/${MaMonAn}`, {
+        method: "DELETE",
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        alert("Sản phẩm đã được xóa thành công!");
+        location.reload(); // Reload trang để cập nhật danh sách sản phẩm
+      } else {
+        alert("Xóa sản phẩm thất bại: " + result.message);
+      }
+    } catch (error) {
+      console.error("Error deleting product:", error);
+      alert("Lỗi trong quá trình xóa sản phẩm.");
+    }
   });
 });
