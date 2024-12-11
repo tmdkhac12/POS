@@ -1,3 +1,4 @@
+// Increase/Decrease order item 
 $(document).ready(function () {
     // jQuery for quantity form
     $('.quantity-right-plus').click(function (e) {

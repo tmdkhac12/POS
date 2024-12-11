@@ -10,10 +10,18 @@ div.price p {
     margin-top: 24px;
 }
 
-.card .card-header {
+.emptyHeader {
     background: #999999;
 }
 
-.card .card-body {
+.emptyBody {
     background: #D4D4D4;
+}
+
+.notEmptyHeader {
+    background: #483cb4;
+}
+
+.notEmptyBody {
+    background: #5844e4;
 }

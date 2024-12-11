@@ -24,7 +24,6 @@
 
     <!-- JS -->
     <script src="./js/main.js"></script>
-    <script src="./js/components/modal.js"></script>
 </head>
 
 <body>
@@ -34,53 +33,39 @@
 
     <div class="container-fluid">
         <div class="row">
-            <!-- Table cards container -->
+            <% for (let i = 0; i < homePageData.tableQuantity; i++) { %>
+                <div class="col-2">
+                    <% if (homePageData.tables[i].trangthai === "Trong") { %>
+                        <div class="card shadow-sm" id="<%=homePageData.tables[i].id_Ban %>">
+                            <div class="card-header d-flex justify-content-between emptyHeader">
+                                <p class="card-text m-0 font-weight-light text-white">Bàn Trống</p>
+                                <a href="/nhanvien/chitiet/<%=homePageData.tables[i].id_Ban %>" class="stretched-link">
+                                    <i style="font-size:16px" class="fa text-white">&#xf142;</i>
+                                </a>
+                            </div>
+                            <div class="card-body py-5 emptyBody">
+                                <p class="card-text text-center font-weight-bolder text-white">Bàn <%=homePageData.tables[i].id_Ban %>
+                                </p>
+                            </div>
+                        </div>
+                    <%} else { %>
+                        <div class="card shadow-sm" id="<%=homePageData.tables[i].id_Ban %>">
+                            <div class="card-header d-flex justify-content-between notEmptyHeader">
+                                <p class="card-text m-0 font-weight-light text-white">Xem Chi Tiết</p>
+                                <a href="/nhanvien/chitiet/<%=homePageData.tables[i].id_Ban %>" class="stretched-link">
+                                    <i style="font-size:16px" class="fa text-white">&#xf142;</i>
+                                </a>
+                            </div>
+                            <div class="card-body py-5 notEmptyBody">
+                                <p class="card-text text-center font-weight-bolder text-white">Bàn <%=homePageData.tables[i].id_Ban%>
+                                </p>
+                            </div>
+                        </div>
+                    <% } %>
+                </div>
+            <% } %>
         </div>
     </div>
-
-    <div class="modal fade" id="sharedModal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <!-- Modal Header -->
-                <div class="modal-header justify-content-center">
-                    <h4>Thông Tin Đơn Hàng</h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
-
-                <!-- Modal Body -->
-                <div class="modal-body">
-                    <ul class="list-group">
-                        <!-- Items -->
-                        <li class="list-group-item list-group-item-action">
-                            <div class="food-info d-flex justify-content-between">
-                                <p>Hamburger</p>
-                                <span class="badge badge-light badge-pill">4</span>
-                            </div>
-                            <div class="price">
-                                <p class="text-danger font-weight-bolder font-italic">35,000</p>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- Modal Footer -->
-                <div class="modal-footer d-flex justify-content-between">
-                    <h4>Tổng Tiền: </h4>
-                    <h4 class="text-danger font-weight-bolder font-italic">135,000</h4>
-                </div>
-
-            </div>
-        </div>
-    </div>
-
-    <div class="test">
-        <!-- <%= typeof tableQuantity %> -->
-    </div>
-
-    <script>
-        const tableQuantity = "<%= tableQuantity %>";
-        addTableCards(parseInt(tableQuantity));
-    </script>
 </body>
 
 </html>
