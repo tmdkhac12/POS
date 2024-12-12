@@ -109,20 +109,22 @@
                             <img src="images/no_notification.png" alt="" class="no_notification_img">
                             <span class="no_notification_msg">Chưa có thông báo</span>
                             <!-- Notification item -->
+                            
                              <h4 class="notification_list_heading">Thông báo gần đây</h4>
                              <ul class="notification_list_item">
                                 <!-- Confirm button : notification_confirm -->
                                  <!-- Watched_notification : notification_watched -->
                                 <li class="notification_item notification_confirm_item">
-                                    <span class="notification_info">Xác nhận hủy món bò beafsteak</span>
+                                    <span class="notification_info">Xác nhận hủy món</span>
                                     <button class="btn_confirm btn">Xác nhận</button>
                                 </li>
                                 <li class="notification_item">
                                     <span class="notification_info">Thanh toán thành công</span>
                                     <button class="btn_confirm btn">Xác nhận</button>
                                 </li>
-                             </ul>      
-                             <a href="#" class="view_notification">Xem tất cả</a>                      
+                             </ul> 
+                             <a href="#" class="view_notification">Xem tất cả</a>    
+
                         </div>
                     </div>
                 </div>            
@@ -373,6 +375,42 @@
                     </div>
                     <button class="btn detail_product_btn">Đặt món</button>
                 </div>
+                <!-- Rating -->
+                 <div class="rating_container">
+                    <i class="rating_close_icon close_icon fa-solid fa-xmark"></i>
+                    <h4 class="rating_header">Đánh giá dịch vụ</h4>
+                    <form id="rating_form">
+                        <div class="rating">
+                          <label class="rating_label">Điểm đánh giá:</label>
+                          <div class="stars">
+                            <div class="star_option">
+                              <input type="radio" id="star5" name="rating" value="5">
+                              <label for="star5">★★★★★</label>
+                            </div>
+                            <div class="star_option">
+                              <input type="radio" id="star4" name="rating" value="4">
+                              <label for="star4">★★★★</label>
+                            </div>
+                            <div class="star_option"> 
+                              <input type="radio" id="star3" name="rating" value="3">
+                              <label for="star3">★★★</label>
+                            </div>
+                            <div class="star_option">
+                              <input type="radio" id="star2" name="rating" value="2">
+                              <label for="star2">★★</label>
+                            </div>
+                            <div class="star_option">
+                              <input type="radio" id="star1" name="rating" value="1">
+                              <label for="star1">★</label>
+                            </div>
+                          </div>                                                  
+                        <div class="comment">
+                          <label>Bình luận:</label>
+                          <textarea class="comment_input" name="comment" rows="4" placeholder="Nhập bình luận của bạn"></textarea>
+                        </div>
+                        <button type="submit" class="btn rate_btn">Gửi đánh giá</button>
+                      </form>
+                 </div>
             </div>
         </div>
     </div>

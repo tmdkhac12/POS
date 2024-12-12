@@ -35,17 +35,31 @@ pay_open_btn.onclick = function() {
 //Close pay modal
 pay_close_btn.onclick = function() {
     modal.style.display = 'none';
+    pay_modal.style.display = 'none';    
+}
+
+//Rating modal
+const rating_modal = document.querySelector('.rating_container');
+const rating_close_btn = document.querySelector('.rating_close_icon');
+const rating_open_btn = document.querySelector('.pay_confirm_btn');
+
+rating_open_btn.onclick = function() {
+    modal.style.display = 'flex';
+    rating_modal.style.display = 'flex';
     pay_modal.style.display = 'none';
 }
 
-
-
+rating_close_btn.onclick = function() {
+    modal.style.display = 'none';
+    rating_modal.style.display = 'none';
+}
 //Close modal
 window.onclick = function(event){
     if(event.target == document.querySelector('.modal_overlay')){        
         modal.style.display = 'none';
         pay_modal.style.display = 'none';
         document.querySelector('.detail_product').style.display = 'none';
+        rating_modal.style.display = 'none';
     }
 }
 
@@ -125,7 +139,7 @@ function renderProduct(product){
 }
 
 //Hàm hiển thị trang khi phân trang
-function renderPage(currentPage, totalPages,category,priceSort){    
+function renderPage(currentPage, totalPages,category,priceSort,input){    
     const currPageDisplay = document.querySelector('.page_current');
     currPageDisplay.textContent = currentPage;    
 
@@ -141,7 +155,7 @@ function renderPage(currentPage, totalPages,category,priceSort){
     else{
         prevBtn.disable = false;
         prevBtn.classList.remove('page_btn_disable');
-        prevBtn.onclick = () => fetchData(category,priceSort,currentPage - 1);
+        prevBtn.onclick = () => fetchData(category,priceSort,currentPage - 1,input);
     }
 
     //Cập nhật trạng thái nút next
@@ -153,45 +167,18 @@ function renderPage(currentPage, totalPages,category,priceSort){
     else{
         nextBtn.disable = false;
         nextBtn.classList.remove('page_btn_disable');
-        nextBtn.onclick = () => fetchData(category,priceSort,currentPage + 1);
+        nextBtn.onclick = () => fetchData(category,priceSort,currentPage + 1,input);
     }
 }
 
-//tìm kiếm
-function fetchAndSendInput(input){
-    fetch(`/khachhang/search?input=${input}`)
-    .then(response => response.json())
-    .then(data => {
-        renderProduct(data);
-        document.querySelector('.category_item_active').classList.remove('category_item_active');
-        document.querySelector('.select_input_label').textContent = 'Giá';
-    })
-    .catch(error => console.error("Lỗi khi tải dữ liệu:", error));
-}
-
-function fetchData(category,priceSort,page=1){
-    fetch(`/khachhang/category?category=${category}&priceSort=${priceSort}&page=${page}`)
+function fetchData(category,priceSort,page=1,input){
+    fetch(`/khachhang/category?category=${category}&priceSort=${priceSort}&page=${page}&input=${input}`)
             .then((response) => response.json())
             .then(data => {
                 renderProduct(data.product); //Hiển thị danh sách
-                renderPage(data.currentPage,data.totalPages,category,priceSort); //Hiển thị trang                
+                renderPage(data.currentPage,data.totalPages,category,priceSort,input); //Hiển thị trang                
             })
             .catch(error => console.error('Lỗi khi tải dữ liệu:', error));
-}
-
-//Load sản phẩm khi tìm kiếm
-function searchProduct(){    
-    document.querySelector('.search_input').addEventListener('keydown',function(event) {
-        if(event.key == 'Enter'){
-            const input = this.value;            
-            fetchAndSendInput(input);
-        }
-    })
-    document.querySelector('.search_btn').addEventListener('click',function() {
-        const input = document.querySelector('.search_input').value;
-        console.log(input);
-        fetchAndSendInput(input);
-    })
 }
 
 //Load sản phẩm khi lọc
@@ -199,13 +186,14 @@ function loadFilterProduct(){
     let category = 'Tất cả';
     let priceSort = 'MaMonAn ASC';
     let currentPage = 1;
+    let input = '%';
     //Lọc theo danh mục
     document.querySelector('.category_list').addEventListener('click',function(event){              
         category = event.target.textContent; 
         const active = document.querySelector('.category_item_active');
         if(active) active.classList.remove('category_item_active');
         event.target.classList.add('category_item_active');                
-        fetchData(category,priceSort,currentPage);
+        fetchData(category,priceSort,currentPage,input);
     })
     
     //Lọc theo giá
@@ -213,7 +201,24 @@ function loadFilterProduct(){
         document.querySelector('.select_input_label').textContent = event.target.textContent;
         if(event.target.textContent == 'Giá : Thấp đến cao') priceSort = 'DonGia ASC';
         else if(event.target.textContent == 'Giá : Cao đến thấp') priceSort = 'DonGia DESC';        
-        fetchData(category,priceSort,currentPage);
+        fetchData(category,priceSort,currentPage,input);
+    })
+    
+    //Tìm kiếm
+    document.querySelector('.search_input').addEventListener('keydown',function(event) {
+        if(event.key == 'Enter'){
+            input = `%${this.value}%`;
+            fetchData(category,priceSort,currentPage,input);
+            document.querySelector('.category_item_active').classList.remove('category_item_active');
+            document.querySelector('.select_input_label').textContent = 'Giá';
+        }
+    })
+    document.querySelector('.search_btn').addEventListener('click',function() {
+        const inputValue = document.querySelector('.search_input').value;   
+        input = `%${inputValue}%`;     
+        fetchData(category,priceSort,currentPage,input);
+        document.querySelector('.category_item_active').classList.remove('category_item_active');
+        document.querySelector('.select_input_label').textContent = 'Giá';
     })
 }
 
@@ -240,10 +245,43 @@ function fetchAndRenderCategory(){
 //Gọi các hàm load
 document.addEventListener('DOMContentLoaded',function(){
     fetchAndRenderCategory();    
-    loadFilterProduct();
-    searchProduct();
-    fetchData('Tất cả','MaMonAn ASC',1)
+    loadFilterProduct();    
+    fetchData('Tất cả','MaMonAn ASC',1,'%');
+    addReview();
 });
+
+//Thêm đánh giá
+function addReview(){
+    document.querySelector('#rating_form').addEventListener('submit', async (event) =>{
+        event.preventDefault();
+    
+        let DiemDanhGia = document.querySelector('input[name="rating"]:checked');
+        let BinhLuan = document.querySelector('.comment_input');
+    
+        if (!DiemDanhGia) {
+            alert("Vui lòng chọn đánh giá!");
+            return;
+        }
+        else DiemDanhGia = parseInt(DiemDanhGia.value);
+        
+        if(!BinhLuan.value){
+            BinhLuan = null;
+        }
+        BinhLuan = BinhLuan.value;
+        
+        const response = await fetch("/khachhang/add", {
+            method: 'POST',
+            headers: {
+                'Content-Type' : 'application/json',
+            },
+            body: JSON.stringify({DiemDanhGia, BinhLuan}),
+        });
+    
+        const result = await response.json();
+        alert(result.message);
+    })
+    
+}
 
 
 
