@@ -9,6 +9,7 @@ const configViewEngine = require("./configs/viewEngine");
 
 dotenv.config();
 const app = express();
+app.use(express.json());
 
 // Serving static file 
 initiator.initStaticFilesServing(app);

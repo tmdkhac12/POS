@@ -14,6 +14,6 @@ khachhangRouter.get("/monan/:id",khachhangController.getProductByID);
  
 khachhangRouter.get('/category',khachhangController.getFilteredProduct);
 
-khachhangRouter.get('/search',khachhangController.searchProduct);
+khachhangRouter.post('/add',khachhangController.addReview);
 
 module.exports = khachhangRouter;
