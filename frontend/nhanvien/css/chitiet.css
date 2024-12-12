@@ -10,6 +10,11 @@ html, body {
     padding-top: 16px;
 }
 
+.card > img {
+    object-fit: cover;
+    height: 15vh;
+}
+
 .card-body p {
     margin: 0;
 }

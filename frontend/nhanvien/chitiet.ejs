@@ -7,14 +7,9 @@
     <title>Nhan Vien / Chi Tiet Order</title>
 
     <!-- Bootstrap Libs -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
-        integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
-        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct"
-        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
 
     <!-- CSS -->
     <link rel="stylesheet" href="../css/chitiet.css">
@@ -29,7 +24,7 @@
 <body>
     <nav class="navbar navbar-expand-sm bg-danger p-2">
         <a href="/nhanvien" class=""><i class="fa fa-arrow-left" aria-hidden="true"></i></a>
-        <p class="m-auto text-white">Chi Tiết Bàn <%=tableID %></p> 
+        <p class="m-auto text-white">Chi Tiết Bàn <%= chiTietPageData.tableId %></p>
     </nav>
 
     <div class="container-fluid h-100">
@@ -37,51 +32,18 @@
             <!-- Food List in DB -->
             <div class="col-6">
                 <div class="row">
+                    <% for (let i = 0; i < chiTietPageData.dishes.length; i++) { %>
                     <div class="col-3 d-flex food-card-item">
-                        <div class="card shadow-sm">
-                            <img class="card-img-top" src="../images/placeholder_700x400.png">
+                        <div class="card shadow-sm flex-fill">
+                            <img class="card-img-top" src="../images/<%= chiTietPageData.dishes[i].Hinh %>">
                             <div class="card-body">
-                                <p class="card-text m-0 text-center">Hamburger</p>
+                                <p class="card-text m-0 text-center"><%= chiTietPageData.dishes[i].TenMonAn %></p>
+                                <p class="card-text m-0 text-center font-weight-bold"><%= Intl.NumberFormat('en-US').format(chiTietPageData.dishes[i].DonGia) %></p>
                                 <a href="#" class="stretched-link"></a>
                             </div>
                         </div>
                     </div>
-                    <div class="col-3 d-flex food-card-item">
-                        <div class="card shadow-sm">
-                            <img class="card-img-top" src="../images/placeholder_700x400.png">
-                            <div class="card-body">
-                                <p class="card-text m-0 text-center">Fried chicken</p>
-                                <a href="#" class="stretched-link"></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-3 d-flex food-card-item">
-                        <div class="card shadow-sm">
-                            <img class="card-img-top" src="../images/placeholder_700x400.png">
-                            <div class="card-body">
-                                <p class="card-text m-0 text-center">Món ăn 3</p>
-                                <a href="#" class="stretched-link"></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-3 d-flex food-card-item">
-                        <div class="card shadow-sm">
-                            <img class="card-img-top" src="../images/placeholder_700x400.png">
-                            <div class="card-body">
-                                <p class="card-text m-0 text-center">Món ăn 4</p>
-                                <a href="#" class="stretched-link"></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-3 d-flex food-card-item">
-                        <div class="card shadow-sm">
-                            <img class="card-img-top" src="../images/placeholder_700x400.png">
-                            <div class="card-body">
-                                <p class="card-text m-0 text-center">Món ăn 5</p>
-                                <a href="#" class="stretched-link"></a>
-                            </div>
-                        </div>
-                    </div>
+                    <% } %>
                 </div>
             </div>
 
@@ -100,28 +62,23 @@
                             <li class="list-group-item list-group-item-action">
                                 <div class="row">
                                     <div class="col-4">
-                                        <p class="font-weight-bold">Hamburger</p>
-                                        <p>350,000</p>
+                                        <p class="font-weight-bold">Tra Dao</p>
+                                        <p>25,000</p>
                                     </div>
                                     <div class="col-8 d-flex justify-content-between align-items-center">
                                         <a href="#" class="text-muted"><i class="fa fa-edit"></i></a>
 
                                         <div class="d-flex justify-content-center">
-                                            <button type="button"
-                                                class="quantity-left-minus btn btn-outline-secondary btn-number"
-                                                data-type="minus">
+                                            <button type="button" class="quantity-left-minus btn btn-outline-secondary btn-number" data-type="minus">
                                                 <i class="fa fa-minus" aria-hidden="true"></i>
                                             </button>
-                                            <input type="text" id="quantity" name="quantity" style="width: 25%;"
-                                                class="input-number text-center" value="1" min="1" max="100">
-                                            <button type="button"
-                                                class="quantity-right-plus btn btn-outline-secondary btn-number"
-                                                data-type="plus">
+                                            <input type="text" id="quantity" name="quantity" style="width: 25%;" class="input-number text-center" value="1" min="1" max="100">
+                                            <button type="button" class="quantity-right-plus btn btn-outline-secondary btn-number" data-type="plus">
                                                 <i class="fa fa-plus" aria-hidden="true"></i>
                                             </button>
                                         </div>
 
-                                        <p class="font-weight-bold">350,000</p>
+                                        <p class="font-weight-bold">25,000</p>
                                         <a href="#" class="text-muted">
                                             <i class="fa fa-trash" aria-hidden="true"></i>
                                         </a>
@@ -134,7 +91,7 @@
                     <div class="card-footer">
                         <div class="total text-right">
                             <p>Thành Tiền</p>
-                            <p class="font-weight-bold text-success">350,000</p>
+                            <p class="font-weight-bold text-success">25,000</p>
                         </div>
 
                         <div class="buttons d-flex">
