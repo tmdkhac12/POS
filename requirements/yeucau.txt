@@ -1,0 +1,40 @@
+Các yêu cầu chức năng
+Khách hàng:
+–     Đặt bàn: Khách hàng có thể đặt bàn qua việc quét mã QR ở bàn. Sau khi quét QR sẽ truy cập vô menu và nhận mã định danh gồm thông tin bàn và thời gian thực
+–     Đặt món: Khách hàng có thể chọn món ăn từ menu, Hệ thống hiển thị chi tiết món ăn khi khách hàng nhấp chọn một mặt hàng. Khách hàng có thể thay đổi số lượng món ăn và thêm vào giỏ hàng, hoặc hủy món ăn
+–     Thao tác giỏ hàng: Giỏ hàng cho phép khách hàng xem danh sách món, chỉnh sửa số lượng, hoặc xóa món cũng như gửi yêu cầu xác nhận đặt các món trong giỏ hàng đến nhân viên.
+–     Thanh toán: hỗ Trợ nhiều phương thức thanh toán: thẻ tín dụng, ví điện tử, chuyển khoản ngân hàng. và hỗ trợ thanh toán bằng QR
+–     Quản Lý Đặt Hàng Mang Đi: Khách hàng có thể chọn tùy chọn mang đi. Xác nhận thời gian và địa điểm giao hàng.
+–     Đánh giá dịch vụ: Khách hàng có thể để lại nhận xét chi tiết về trải nghiệm của họ, bao gồm cả nhận xét về phục vụ và chất lượng món ăn.
+Nhân viên:
+–     Đăng nhập/Đăng xuất:
++ Đăng nhập: Nhân viên cần đăng nhập vào hệ thống bằng tài khoản đã được cấp (thường là tên đăng nhập và mật khẩu).Hệ thống yêu cầu nhập thông tin xác thực (tên đăng nhập, mật khẩu). Sau khi đăng nhập, hệ thống ghi nhận danh tính nhân viên để theo dõi hoạt động của họ.
++ Đăng xuất: Sau khi hoàn thành ca làm việc, nhân viên đăng xuất khỏi hệ thống để bảo mật tài khoản
+–     Quản lý thông tin bàn: Theo dõi trạng thái bàn , dọn dẹp vệ sinh bàn khi khách rời đi để sẵn sàng đón khách mới.
+Quản lý thông tin món ăn: Theo dõi trạng thái món ăn từ bếp để phục vụ cho khách hàng. 
+–     Quản lý thanh toán:Hỗ trợ các trường hợp đặc biệt : Xử lý thanh toán thủ công nếu khách không sử dụng được QR hoặc ví điện tử. In hóa đơn nếu khách yêu cầu (dành cho khách hàng cần hóa đơn giấy)
+
+
+Nhà bếp:
+–     Tiếp nhận thực đơn order đã được xác nhận từ nhân viên order:. Hệ thống hiển thị thông tin chi tiết về từng đơn hàng (món ăn, số lượng, yêu cầu đặc biệt). Bếp có thể nhận thông báo khi có đơn hàng mới được xác nhận.
+–     Cập nhận trạng thái chế biến (đã xong, chưa xong): Bếp có thể cập nhật trạng thái của từng món ăn trong đơn hàng (đã hoàn thành, đang chế biến, chưa bắt đầu). Hệ thống tự động cập nhật tình trạng đơn hàng cho nhân viên phục vụ và khách hàng. Bếp có thể ghi chú về tình trạng đặc biệt của món ăn (ví dụ: cần thêm thời gian, đã bị lỗi).
+Quản lý:
+–     Đăng nhập/Đăng xuất:
+    + Đăng nhập: Quản lý đăng nhập vào hệ thống với tài khoản của mình
+    + Đăng xuất: Sau khi hoàn thành công việc, quản lý có thể đăng xuất khỏi hệ thống
+–     Quản lý thông tin giao dịch: Ghi nhận và quản lý các giao dịch hàng ngày.
+–     Thống kê doanh thu : Quản lý có thể xem báo cáo doanh thu theo ngày, tuần, tháng hoặc năm. Hệ thống cung cấp biểu đồ và số liệu thống kê để giúp quản lý theo dõi doanh thu theo thời gian. Quản lý có thể xem doanh thu chi tiết theo từng món ăn, loại dịch vụ hoặc theo nhóm nhân viên – Phân quyền: Quản lý cập nhật quyền cho nhân viên.
+–     Xem lịch sử đơn hàng : Quản lý có thể xem danh sách tất cả các đơn hàng đã được thực hiện trong một khoảng thời gian nhất định. Hệ thống hiển thị thông tin chi tiết về từng đơn hàng (món ăn, số lượng, giá, trạng thái đơn hàng). Quản lý có thể lọc và tìm kiếm đơn hàng theo ngày, trạng thái, hoặc tên khách hàng.
+–     Phân quyền: Quản lý cập nhật quyền cho nhân viên.
+–     Thêm sửa xóa món : Quản lý có thể thêm món ăn mới vào thực đơn, bao gồm tên, mô tả, giá cả và hình ảnh. Quản lý có thể sửa đổi thông tin của món ăn hiện có (giá cả, mô tả, hình ảnh). Quản lý có thể xóa món ăn khỏi thực đơn nếu không còn phục vụ
+
+
+Yêu Cầu Phi Chức Năng
+- Hiệu năng: Hệ thống phải đảm bảo tốc độ phản hồi nhanh, thời gian tải trang không quá 2 giây trong điều kiện bình thường.
+- Bảo mật: Thông tin khách hàng (số điện thoại, email, thông tin thanh toán) và doanh nghiệp (doanh thu, lịch sử đơn hàng) phải được bảo vệ bằng các cơ chế mã hóa và kiểm soát truy cập chặt chẽ. Phần mềm cần đảm bảo bảo mật thông tin trước các đơn vị với nhau
+- Khả năng mở rộng: Hệ thống phải dễ dàng mở rộng để hỗ trợ số lượng lớn người dùng đồng thời mà không làm giảm hiệu suất.
+- Dễ sử dụng: Giao diện phải thân thiện, dễ hiểu và dễ thao tác với mọi đối tượng người dùng, bao gồm cả những người không am hiểu công nghệ.
+- Khả năng bảo trì: Hệ thống phải được xây dựng với cấu trúc rõ ràng, dễ bảo trì và nâng cấp khi cần thiết.
+- Độ tin cậy: Hệ thống phải đảm bảo hoạt động liên tục, giảm thiểu tối đa thời gian gián đoạn dịch vụ.
+- Ngoại cảnh: Phần mềm đảm bảo tuân thủ luật pháp , quy định quốc gia sở tại nơi ứng dụng hoạt động
+- Lưu trữ: Dữ liệu phải được lưu trữ an toàn và có khả năng sao lưu định kỳ để tránh mất mát dữ liệu.

@@ -28,7 +28,8 @@
 
 <body>
     <nav class="navbar navbar-expand-sm bg-danger justify-content-center p-2">
-        <p class="m-0 text-white">Bàn</p>
+        <p class="m-0 text-white flex-fill text-center">Bàn</p>
+        <button class="btn btn-outline-dark ml-auto" data-toggle="modal" data-target="#myModal">Đăng xuất</button>
     </nav>
 
     <div class="container-fluid">
@@ -66,6 +67,24 @@
             <% } %>
         </div>
     </div>
+
+    <div class="modal " id="myModal">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+      
+            <!-- Modal body -->
+            <div class="modal-body">
+                <h4>Đăng xuất <i class="fa fa-lock"></i></h4>
+                <p class="mt-4">
+                    <i class="fa fa-question-circle"></i> <span>Bạn có chắc muốn đăng xuất??</span>
+                </p>
+                <a class="btn btn-danger btn-block my-4">Đăng xuất</a>
+              
+            </div>
+      
+          </div>
+        </div>
+      </div>
 </body>
 
 </html>

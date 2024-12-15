@@ -27,12 +27,12 @@
         <p class="m-auto text-white">Chi Tiết Bàn <%= chiTietPageData.tableId %></p>
     </nav>
 
-    <div class="container-fluid h-100">
+    <div class="container-fluid h-90">
         <div class="row h-100">
             <!-- Food List in DB -->
             <div class="col-6">
                 <div class="row">
-                    <% for (let i = 0; i < chiTietPageData.dishes.length; i++) { %>
+                    <% for (let i = 0; i < 10; i++) { %>
                     <div class="col-3 d-flex food-card-item">
                         <div class="card shadow-sm flex-fill">
                             <img class="card-img-top" src="../images/<%= chiTietPageData.dishes[i].Hinh %>">
