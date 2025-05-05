@@ -1,26 +1,80 @@
-const cartItemsContainer = document.getElementById('cart-items');
 
 document.addEventListener("DOMContentLoaded", () => {
-    addCartItems(4);
+    preOrderHandler.init();
 })
 
-function addCartItems(number) {
-    for (let i = 0; i < number; i++) {
-        cartItemsContainer.innerHTML += `
-            <li class="list-group-item cart-item d-flex">
-                <img src="https://picsum.photos/150/100?random=3" alt="Pasta">
-                <div class="cart-item-details">
-                    <p><span class="text-danger">1. </span> Pasta</p>
-                    <p class="text-danger mt-2">30.000đ</p>
-                </div>
-                <div class="cart-item-controls">
-                    <button class="decrease-btn" data-id="3">-</button>
-                    <span>1</span>
-                    <button class="increase-btn text-danger border-danger" data-id="3">+</button>
-                </div>
-            </li>
-        `;
+const preOrderHandler = {
+    d_cartItemsContainer: document.getElementById('cart-items'),
+    d_orderedCartItemsContainer: document.querySelector("#ordered-cart-items"),
+
+    get a_cartItems() {
+        return document.querySelectorAll("#cart-items .cart-item");
+    },
+
+    init() {
+        // Thêm 4 item mẫu 
+        this.addCartItems(4);
+
+        // Xử lý sự kiện xác nhận đặt món.  
+        document.querySelector("#confirm-btn").addEventListener("click", () => {
+            if (confirm("Bạn có chắc muốn gọi những món trên?")) {
+                // 1. Lưu lại các item clone trước khi xóa
+                const clonedItems = this.a_cartItems;
+
+                this.d_cartItemsContainer.innerHTML = "";
+
+                clonedItems.forEach(item => {
+                    this.d_orderedCartItemsContainer.appendChild(item.cloneNode(true));
+                });
+
+                // Chuyển qua tab các món đã đặt 
+                const tabTrigger = document.querySelector('[data-bs-toggle="tab"][href="#mon-da-dat"]');
+                const tab = new bootstrap.Tab(tabTrigger);
+                tab.show();
+
+                // Cập nhật tổng tiền trên đặt món và các món đã đặt.
+                this.updateTotal();
+                orderedCartHandler.updateTotal();
+            }
+        });
+    },
+
+    addCartItems(number) {
+        for (let i = 0; i < number; i++) {
+            this.d_cartItemsContainer.innerHTML += `
+                <li class="list-group-item cart-item d-flex">
+                    <img src="https://picsum.photos/150/100?random=${i}" alt="Pasta">
+                    <div class="cart-item-details">
+                        <p><span class="text-danger">${i + 1}. </span> Pasta</p>
+                        <p class="text-danger mt-2 price" price="30000">30.000đ</p>
+                        <small>(Đơn giá đã tính VAT = 30.000đ)</small>
+                    </div>
+                    <div class="cart-item-controls">
+                        <button class="decrease-btn" data-id="3">-</button>
+                        <span>1</span>
+                        <button class="increase-btn text-danger border-danger" data-id="3">+</button>
+                    </div>
+                </li>
+            `;
+        }
+
+        this.updateTotal();
+    },
+
+    updateTotal() {
+        let total = 0;
+
+        this.a_cartItems.forEach(item => {
+            total += parseInt(item.querySelector(".price").getAttribute("price"));
+        });
+
+        document.querySelector("#pre-cart-total").innerHTML = formatCurrency(total);
     }
+};
+
+
+function formatCurrency(value) {
+    return value.toLocaleString('vi-VN') + 'đ';
 }
 
 function updateCart() {
@@ -76,20 +130,18 @@ function updateCart() {
     });
 }
 
-function formatCurrency(value) {
-    return value.toLocaleString('vi-VN') + 'đ';
-}
+const orderedCartHandler = {
+    get a_orderedCartItems() {
+        return document.querySelectorAll("#ordered-cart-items .cart-item");
+    },
 
-document.querySelector("#confirm-btn").addEventListener("click", () => {
+    updateTotal() {
+        let total = 0;
 
-    if(confirm("Bạn có chắc muốn gọi những món trên?")) {
-        const a_cartItems = document.querySelectorAll("#cart-items .cart-item");
-        cartItemsContainer.innerHTML = "";
-    
-        const d_orderedCartItemsContainer = document.querySelector("#ordered-cart-items");
-        Array.from(a_cartItems).forEach(item => {
-            d_orderedCartItemsContainer.appendChild(item.cloneNode(true));
+        this.a_orderedCartItems.forEach(item => {
+            total += parseInt(item.querySelector(".price").getAttribute("price"));
         });
+
+        document.querySelector("#ordered-cart-total").innerHTML = formatCurrency(total);
     }
-    
-})
+}
