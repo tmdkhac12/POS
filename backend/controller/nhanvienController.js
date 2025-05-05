@@ -1,60 +1,48 @@
-const path = require("path")
-const connection = require("../configs/connection").promise();
+const banModel = require("../models/BanModel")
+const monanModel = require("../models/MonAnModel")
 
-const getHomePage = function (req, res) {
-    const getAllBans_SQLquery = "SELECT * FROM ban;"
+const getHomePage = async function (req, res) {
+    try {
+        const tables = await banModel.getAllBans();
 
-    connection.query(getAllBans_SQLquery)
-        .then(([result]) => {
-            // Data bundle 
-            const homePageData = {
-                tables: result,
-                tableQuantity: result.length
-            };
+        const homePageData = {
+            tables: tables,
+            tableQuantity: tables.length
+        }
 
-            // Render view với dữ liệu trả về
-            res.render("nhanvien/index", { homePageData });
-        })
-        .catch((err) => {
-            console.log("Error in controller:", err);
-        });
+        res.render("nhanvien/index", { homePageData })
+    } catch (error) {
+        console.log("Error in nhanvienController", error)
+    }
 }
 
-const getChiTietPage = function (req, res) {
+const getChiTietPage = async function (req, res) {
     const tableId = req.params.id;
 
-    const getTablesQuantity_SQLquery = "SELECT COUNT(*) as 'soluong' FROM ban;";
-    const getAllDishes_SQLquery = "SELECT * FROM monan;";
+    try {
+        // Thực hiện các truy vấn song song với Promise.all()
+        const [tableQuantity, dishes] = await Promise.all([
+            banModel.getNumberOfTable(), 
+            monanModel.getAllDishes()
+        ])
 
-    // Thực hiện các truy vấn song song với Promise.all()
-    Promise.all([
-        connection.query(getTablesQuantity_SQLquery),
-        connection.query(getAllDishes_SQLquery)
-    ])
-        .then(([getTablesQuantity_result, getAllDishes_result]) => {
-            // Các truy vấn đã hoàn thành, xử lý kết quả
-            const TABLE_QUANTITY = getTablesQuantity_result[0][0].soluong;
-            const dishes = getAllDishes_result[0];
+        const chiTietPageData = {
+            tableId: tableId,
+            dishes: dishes
+        }
 
-            // Data bundle
-            const chiTietPageData = {
-                dishes: dishes,
-                tableId: tableId
-            }
-
-            if (tableId > 0 && tableId <= TABLE_QUANTITY) {
-                res.render("nhanvien/chitiet", { chiTietPageData });
-            } else {
-                res.send("Invalid URL, 404 not Found")
-            }
-        })
-        .catch((err) => {
-            console.log("Error getChiTietPage occurred:", err);
-        });
+        if (tableId > 0 && tableId <= tableQuantity) {
+            res.render("nhanvien/chitiet", { chiTietPageData })
+        } else {
+            res.send("Invalid URL, 404 not Found")
+        }
+    } catch (error) {
+        console.log("Error in nhanvienController", error)
+    }   
 
 }
 
 module.exports = {
     getHomePage,
-    getChiTietPage
+    getChiTietPage,
 };

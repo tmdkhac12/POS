@@ -1,15 +1,10 @@
 // Modules 
-const express = require("express");
-const path = require("path");
-const dotenv = require("dotenv");
+require("dotenv").config();
+const app = require("express")();
 
 // Static modules
 const initiator = require("./configs/initiator");
 const configViewEngine = require("./configs/viewEngine");
-
-dotenv.config();
-const app = express();
-app.use(express.json());
 
 // Serving static file 
 initiator.initStaticFilesServing(app);

@@ -1,0 +1,21 @@
+#food-items .food-card {
+    border-radius: 18px;
+}
+
+.food-card img {
+    width: 100%;               /* Ảnh chiếm toàn bộ chiều rộng khung */
+    height: 150px;             /* Chiều cao cố định */
+    object-fit: cover;         /* Cắt ảnh để lấp đầy khung mà không méo */
+    border-top-left-radius: 18px;
+    border-top-right-radius: 18px;
+}
+
+.add-to-cart {
+    width: 36px;
+    height: 36px;
+    border: none;
+    font-size: 1.2rem;
+    color: white;
+    background-color: #dc3545;
+    border-radius: 50%;
+}

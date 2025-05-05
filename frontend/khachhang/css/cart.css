@@ -1,0 +1,85 @@
+.cart-footer {
+    border-top: 1px solid #dee2e6;
+    background: #fff;
+    position: absolute;
+    bottom: 0;
+    z-index: 1;
+    width: 100%;
+}
+
+.cart-sidebar {
+    position: fixed;
+    right: 0;
+    height: 100vh;
+    border-left: 1px solid #dee2e6;
+}
+
+.cart-item {
+    padding: 0.5rem 1rem;
+    align-items: center;
+}
+
+.cart-item img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    margin-right: 0.5rem;
+}
+
+.cart-item-details {
+    flex-grow: 1;
+}
+
+.cart-item-details p {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.cart-item-options {
+    font-size: 0.8rem;
+    color: #6c757d;
+}
+
+.cart-item-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.cart-item-controls button {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 1.2px solid #6c757d;
+    background: none;
+    color: #6c757d;
+    font-weight: bold;
+}
+
+.tab-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.tab-pane {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+}
+
+.tab-pane .cart-list {
+    flex: 1;
+    overflow-y: auto;
+    max-height: calc(105vh - 200px);
+    /* Giới hạn chiều cao để cuộn được */
+}
+
+.nav-link.active {
+    color: rgba(var(--bs-danger-rgb),var(--bs-text-opacity))!important;
+}
+
+#cart-total {
+    font-size: 20px;
+}
