@@ -3,3 +3,5 @@
 
 # Ignore .env file 
 backend/.env
+
+frontend/nhanvien/tmp.html 

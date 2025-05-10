@@ -10,6 +10,7 @@ const pool = mysql.createPool({
     database: process.env.DB_NAME
 })
 
+// Kiểm tra kết nối (chỉ thực hiện 1 lần khi khởi động)
 pool.promise().getConnection()
     .then((connection) => {
         console.log("Connected!")

@@ -1,3 +1,153 @@
-.card-header .content {
+.table-card {
+    transition: all 0.3s ease;
+    border: none;
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.table-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Bàn trống */
+.table-card[data-status="empty"] .emptyHeader {
+    background-color: #D4EDDA;
+    /* Xanh lá nhạt */
+    border-bottom: 2px solid #c3e6cb;
+}
+
+.table-card[data-status="empty"] .emptyHeader p,
+.table-card[data-status="empty"] .emptyHeader i {
+    color: #155724;
+    /* Xanh lá đậm cho chữ và icon */
+}
+
+.table-card[data-status="empty"] .emptyBody {
+    background-color: #E9ECEF;
+    /* Xám nhạt */
+    color: #6C757D;
+    /* Xám đậm cho chữ */
+}
+
+/* Bàn đang có khách (chưa hoàn thành) */
+.table-card[data-status="occupied"].pending .emptyHeader {
+    background-color: #ff4f3e;
+    /* Cam đậm */
+    border-bottom: 2px solid #e03e33;
+    position: relative;
+}
+
+.table-card[data-status="occupied"].pending .emptyHeader i.fa-clock {
+    position: absolute;
+    top: 50%;
+    right: 30px;
+    transform: translateY(-50%);
+    color: #FFFFFF;
     font-size: 14px;
 }
+
+/* .table-card[data-status="occupied"].pending {
+    animation: blinkBorder 1.5s infinite;
+}
+
+@keyframes blinkBorder {
+    50% {
+        border: 2px solid #FF6F61;
+    }
+} */
+
+/* Bàn đang có khách (đã hoàn thành) */
+.table-card[data-status="occupied"] .emptyHeader {
+    background-color: #FF6F61;
+    /* Cam nhạt */
+    border-bottom: 2px solid #ff4f3e;
+}
+
+.table-card[data-status="occupied"] .emptyHeader p,
+.table-card[data-status="occupied"] .emptyHeader i {
+    color: #FFFFFF;
+    /* Trắng cho chữ và icon */
+}
+
+.table-card[data-status="occupied"] .emptyBody {
+    background-color: #FFE4E1;
+    /* Hồng nhạt */
+    color: #FF6F61;
+    /* Cam nhạt cho chữ */
+}
+
+/* Trạng thái active (khi được chọn) */
+.active-table .emptyHeader {
+    background-color: #FFF3CD;
+    /* Vàng nhạt */
+    border-bottom: 2px solid #ffda6a;
+}
+
+.active-table .emptyHeader p,
+.active-table .emptyHeader i {
+    color: #856404;
+    /* Vàng đậm cho chữ và icon */
+}
+
+.active-table[data-status="empty"] .emptyBody {
+    background-color: #c3e6cb;
+    /* Xanh lá đậm hơn */
+    color: #155724;
+}
+
+.active-table[data-status="occupied"] .emptyBody {
+    background-color: #ffdcd9;
+    /* Hồng nhạt đậm hơn */
+    color: #ff4f3e;
+    /* Cam nhạt đậm hơn */
+}
+
+.order-list {
+    height: calc(85vh - 20px);
+    overflow-y: auto;
+}
+
+.left-column {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: sticky;
+    top: 0;
+    background-color: #f8f9fa;
+}
+
+.order-content {
+    flex: 1;
+}
+
+.payment-button {
+    padding-top: 10px;
+}
+
+/* Dropdown trạng thái */
+.status-dropdown .btn {
+    min-width: 120px;
+}
+
+.status-received {
+    background-color: #6C757D !important;
+    color: #FFFFFF !important;
+}
+
+.status-processing {
+    background-color: #FFC107 !important;
+    color: #000000 !important;
+}
+
+.status-completed {
+    background-color: #28A745 !important;
+    color: #FFFFFF !important;
+}
+
+.completed-item {
+    text-decoration: line-through;
+    color: #6C757D;
+}
+

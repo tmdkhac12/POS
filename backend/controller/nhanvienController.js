@@ -10,7 +10,7 @@ const getHomePage = async function (req, res) {
             tableQuantity: tables.length
         }
 
-        res.render("nhanvien/index", { homePageData })
+        res.render("./nhanvien/index", { homePageData })
     } catch (error) {
         console.log("Error in nhanvienController", error)
     }
@@ -32,7 +32,7 @@ const getChiTietPage = async function (req, res) {
         }
 
         if (tableId > 0 && tableId <= tableQuantity) {
-            res.render("nhanvien/chitiet", { chiTietPageData })
+            res.render("./nhanvien/chitiet", { chiTietPageData })
         } else {
             res.send("Invalid URL, 404 not Found")
         }

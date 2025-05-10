@@ -5,8 +5,7 @@ const getAllDishes = async function () {
 
     try {
         const [result] = await pool.query(sql);
-        
-        return result
+        return result;
     } catch (error) {
         throw new Error("Get All Dishes query Error: " + error.message)
     }
