@@ -2,26 +2,54 @@
     padding-top: 16px;
 }
 
-ul.list-group p {
-    margin: 0;
+.table-card {
+    overflow: auto;
+    border-radius: 10px;
+    transition: all 0.3s ease;
 }
 
-div.price p {
-    margin-top: 24px;
+.table-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15) !important;
 }
 
-.emptyHeader {
-    background: #999999;
+/* Bàn đang có khách */
+.table-card[data-status="occupied"] .card-header {
+    background-color: #ff4f3e;
+    border-bottom: 1px solid #e03e33;;
 }
 
-.emptyBody {
-    background: #D4D4D4;
+.table-card[data-status="occupied"] .card-header p,
+.table-card[data-status="occupied"] .card-header i {
+    color: white;
 }
 
-.notEmptyHeader {
-    background: #483cb4;
+.table-card[data-status="occupied"] .card-body {
+    background-color: #ffdcd9;
+    color: #ff4f3e;
 }
 
-.notEmptyBody {
-    background: #5844e4;
+.table-card[data-status="occupied"]:hover .card-header {
+    border: none;
+}
+
+/* Bàn trống */
+.table-card[data-status="empty"] .card-header {
+    background-color: #D4EDDA;
+    border-bottom: 2px solid #c3e6cb;;
+}
+
+.table-card[data-status="empty"] .card-header p,
+.table-card[data-status="empty"] .card-header i {
+    color: #155724;
+}
+
+.table-card[data-status="empty"] .card-body {
+    background-color: #E9ECEF;
+    color: #6C757D;
+}
+
+.table-card[data-status="empty"]:hover .card-body {
+    background-color: #c3e6cb;
+    color: #155724;
 }

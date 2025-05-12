@@ -26,36 +26,26 @@
 
     <div class="container-fluid">
         <div class="row">
-            <% for (let i = 0; i < homePageData.tableQuantity; i++) { %>
+            <% for (let i = 0; i < homePageData.tableQuantity; i++) {
+                let tableStatus = homePageData.tables[i].trang_thai;
+                let tableId = homePageData.tables[i].ma_ban;
+                let isEmpty = tableStatus === "Trống"; 
+            %>
+
             <div class="col-2">
-                <% if (homePageData.tables[i].trang_thai === "Trống") { %>
-                <div class="card shadow-sm" id="<%=homePageData.tables[i].ma_ban %>">
-                    <div class="card-header d-flex justify-content-between emptyHeader">
-                        <p class="card-text m-0 font-weight-light text-white">Bàn Trống</p>
-                        <a href="/nhanvien/chitiet/<%=homePageData.tables[i].ma_ban %>" class="stretched-link">
-                            <i style="font-size:16px" class="fa text-white">&#xf142;</i>
+                <div class="card shadow-sm table-card" id="table-<%= tableId %>" data-table-id="<%= tableId %>" data-status="<%= tableStatus === 'Trống' ? 'empty' : 'occupied' %>">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <p class="card-text m-0 font-weight-light"><%= tableStatus === "Trống" ? "Bàn trống" : "Xem chi tiết" %></p>
+                        <a href="./chitiet/<%= tableId %>" class="stretched-link">
+                            <i style="font-size:16px" class="fa fas fa-chevron-right"></i>
                         </a>
                     </div>
-                    <div class="card-body py-5 emptyBody">
-                        <p class="card-text text-center font-weight-bolder text-white">Bàn <%=homePageData.tables[i].ma_ban %>
-                        </p>
+                    <div class="card-body py-5">
+                        <p class="card-text text-center font-weight-bolder"><%= homePageData.tables[i].ten_ban %></p>
                     </div>
                 </div>
-                <%} else { %>
-                <div class="card shadow-sm" id="<%=homePageData.tables[i].ma_ban %>">
-                    <div class="card-header d-flex justify-content-between notEmptyHeader">
-                        <p class="card-text m-0 font-weight-light text-white">Xem Chi Tiết</p>
-                        <a href="/nhanvien/chitiet/<%=homePageData.tables[i].ma_ban %>" class="stretched-link">
-                            <i style="font-size:16px" class="fa text-white">&#xf142;</i>
-                        </a>
-                    </div>
-                    <div class="card-body py-5 notEmptyBody">
-                        <p class="card-text text-center font-weight-bolder text-white">Bàn <%=homePageData.tables[i].ma_ban%>
-                        </p>
-                    </div>
-                </div>
-                <% } %>
             </div>
+            
             <% } %>
         </div>
     </div>
@@ -73,7 +63,7 @@
                     <a class="btn btn-danger btn-block my-4">Đăng xuất</a>
 
                 </div>
-
+                
             </div>
         </div>
     </div>

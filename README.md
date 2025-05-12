@@ -28,7 +28,7 @@ Hệ thống POS (Point of Sale) của dự án này là một hệ thống qu�
 - **Quản lý món ăn**: Chủ nhà hàng có thể thêm, sửa, hoặc xóa món ăn qua giao diện quản trị.
 
 ## Công nghệ sử dụng
-- **Frontend**: HTML, CSS, JavaScript, Bootstrap 4.  
+- **Frontend**: HTML, CSS, JavaScript, Bootstrap 5.  
 - **Backend**: Node.js, Express.js.  
 - **Ứng dụng**: Web Application.
 

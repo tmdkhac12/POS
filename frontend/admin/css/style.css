@@ -1,0 +1,38 @@
+.col-2 {
+    height: 100vh;
+    position: sticky;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Left Nav */
+ul.nav {
+    flex: 1;
+}
+
+.nav-link {
+    font-size: 1.1rem !important;
+    color: black !important;
+    border: none !important;
+}
+
+.nav-link.active {
+    border: none !important;
+    color: #dc3545 !important;
+}
+
+.nav-item {
+    padding: 0 12px;
+}
+
+/* Tab pane */
+.tab-pane {
+    padding: 0 !important;
+}
+
+/* Table */
+table th,
+table td {
+    text-align: center;
+    vertical-align: middle;
+}
