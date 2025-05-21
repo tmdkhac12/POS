@@ -63,12 +63,8 @@ body {
     overflow-x: auto;
     scroll-behavior: smooth;
     scrollbar-width: none;
-    /* Ẩn thanh cuộn trên Firefox */
-    -ms-overflow-style: none;
-    /* Ẩn thanh cuộn trên IE và Edge */
 }
 
 .menu-container::-webkit-scrollbar {
     display: none;
-    /* Ẩn thanh cuộn trên Chrome, Safari, và Opera */
 }

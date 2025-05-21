@@ -1,19 +1,10 @@
 const express = require("express");
-const khachhangController = require("../controller/khachhangController");
-const khachhangRouter = express.Router();
+const khachHangController = require("../controller/khachhangController");
 
-khachhangRouter.get("/", (req, res) => {
-    khachhangController.getHomePage(req, res);
+const khachHangRouter = express.Router();
+
+khachHangRouter.get("/table/:id", (req, res) => {
+    khachHangController.getHomePage(req, res);
 })
 
-//Load menu
-khachhangRouter.get("/monan",khachhangController.getMonAn);
-
-//Get product by ID
-khachhangRouter.get("/monan/:id",khachhangController.getProductByID);
- 
-khachhangRouter.get('/category',khachhangController.getFilteredProduct);
-
-khachhangRouter.post('/add',khachhangController.addReview);
-
-module.exports = khachhangRouter;
+module.exports = khachHangRouter;

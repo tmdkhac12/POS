@@ -5,54 +5,76 @@ document.addEventListener("DOMContentLoaded", () => {
 })
 
 const LoadNavItems = {
-    groups: null,
     menuContainer: null,
+    foodItemsContainer: null,
+
+    j_foodData: JSON.parse(document.querySelector("#dishes-data-json").textContent),
 
     init() {
         this.initAtt();
-
-        // Load nav items data 
-        this.groups.forEach(item => {
-            this.menuContainer.innerHTML += `
-                <button class="menu-btn">
-                    <img src="${item.image}" alt="">
-                    <h6 class="mb-0 mt-2">${item.name}</h6>
-                </button>
-            `;
-        })
+        this.displayFoodItems(this.j_foodData[0]);
 
         // Add active class for first button 
         const firstButton = document.querySelector(".menu-btn");
         firstButton.classList.add("active");
-        
+        this.updateSelectingLabel();
+
         // Add nav item onclick event handler  
         const buttons = document.querySelectorAll('.menu-btn');
         buttons.forEach(btn => {
             btn.addEventListener('click', () => {
-                // Xóa active khỏi tất cả button
-                buttons.forEach(b => b.classList.remove('active'));
                 // Thêm active vào button được click
+                buttons.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
+
+                // Lấy index của thẻ đang được chọn
+                let index = parseInt(btn.getAttribute("data-index"));
+                this.displayFoodItems(this.j_foodData[index]);
+
+                // Cập nhật label cho nav item đang chọn
+                this.updateSelectingLabel();
             });
         });
     },
 
     initAtt() {
         this.menuContainer = document.querySelector("#menuContainer");
+        this.foodItemsContainer = document.querySelector("#food-items");
 
-        this.groups = [
-            { name: "Cupcake", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlfauCI-G5IZ5foSvbWbYNpgHqXFGeKJ8QtA&s" },
-            { name: "Juice", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlfauCI-G5IZ5foSvbWbYNpgHqXFGeKJ8QtA&s" },
-            { name: "Hot", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlfauCI-G5IZ5foSvbWbYNpgHqXFGeKJ8QtA&s" },
-            { name: "Cold", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlfauCI-G5IZ5foSvbWbYNpgHqXFGeKJ8QtA&s" },
-            { name: "Coca", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlfauCI-G5IZ5foSvbWbYNpgHqXFGeKJ8QtA&s" },
-            // { name: "Chicken", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlfauCI-G5IZ5foSvbWbYNpgHqXFGeKJ8QtA&s" },
-            // { name: "Beef", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlfauCI-G5IZ5foSvbWbYNpgHqXFGeKJ8QtA&s" },
-            // { name: "Beef1", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlfauCI-G5IZ5foSvbWbYNpgHqXFGeKJ8QtA&s" },
-            // { name: "Beef2", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlfauCI-G5IZ5foSvbWbYNpgHqXFGeKJ8QtA&s" },
-            // { name: "Beef3", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlfauCI-G5IZ5foSvbWbYNpgHqXFGeKJ8QtA&s" },
-            // { name: "Beef4", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlfauCI-G5IZ5foSvbWbYNpgHqXFGeKJ8QtA&s" }
-        ];
+    },
+
+    updateSelectingLabel() {
+        const navItemSelected = document.querySelector(".menu-btn.active");
+        const navItemLabel = document.querySelector("#nav-item-label");
+
+        navItemLabel.textContent = navItemSelected.querySelector("h6").textContent;
+    },
+
+    displayFoodItems(items) {
+        this.foodItemsContainer.innerHTML = ''; // Xóa nội dung cũ
+
+        for (let i = 0; i < items.length; i++) {
+            const card = `
+                <div class="col-4 fw-bold d-flex">
+                    <div class="food-card shadow border border-1 h-100 w-100">
+                        <img src="/khachhang/images/dishes/${items[i].hinh_anh}">
+
+                            <div class="card-body p-3">
+                                <h5 class="card-title" title="${items[i].ten_mon_an}"><span class="text-danger">${i + 1}. </span>${items[i].ten_mon_an}</h5>
+
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <p class="card-text text-danger m-0">${items[i].don_gia.toLocaleString("vi-VN")}đ</p>
+                                    <button class="add-to-cart">
+                                        <i class="bi bi-cart"></i>
+                                    </button>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            `
+
+            this.foodItemsContainer.innerHTML += card;
+        }
     }
 }
 

@@ -47,13 +47,16 @@ const preOrderHandler = {
                     <div class="cart-item-details">
                         <p><span class="text-danger">${i + 1}. </span> Pasta</p>
                         <p class="text-danger mt-2 price" price="30000">30.000đ</p>
-                        <small>(Đơn giá đã tính VAT = 30.000đ)</small>
+                        <small>(Đơn giá đã tính VAT = 30.000đ)</small> 
                     </div>
                     <div class="cart-item-controls">
                         <button class="decrease-btn" data-id="3">-</button>
                         <span>1</span>
                         <button class="increase-btn text-danger border-danger" data-id="3">+</button>
                     </div>
+                    <button type="button" class="remove-item btn border-0 text-danger p-2">
+                        <i class="bi bi-trash-fill"></i>
+                    </button>
                 </li>
             `;
         }
