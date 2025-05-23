@@ -69,10 +69,12 @@
 }
 
 .tab-pane .cart-list {
-    flex: 1;
     overflow-y: auto;
     max-height: calc(105vh - 200px);
-    /* Giới hạn chiều cao để cuộn được */
+}
+
+.tab-pane .cart-list::-webkit-scrollbar {
+    display: none;
 }
 
 .nav-link.active {

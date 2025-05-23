@@ -1,18 +1,17 @@
 document.addEventListener("DOMContentLoaded", () => {
-    LoadNavItems.init();
+    NavItemsHandler.init();
 
     ScrollBarHandler.init();
 })
 
-const LoadNavItems = {
-    menuContainer: null,
-    foodItemsContainer: null,
+const NavItemsHandler = {
+    menuContainer: document.querySelector("#menuContainer"),
+    foodItemsContainer: document.querySelector("#food-items"),
 
-    j_foodData: JSON.parse(document.querySelector("#dishes-data-json").textContent),
+    a_foodData: JSON.parse(document.querySelector("#dishes-data-json").textContent),
 
     init() {
-        this.initAtt();
-        this.displayFoodItems(this.j_foodData[0]);
+        this.displayFoodItems(this.a_foodData[0]);
 
         // Add active class for first button 
         const firstButton = document.querySelector(".menu-btn");
@@ -29,18 +28,18 @@ const LoadNavItems = {
 
                 // Lấy index của thẻ đang được chọn
                 let index = parseInt(btn.getAttribute("data-index"));
-                this.displayFoodItems(this.j_foodData[index]);
+                this.displayFoodItems(this.a_foodData[index]);
 
                 // Cập nhật label cho nav item đang chọn
                 this.updateSelectingLabel();
+
+                // Thêm sự kiện add to cart cho các món ăn 
+                foodCardHandler.addToCartHandler();
             });
         });
-    },
 
-    initAtt() {
-        this.menuContainer = document.querySelector("#menuContainer");
-        this.foodItemsContainer = document.querySelector("#food-items");
-
+        // Add add to card event onclick handler 
+        foodCardHandler.addToCartHandler();
     },
 
     updateSelectingLabel() {
@@ -55,20 +54,20 @@ const LoadNavItems = {
 
         for (let i = 0; i < items.length; i++) {
             const card = `
-                <div class="col-4 fw-bold d-flex">
-                    <div class="food-card shadow border border-1 h-100 w-100">
+                <div class="col-4 fw-bold">
+                    <div class="food-card shadow border border-1" data-dish-id="${items[i].ma_mon_an}" data-price="${items[i].don_gia}">
                         <img src="/khachhang/images/dishes/${items[i].hinh_anh}">
 
-                            <div class="card-body p-3">
-                                <h5 class="card-title" title="${items[i].ten_mon_an}"><span class="text-danger">${i + 1}. </span>${items[i].ten_mon_an}</h5>
+                        <div class="card-body p-3">
+                            <h5 class="card-title" title="${items[i].ten_mon_an}"><span class="text-danger">${i + 1}. </span>${items[i].ten_mon_an}</h5>
 
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <p class="card-text text-danger m-0">${items[i].don_gia.toLocaleString("vi-VN")}đ</p>
-                                    <button class="add-to-cart">
-                                        <i class="bi bi-cart"></i>
-                                    </button>
-                                </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <p class="card-text text-danger m-0">${items[i].don_gia.toLocaleString("vi-VN")}đ</p>
+                                <button class="add-to-cart">
+                                    <i class="bi bi-cart"></i>
+                                </button>
                             </div>
+                        </div>
                     </div>
                 </div>
             `
