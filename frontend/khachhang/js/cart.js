@@ -127,13 +127,14 @@ const cartHandler = {
             this.d_cartItemsContainer.innerHTML += li;
         }
 
+        this.updateTotal();
+
         // Xử lý sự kiện giảm số lượng món 
         this.ad_decreaseBtns.forEach(btn => {
             btn.addEventListener("click", () => {
                 const maMon = parseInt(btn.closest(".cart-item-controls").getAttribute("data-dish-id"));
                 this.updateLocalStorage("decrease", maMon);
                 this.loadCart();
-                this.updateTotal();
             })
         })
 
@@ -143,7 +144,6 @@ const cartHandler = {
                 const maMon = parseInt(btn.closest(".cart-item-controls").getAttribute("data-dish-id"));
                 this.updateLocalStorage("increase", maMon);
                 this.loadCart();
-                this.updateTotal();
             })
         })
 
@@ -154,7 +154,6 @@ const cartHandler = {
                     const maMon = parseInt(btn.previousElementSibling.getAttribute("data-dish-id"));
                     this.updateLocalStorage("remove", maMon);
                     this.loadCart();
-                    this.updateTotal();
                 }
             })
         })

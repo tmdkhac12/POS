@@ -11,19 +11,6 @@ const getAllBans = async () => {
     }
 }
 
-const getNumberOfTable = async () => { 
-    const sql = "SELECT COUNT(*) as quantity FROM BAN"
-
-    try {
-        const [result] = await pool.query(sql);
-        let quantity = result[0].quantity;
-
-        return quantity;
-    } catch (error) {
-        throw new Error("Get Number of Ban query Error: " + error.message)
-    }
-}
-
 const getTableById = async (id) => {
     const sql = "SELECT * FROM ban WHERE ma_ban = ?";
 
@@ -39,6 +26,5 @@ const getTableById = async (id) => {
 
 module.exports = {
     getAllBans,
-    getNumberOfTable,
     getTableById
 }
