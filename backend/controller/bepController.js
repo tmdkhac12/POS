@@ -1,7 +1,14 @@
-const path = require("path")
+const banModel = require("../models/BanModel");
 
-const getHomePage = function (req, res) {
-    res.render("bep/index");
+const getHomePage = async function (req, res) {
+    const bans = await banModel.getAllBans();
+
+    const homePageData = {
+        bans
+    }
+
+    // console.log(bans);
+    res.render("bep/index", homePageData);
 }
 
 module.exports = {

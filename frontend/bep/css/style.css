@@ -12,29 +12,29 @@
 }
 
 /* Bàn trống */
-.table-card[data-status="empty"] .emptyHeader {
+.table-card[data-status="empty"] .card-header {
     background-color: #D4EDDA;
     border-bottom: 2px solid #c3e6cb;
 }
 
-.table-card[data-status="empty"] .emptyHeader p,
-.table-card[data-status="empty"] .emptyHeader i {
+.table-card[data-status="empty"] .card-header p,
+.table-card[data-status="empty"] .card-header i {
     color: #155724;
 }
 
-.table-card[data-status="empty"] .emptyBody {
+.table-card[data-status="empty"] .card-body {
     background-color: #E9ECEF;
     color: #6C757D;
 }
 
 /* Bàn đang có khách (chưa hoàn thành) */
-.table-card[data-status="occupied"].pending .emptyHeader {
+.table-card[data-status="occupied"].pending .card-header {
     background-color: #ff4f3e;
     border-bottom: 2px solid #e03e33;
     position: relative;
 }
 
-.table-card[data-status="occupied"].pending .emptyHeader i.fa-clock {
+.table-card[data-status="occupied"].pending .card-header i.fa-clock {
     position: absolute;
     top: 50%;
     right: 30px;
@@ -44,30 +44,32 @@
 }
 
 /* Bàn đang có khách (đã hoàn thành) */
-.table-card[data-status="occupied"] .emptyHeader {
+.table-card[data-status="occupied"] .card-header {
     background-color: #FF6F61;
     border-bottom: 2px solid #ff4f3e;
 }
 
-.table-card[data-status="occupied"] .emptyHeader p,
-.table-card[data-status="occupied"] .emptyHeader i {
+.table-card[data-status="occupied"] .card-header p,
+.table-card[data-status="occupied"] .card-header i {
     color: #FFFFFF;
 }
 
-.table-card[data-status="occupied"] .emptyBody {
+.table-card[data-status="occupied"] .card-body {
     background-color: #FFE4E1;
     color: #FF6F61;
 }
 
 /* Trạng thái active (khi được chọn) */
-.active-table[data-status="empty"] .emptyBody {
+.active-table[data-status="empty"] .card-body {
     background-color: #c3e6cb;
     color: #155724;
+    font-weight: bolder !important;
 }
 
-.active-table[data-status="occupied"] .emptyBody {
+.active-table[data-status="occupied"] .card-body {
     background-color: #ffdcd9;
     color: #ff4f3e;
+    font-weight: bolder !important;
 }
 
 .order-list {
