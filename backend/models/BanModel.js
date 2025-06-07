@@ -11,6 +11,17 @@ const getAllBans = async () => {
     }
 }
 
+const getBans = async (limit, offset) => {
+    const sql = "SELECT * FROM ban LIMIT ? OFFSET ?";
+
+    try {
+        const [result] = await pool.execute(sql, [limit, offset]);
+        return result;
+    } catch (error) {
+        throw new Error("Get Bans query Error: " + error.message)
+    }
+} 
+
 const getTableById = async (id) => {
     const sql = "SELECT * FROM ban WHERE ma_ban = ?";
 
@@ -24,7 +35,21 @@ const getTableById = async (id) => {
     }
 }
 
+const getNumberOfTable = async () => {
+    const sql = "select count(*) as soluong from ban";
+
+    try {
+        const [result] = await pool.query(sql);
+
+        return result[0].soluong;
+    } catch (error) {
+        throw new Error("Get Number Of Table: " + error.message)
+    }
+}
+
 module.exports = {
     getAllBans,
-    getTableById
+    getBans,
+    getTableById,
+    getNumberOfTable
 }

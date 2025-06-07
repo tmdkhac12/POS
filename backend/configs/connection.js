@@ -7,7 +7,8 @@ dotenv.config({ path: path.join(__dirname, "../.env") });
 const pool = mysql.createPool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
-    database: process.env.DB_NAME
+    database: process.env.DB_NAME,
+    dateStrings: true
 })
 
 // Kiểm tra kết nối (chỉ thực hiện 1 lần khi khởi động)

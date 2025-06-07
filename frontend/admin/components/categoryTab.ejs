@@ -1,0 +1,46 @@
+<!-- Category Tab -->
+<div class="tab-pane fade" id="category">
+    <header>
+        <h3>Phân loại</h3>
+    </header>
+
+    <div class="table-container p-3 border border-1">
+        <div class="form-outline" data-mdb-input-init>
+            <input type="search" id="form1" class="form-control" placeholder="Tìm kiếm..." aria-label="Search" />
+        </div>
+
+        <table class="table table-bordered mt-3">
+            <thead>
+                <tr>
+                    <th style="width: 15%;">Mã phân loại</th>
+                    <th>Tên phân loại</th>
+                    <th style="width: 25%;">Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% for (const nhom of nhoms) { %>
+                    <tr>
+                        <td><%= nhom.ma_nhom %></td>
+                        <td><%= nhom.ten_nhom %></td>
+                        <td>
+                            <div class="d-flex gap-2 justify-content-center">
+                                <button class="btn btn-warning">Cập nhật</button>
+                                <button class="btn btn-danger">Xóa</button>
+                            </div>
+                        </td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+
+    <ul class="pagination justify-content-end pt-3" id="category-pagination">
+        <% const numberOfNhom = Math.ceil(nhomCount / 8) %>
+        <li class="page-item prev-btn"><a class="page-link" href="#">Trang trước</a></li>
+        <li class="page-item page-item-btn active"><a class="page-link" href="#">1</a></li>
+        <% for (let i = 1; i < numberOfNhom; i++) { %>
+            <li class="page-item page-item-btn"><a class="page-link" href="#"><%= i + 1 %></a></li>
+        <% } %>
+        <li class="page-item next-btn"><a class="page-link" href="#">Trang sau</a></li>
+    </ul>
+</div>

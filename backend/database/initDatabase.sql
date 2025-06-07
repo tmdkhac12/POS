@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 20, 2025 at 05:14 PM
+-- Generation Time: May 26, 2025 at 02:20 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -57,10 +57,14 @@ INSERT INTO `ban` (`ma_ban`, `ten_ban`, `trang_thai`) VALUES
 --
 
 CREATE TABLE `chitiethoadon` (
-  `ma_mon_an` int(11) NOT NULL,
-  `ma_hoa_don` int(11) NOT NULL,
+  `ma_chi_tiet` int(11) NOT NULL,
+  `ma_mon_an` int(11) DEFAULT NULL,
+  `ma_hoa_don` int(11) DEFAULT NULL,
   `so_luong` int(11) DEFAULT NULL,
-  `gia_mon_an` double DEFAULT NULL
+  `thanh_tien` double DEFAULT NULL,
+  `gia_mon_an` double DEFAULT NULL,
+  `thoi_gian_dat` datetime DEFAULT NULL,
+  `ghi_chu` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -70,12 +74,14 @@ CREATE TABLE `chitiethoadon` (
 --
 
 CREATE TABLE `currentorder` (
-  `ma_mon_an` int(11) NOT NULL,
-  `ma_ban` int(11) NOT NULL,
-  `ten_mon_an` varchar(255) DEFAULT NULL,
-  `don_gia` double DEFAULT NULL,
+  `ma_order` int(11) NOT NULL,
+  `ma_mon_an` int(11) DEFAULT NULL,
+  `ma_ban` int(11) DEFAULT NULL,
+  `don_gia_ap_dung` double DEFAULT NULL,
   `so_luong` int(11) DEFAULT NULL,
-  `trang_thai` enum('Đã nhận','Đang chế biến','Hoàn thành') DEFAULT NULL
+  `thoi_gian_dat` datetime DEFAULT NULL,
+  `ghi_chu` text DEFAULT NULL,
+  `trang_thai` enum('Đã nhận','Đang chế biến','Hoàn thành') DEFAULT 'Đã nhận'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Mã món ăn, mã bàn có tham chiếu';
 
 -- --------------------------------------------------------
@@ -106,7 +112,7 @@ CREATE TABLE `khachhang` (
   `so_dien_thoai` varchar(20) DEFAULT NULL,
   `tong_chi_tieu` double DEFAULT NULL,
   `tien_tich_luy` double DEFAULT NULL,
-  `cap_bac` enum('Đồng','Bạc','Vàng','Kim Cương') DEFAULT NULL
+  `cap_bac` enum('Đồng','Bạc','Vàng','Kim Cương') DEFAULT 'Đồng'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Đồng: 2%, Bạc: 3%, Vàng: 5%, Kim Cương: 7%';
 
 --
@@ -159,21 +165,26 @@ CREATE TABLE `monan` (
 --
 
 INSERT INTO `monan` (`ma_mon_an`, `ten_mon_an`, `don_gia`, `hinh_anh`, `ma_nhom`, `ma_khuyen_mai`) VALUES
-(1, 'Khoai Tây Chiên', 20000, 'khoai_tay_chien.jpg', 1, NULL),
-(2, 'Gà Rán Miếng', 30000, 'ga_ran_mieng.jpg', 1, NULL),
-(3, 'Cánh Gà Chiên Nước Mắm', 35000, 'canh_ga_nuocmam.jpg', 1, NULL),
-(4, 'Khoai Lang Chiên', 25000, 'khoai_lang_chien.jpg', 1, NULL),
-(5, 'Nem Chiên', 30000, 'nem_chien.jpg', 1, NULL),
-(6, 'Gà Xiên Nướng', 40000, 'ga_xien_nuong.jpg', 2, NULL),
-(7, 'Bò Nướng Sa Tế', 50000, 'bo_nuong_sa_te.jpg', 2, NULL),
-(8, 'Tôm Nướng Muối Ớt', 45000, 'tom_nuong_muoi_ot.jpg', 2, NULL),
-(9, 'Rib BBQ Nướng', 55000, 'rib_bbq_nuong.jpg', 2, NULL),
-(10, 'Rau Củ Nướng', 30000, 'rau_cu_nuong.jpg', 2, NULL),
-(11, 'Coca-Cola Chai', 15000, 'coca_cola_chai.jpg', 3, NULL),
-(12, 'Pepsi Lon', 15000, 'pepsi_lon.jpg', 3, NULL),
-(13, 'Trà Đá', 10000, 'tra_da.jpg', 3, NULL),
-(14, 'Nước Ép Cam', 20000, 'nuoc_ep_cam.jpg', 3, NULL),
-(15, 'Sinh Tố Bơ', 25000, 'sinh_to_bo.jpg', 3, NULL);
+(1, 'Ramen Teriyaki', 78000, 'ramen_teriyaki.jfif', 1, NULL),
+(2, 'Ramen Daidai', 68000, 'ramen_daidai.jpg', 1, NULL),
+(3, 'Ramen Aka', 58000, 'ramen_aka.jfif', 1, NULL),
+(4, 'Ramen Shiro', 78000, 'ramen_shiro.jpg', 1, NULL),
+(5, 'Ramen Kuro', 68000, 'ramen_kuro.png', 1, NULL),
+(6, 'Ramen Tonkatsu', 98000, 'ramen_tonkatsu.jpg', 1, NULL),
+(7, 'Ramen Cao Cấp', 103000, 'ramen_caocap.jpg', 1, NULL),
+(8, 'Cơm Cà Ri Bò', 65000, 'rice_currybeef.jfif', 2, NULL),
+(9, 'Cơm Cà Ri Gà', 75000, 'rice_currychicken.png', 2, NULL),
+(10, 'Cơm Trứng Cuộn', 55000, 'rice_egg.jfif', 2, NULL),
+(11, 'Cơm Bò', 68000, 'rice_gyudon.jfif', 2, NULL),
+(12, 'Cơm Ichiban', 78000, 'rice_ichiban.jfif', 2, NULL),
+(13, 'Cơm Thịt Heo Chiên Xù ', 78000, 'rice_tonkatsu.jfif', 2, NULL),
+(14, 'Tôm Chiên Xù', 88000, 'fried_shrimp.jfif', 3, NULL),
+(15, 'Bánh Xèo', 58000, 'banhxeo.jfif', 3, NULL),
+(16, 'Takoyaki', 35000, 'takoyaki.jfif', 3, NULL),
+(17, 'Trà đá', 10000, 'tra_da.jfif', 4, NULL),
+(18, '7up', 25000, '7up.jfif', 4, NULL),
+(19, 'Pepsi', 25000, 'pepsi.jfif', 4, NULL),
+(20, 'Coca', 25000, 'coca.jfif', 4, NULL);
 
 -- --------------------------------------------------------
 
@@ -183,17 +194,19 @@ INSERT INTO `monan` (`ma_mon_an`, `ten_mon_an`, `don_gia`, `hinh_anh`, `ma_nhom`
 
 CREATE TABLE `nhom` (
   `ma_nhom` int(11) NOT NULL,
-  `ten_nhom` varchar(255) DEFAULT NULL
+  `ten_nhom` varchar(255) DEFAULT NULL,
+  `hinh_anh` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `nhom`
 --
 
-INSERT INTO `nhom` (`ma_nhom`, `ten_nhom`) VALUES
-(1, 'Đồ Chiên'),
-(2, 'Đồ Nướng'),
-(3, 'Nước Ngọt');
+INSERT INTO `nhom` (`ma_nhom`, `ten_nhom`, `hinh_anh`) VALUES
+(1, 'Ramen', 'ramen.jfif'),
+(2, 'Cơm', 'rice.jfif'),
+(3, 'Món chiên', 'fried.jfif'),
+(4, 'Đồ uống', 'juice.avif');
 
 -- --------------------------------------------------------
 
@@ -209,6 +222,15 @@ CREATE TABLE `taikhoan` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Mã nhóm quyền 1: Admin, 2: Nhân Viên, 3: Bếp';
 
 --
+-- Dumping data for table `taikhoan`
+--
+
+INSERT INTO `taikhoan` (`ma_tai_khoan`, `username`, `hashPassword`, `ma_nhom_quyen`) VALUES
+(1, 'admin', NULL, 1),
+(2, 'nhanvien', NULL, 2),
+(3, 'bep', NULL, 3);
+
+--
 -- Indexes for dumped tables
 --
 
@@ -222,14 +244,17 @@ ALTER TABLE `ban`
 -- Indexes for table `chitiethoadon`
 --
 ALTER TABLE `chitiethoadon`
-  ADD PRIMARY KEY (`ma_hoa_don`,`ma_mon_an`),
-  ADD KEY `ma_mon_an` (`ma_mon_an`);
+  ADD PRIMARY KEY (`ma_chi_tiet`),
+  ADD KEY `ma_mon_an` (`ma_mon_an`),
+  ADD KEY `ma_hoa_don` (`ma_hoa_don`);
 
 --
 -- Indexes for table `currentorder`
 --
 ALTER TABLE `currentorder`
-  ADD PRIMARY KEY (`ma_ban`,`ma_mon_an`);
+  ADD PRIMARY KEY (`ma_order`),
+  ADD KEY `ma_mon_an` (`ma_mon_an`),
+  ADD KEY `ma_ban` (`ma_ban`);
 
 --
 -- Indexes for table `hoadon`
@@ -281,6 +306,18 @@ ALTER TABLE `ban`
   MODIFY `ma_ban` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
+-- AUTO_INCREMENT for table `chitiethoadon`
+--
+ALTER TABLE `chitiethoadon`
+  MODIFY `ma_chi_tiet` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `currentorder`
+--
+ALTER TABLE `currentorder`
+  MODIFY `ma_order` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `hoadon`
 --
 ALTER TABLE `hoadon`
@@ -302,19 +339,19 @@ ALTER TABLE `khuyenmai`
 -- AUTO_INCREMENT for table `monan`
 --
 ALTER TABLE `monan`
-  MODIFY `ma_mon_an` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `ma_mon_an` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `nhom`
 --
 ALTER TABLE `nhom`
-  MODIFY `ma_nhom` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `ma_nhom` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `taikhoan`
 --
 ALTER TABLE `taikhoan`
-  MODIFY `ma_tai_khoan` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ma_tai_khoan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Constraints for dumped tables
@@ -326,6 +363,13 @@ ALTER TABLE `taikhoan`
 ALTER TABLE `chitiethoadon`
   ADD CONSTRAINT `chitiethoadon_ibfk_1` FOREIGN KEY (`ma_mon_an`) REFERENCES `monan` (`ma_mon_an`),
   ADD CONSTRAINT `chitiethoadon_ibfk_2` FOREIGN KEY (`ma_hoa_don`) REFERENCES `hoadon` (`ma_hoa_don`);
+
+--
+-- Constraints for table `currentorder`
+--
+ALTER TABLE `currentorder`
+  ADD CONSTRAINT `currentorder_ibfk_1` FOREIGN KEY (`ma_mon_an`) REFERENCES `monan` (`ma_mon_an`),
+  ADD CONSTRAINT `currentorder_ibfk_2` FOREIGN KEY (`ma_ban`) REFERENCES `ban` (`ma_ban`);
 
 --
 -- Constraints for table `hoadon`

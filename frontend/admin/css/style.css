@@ -1,6 +1,6 @@
 .col-2 {
     height: 100vh;
-    position: sticky;
+    position: fixed;
     display: flex;
     flex-direction: column;
 }
@@ -23,6 +23,13 @@ ul.nav {
 
 .nav-item {
     padding: 0 12px;
+}
+
+.content-area {
+    position: absolute;
+    right: 0;
+    overflow-y: auto;
+    max-height: 100vh;
 }
 
 /* Tab pane */

@@ -1,0 +1,58 @@
+const pool = require('../configs/connection.js').promise();
+
+const getAllHoaDons = async () => {
+    const sql = "select * from hoadon";
+
+    try {
+        const [result] = await pool.query(sql);
+
+        return result;        
+    } catch (error) {
+        console.error("Get All Hoa Don: " + error.message);
+    }
+}
+
+const getHoaDons = async (limit, offset) => {
+    const sql = "select * from hoadon limit ? offset ?";
+
+    try {
+        const [result] = await pool.execute(sql, [limit, offset]);
+
+        return result;        
+    } catch (error) {
+        console.error("Get Hoa Don Limit Offset: " + error.message);
+    }
+}
+
+const getHoaDonsJoinKhachHang = async (limit, offset) => {
+    const sql = `select hd.*, kh.ten_khach_hang, kh.so_dien_thoai 
+                from hoadon hd inner join khachhang kh on hd.ma_khach_hang = kh.ma_khach_hang
+                limit ? offset ?`;
+
+    try {
+        const [result] = await pool.execute(sql, [limit, offset]);
+
+        return result;        
+    } catch (error) {
+        console.error("Get Hoa Don Limit Offset: " + error.message);
+    }
+}
+
+const getNumberOfHoaDon = async () => {
+    const sql = "select count(*) as soluong from hoadon";
+
+    try {
+        const [result] = await pool.query(sql);
+
+        return result[0].soluong;        
+    } catch (error) {
+        console.error("Get Number of Hoa Don: " + error.message);
+    }
+}
+
+module.exports = {
+    getAllHoaDons,
+    getNumberOfHoaDon,
+    getHoaDons,
+    getHoaDonsJoinKhachHang
+}
