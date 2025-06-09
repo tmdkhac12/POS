@@ -12,6 +12,9 @@ initiator.initStaticFilesServing(app);
 // Define routers for specified routes 
 initiator.initRouters(app);
 
+// Define routers for API
+initiator.initApiRouters(app);
+
 // Config View Engine
 configViewEngine(app); 
 

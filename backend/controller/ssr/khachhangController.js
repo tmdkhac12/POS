@@ -1,6 +1,6 @@
-const nhomModel = require("../models/NhomModel");
-const banModel = require("../models/BanModel");
-const monanModel = require('../models/MonAnModel');
+const nhomModel = require("../../models/NhomModel");
+const banModel = require("../../models/BanModel");
+const monanModel = require('../../models/MonAnModel');
 
 const getHomePage = async (req, res) => {
     const tableId = req.params.id;
@@ -34,7 +34,8 @@ const getHomePage = async (req, res) => {
 
         res.render("./khachhang/index", homePageData);
     } catch (error) {
-        console.log("Lỗi khachHangController: " + error.message);
+        console.log("Error in getHomePage: " + error.message);
+        res.status(500).send("Lỗi server!");
     }
 }
 

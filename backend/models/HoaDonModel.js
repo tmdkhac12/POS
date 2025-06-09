@@ -8,19 +8,19 @@ const getAllHoaDons = async () => {
 
         return result;        
     } catch (error) {
-        console.error("Get All Hoa Don: " + error.message);
+        throw new Error("Get All Hoa Don (HoaDonModel): " + error.message);
     }
 }
 
 const getHoaDons = async (limit, offset) => {
-    const sql = "select * from hoadon limit ? offset ?";
+    const sql = "select * from hoadon limit ? offset ?";    
 
     try {
         const [result] = await pool.execute(sql, [limit, offset]);
 
         return result;        
     } catch (error) {
-        console.error("Get Hoa Don Limit Offset: " + error.message);
+        throw new Error("Get Hoa Don Limit Offset (HoaDonModel): " + error.message);
     }
 }
 
@@ -34,7 +34,7 @@ const getHoaDonsJoinKhachHang = async (limit, offset) => {
 
         return result;        
     } catch (error) {
-        console.error("Get Hoa Don Limit Offset: " + error.message);
+        throw new Error("Get Hoa Don Limit Offset (HoaDonModel): " + error.message);
     }
 }
 
@@ -46,7 +46,7 @@ const getNumberOfHoaDon = async () => {
 
         return result[0].soluong;        
     } catch (error) {
-        console.error("Get Number of Hoa Don: " + error.message);
+        throw new Error("Get Number of Hoa Don (HoaDonModel): " + error.message);
     }
 }
 

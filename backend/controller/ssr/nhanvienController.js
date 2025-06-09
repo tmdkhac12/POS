@@ -1,6 +1,6 @@
-const banModel = require("../models/BanModel");
-const monanModel = require("../models/MonAnModel");
-const nhomModel = require('../models/NhomModel');
+const banModel = require("../../models/BanModel");
+const monanModel = require("../../models/MonAnModel");
+const nhomModel = require('../../models/NhomModel');
 
 const getHomePage = async function (req, res) {
     try {
@@ -14,7 +14,8 @@ const getHomePage = async function (req, res) {
         // console.log(tables)
         res.render("./nhanvien/index", homePageData);
     } catch (error) {
-        console.log("Error in nhanvienController: ", error.message);
+        console.error("Error in getHomePage: " + error.message);
+        res.status(500).send("Lỗi Server");
     }
 }
 
@@ -47,12 +48,13 @@ const getChiTietPage = async function (req, res) {
         // console.log(dishes[0]);
         res.render("./nhanvien/chitiet", chiTietPageData);
     } catch (error) {
-        console.log("Error in nhanvienController: ", error.message);
+        console.log("Error in getChiTietPage: ", error.message);
+        res.status(500).send("Lỗi Server");
     }
 
 }
 
 module.exports = {
     getHomePage,
-    getChiTietPage,
+    getChiTietPage
 };

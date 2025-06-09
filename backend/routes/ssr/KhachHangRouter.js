@@ -1,5 +1,5 @@
 const express = require("express");
-const khachHangController = require("../controller/khachhangController");
+const khachHangController = require("../../controller/ssr/khachhangController");
 
 const khachHangRouter = express.Router();
 

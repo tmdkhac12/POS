@@ -7,7 +7,7 @@ const getAllBans = async () => {
         const [result] = await pool.query(sql);
         return result;
     } catch (error) {
-        throw new Error("Get All Ban query Error: " + error.message)
+        throw new Error("Get All Ban (BanModel): " + error.message)
     }
 }
 
@@ -18,7 +18,7 @@ const getBans = async (limit, offset) => {
         const [result] = await pool.execute(sql, [limit, offset]);
         return result;
     } catch (error) {
-        throw new Error("Get Bans query Error: " + error.message)
+        throw new Error("Get Bans (BanModel): " + error.message)
     }
 } 
 
@@ -31,7 +31,7 @@ const getTableById = async (id) => {
 
         return result[0];
     } catch (error) {
-        throw new Error("Get Table By Id query Error: " + error.message)
+        throw new Error("Get Table By Id (BanModel): " + error.message)
     }
 }
 
@@ -43,7 +43,7 @@ const getNumberOfTable = async () => {
 
         return result[0].soluong;
     } catch (error) {
-        throw new Error("Get Number Of Table: " + error.message)
+        throw new Error("Get Number Of Table (BanModel): " + error.message)
     }
 }
 

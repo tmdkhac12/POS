@@ -9,20 +9,27 @@ const initStaticFilesServing = function (app) {
 }
 
 const initRouters = function (app) {
-    const nhanvienRouter = require("../routes/nhanvien");
-    app.use("/nhanvien", nhanvienRouter);
+    app.use("/nhanvien", require("../routes/ssr/NhanVienRouter.js"));
 
-    const khachhangRouter = require("../routes/khachhang");
-    app.use("/khachhang", khachhangRouter);
+    app.use("/khachhang", require("../routes/ssr/KhachHangRouter.js"));
 
-    const bepRouter = require("../routes/bep");
-    app.use("/bep", bepRouter);
+    app.use("/bep", require("../routes/ssr/BepRouter.js"));
 
-    const adminRouter = require("../routes/admin");
-    app.use("/admin", adminRouter);
+    app.use("/admin", require("../routes/ssr/AdminRouter.js"));
+}
+
+const initApiRouters = (app) => {
+    app.use("/api/bans", require("../routes/api/BanRouter.js"));
+    app.use("/api/monans", require('../routes/api/MonAnRouter.js'));
+    app.use("/api/khachhangs", require('../routes/api/KhachHangRouter.js'));
+    app.use("/api/taikhoans", require('../routes/api/TaiKhoanRouter.js'));
+    app.use("/api/phanloais", require('../routes/api/PhanLoaiRouter.js'));
+    app.use("/api/khuyenmais", require('../routes/api/KhuyenMaiRouter.js'));
+    app.use("/api/hoadons", require('../routes/api/HoaDonRouter.js'));
 }
 
 module.exports = {
     initStaticFilesServing,
-    initRouters
+    initRouters,
+    initApiRouters
 };

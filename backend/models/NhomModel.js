@@ -8,7 +8,7 @@ const getAllNhoms = async () => {
 
         return result;
     } catch (error) {
-        console.error("Get All Nhoms: " + error.message);
+        throw new Error("Get All Nhoms (NhomModel): " + error.message);
     }
 }
 
@@ -20,7 +20,7 @@ const getNhoms = async (limit, offset) => {
 
         return result;
     } catch (error) {
-        console.error("Get Nhoms Limit Offset: " + error.message);
+        throw new Error("Get Nhoms Limit Offset (NhomModel): " + error.message);
     }
 }
 
@@ -32,7 +32,7 @@ const getNumberOfNhoms = async function () {
 
         return result[0].soluong;
     } catch (error) {
-        console.error("Get Number of Nhoms: " + error.message);
+        throw new Error("Get Number of Nhoms (NhomModel): " + error.message);
     }
 }
 

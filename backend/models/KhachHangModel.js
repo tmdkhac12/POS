@@ -8,7 +8,7 @@ const getAllKhachHangs = async () => {
 
         return result;        
     } catch (error) {
-        console.error("Get All Khach Hang: " + error.message);
+        throw new Error("Get All Khach Hang (KhachHangModel): " + error.message);
     }
 }
 
@@ -20,7 +20,7 @@ const getKhachHangs = async (limit, offset) => {
 
         return result;        
     } catch (error) {
-        console.error("Get Khach Hang Limit Offset: " + error.message);
+        throw new Error("Get Khach Hang Limit Offset (KhachHangModel): " + error.message);
     }
 }
 
@@ -32,7 +32,7 @@ const getNumberOfKhachHang = async () => {
 
         return result[0].soluong;        
     } catch (error) {
-        console.error("Get Number of Khach Hang: " + error.message);
+        throw new Error("Get Number of Khach Hang (KhachHangModel): " + error.message);
     }
 }
 

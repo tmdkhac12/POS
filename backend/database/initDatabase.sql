@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 26, 2025 at 02:20 PM
+-- Generation Time: Jun 09, 2025 at 06:42 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -100,6 +100,27 @@ CREATE TABLE `hoadon` (
   `ma_khach_hang` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `hoadon`
+--
+
+INSERT INTO `hoadon` (`ma_hoa_don`, `thoi_gian_tao`, `tong_tien`, `tien_tich_duoc`, `tien_da_dung`, `hinh_thuc_thanh_toan`, `ma_khach_hang`) VALUES
+(1, '2025-05-01 10:15:00', 120000, 2400, 0, 'Tiền mặt', 1),
+(2, '2025-05-02 12:30:00', 85000, 1700, 0, 'Chuyển khoản', 3),
+(3, '2025-05-03 15:45:00', 200000, 4000, 10000, 'Thẻ', 5),
+(4, '2025-05-04 09:00:00', 95000, 1900, 0, 'Tiền mặt', 2),
+(5, '2025-05-05 18:20:00', 150000, 3000, 5000, 'Thẻ', 4),
+(6, '2025-05-06 13:10:00', 130000, 2600, 0, 'Chuyển khoản', 6),
+(7, '2025-05-07 14:50:00', 175000, 3500, 0, 'Tiền mặt', 7),
+(8, '2025-05-08 11:25:00', 220000, 4400, 20000, 'Thẻ', 8),
+(9, '2025-05-09 17:40:00', 99000, 1980, 0, 'Tiền mặt', 9),
+(10, '2025-05-10 08:30:00', 89000, 1780, 0, 'Chuyển khoản', 10),
+(11, '2025-05-11 16:00:00', 145000, 2900, 0, 'Thẻ', 3),
+(12, '2025-05-12 10:10:00', 110000, 2200, 0, 'Tiền mặt', 5),
+(13, '2025-05-13 19:20:00', 98000, 1960, 0, 'Thẻ', 6),
+(14, '2025-05-14 12:00:00', 205000, 4100, 15000, 'Chuyển khoản', 1),
+(15, '2025-05-15 13:30:00', 175000, 3500, 0, 'Tiền mặt', 2);
+
 -- --------------------------------------------------------
 
 --
@@ -142,8 +163,20 @@ CREATE TABLE `khuyenmai` (
   `giam_theo_phan_tram` int(11) DEFAULT NULL,
   `giam_theo_tien` double DEFAULT NULL,
   `ngay_bat_dau` datetime DEFAULT NULL,
-  `ngay_ket_thuc` datetime DEFAULT NULL
+  `ngay_ket_thuc` datetime DEFAULT NULL,
+  `ten_khuyen_mai` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `khuyenmai`
+--
+
+INSERT INTO `khuyenmai` (`ma_khuyen_mai`, `giam_theo_phan_tram`, `giam_theo_tien`, `ngay_bat_dau`, `ngay_ket_thuc`, `ten_khuyen_mai`) VALUES
+(1, 10, NULL, '2025-06-01 00:00:00', '2025-06-10 23:59:59', 'Sinh Nhật 2 Năm'),
+(2, NULL, 15000, '2025-06-05 00:00:00', '2025-06-07 23:59:59', 'Flash Sale'),
+(3, 5, NULL, '2025-07-01 00:00:00', '2025-07-31 23:59:59', 'Mừng Giáng Sinh'),
+(4, NULL, 20000, '2025-08-10 00:00:00', '2025-08-15 23:59:59', 'Giảm Đồ Nướng'),
+(5, 20, NULL, '2025-09-01 00:00:00', '2025-09-05 23:59:59', 'Đại Lễ 2/9');
 
 -- --------------------------------------------------------
 
@@ -321,7 +354,7 @@ ALTER TABLE `currentorder`
 -- AUTO_INCREMENT for table `hoadon`
 --
 ALTER TABLE `hoadon`
-  MODIFY `ma_hoa_don` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ma_hoa_don` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `khachhang`
@@ -333,7 +366,7 @@ ALTER TABLE `khachhang`
 -- AUTO_INCREMENT for table `khuyenmai`
 --
 ALTER TABLE `khuyenmai`
-  MODIFY `ma_khuyen_mai` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ma_khuyen_mai` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `monan`

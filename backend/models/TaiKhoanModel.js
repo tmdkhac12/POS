@@ -8,7 +8,7 @@ const getAllTaiKhoans = async () => {
 
         return result;        
     } catch (error) {
-        console.error("Get All Tai Khoan: " + error.message);
+        throw new Error("Get All Tai Khoan (TaiKhoanModel): " + error.message);
     }
 }
 
@@ -20,7 +20,7 @@ const getTaiKhoans = async (limit, offset) => {
 
         return result;        
     } catch (error) {
-        console.error("Get Tai Khoan Limit Offset: " + error.message);
+        console.error("Get Tai Khoan Limit Offset (TaiKhoanModel): " + error.message);
     }
 }
 
@@ -32,7 +32,7 @@ const getNumberOfTaiKhoan = async () => {
 
         return result[0].soluong;        
     } catch (error) {
-        console.error("Get Number of Tai Khoan: " + error.message);
+        console.error("Get Number of Tai Khoan (TaiKhoanModel): " + error.message);
     }
 }
 

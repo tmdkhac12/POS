@@ -8,7 +8,7 @@ const getAllKhuyenMais = async () => {
 
         return result;        
     } catch (error) {
-        console.error("Get All Khuyen Mai: " + error.message);
+        throw new Error("Get All Khuyen Mai (KhuyenMaiModel): " + error.message);
     }
 }
 
@@ -20,7 +20,7 @@ const getKhuyenMais = async (limit, offset) => {
 
         return result;        
     } catch (error) {
-        console.error("Get Khuyen Mai Limit Offset: " + error.message);
+        throw new Error("Get Khuyen Mai Limit Offset (KhuyenMaiModel): " + error.message);
     }
 }
 
@@ -32,7 +32,7 @@ const getNumberOfKhuyenMai = async () => {
 
         return result[0].soluong;        
     } catch (error) {
-        console.error("Get Number of Khuyen Mai: " + error.message);
+        throw new Error("Get Number of Khuyen Mai (KhuyenMaiModel): " + error.message);
     }
 }
 

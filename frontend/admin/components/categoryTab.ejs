@@ -9,7 +9,7 @@
             <input type="search" id="form1" class="form-control" placeholder="Tìm kiếm..." aria-label="Search" />
         </div>
 
-        <table class="table table-bordered mt-3">
+        <table class="table table-bordered mt-3" id="phanloai-table">
             <thead>
                 <tr>
                     <th style="width: 15%;">Mã phân loại</th>
@@ -37,9 +37,9 @@
     <ul class="pagination justify-content-end pt-3" id="category-pagination">
         <% const numberOfNhom = Math.ceil(nhomCount / 8) %>
         <li class="page-item prev-btn"><a class="page-link" href="#">Trang trước</a></li>
-        <li class="page-item page-item-btn active"><a class="page-link" href="#">1</a></li>
-        <% for (let i = 1; i < numberOfNhom; i++) { %>
-            <li class="page-item page-item-btn"><a class="page-link" href="#"><%= i + 1 %></a></li>
+        <li class="page-item page-item-btn active" data-page="1"><a class="page-link" href="#">1</a></li>
+        <% for (let i = 2; i <= numberOfNhom; i++) { %>
+            <li class="page-item page-item-btn" data-page="<%= i %>"><a class="page-link" href="#"><%= i %></a></li>
         <% } %>
         <li class="page-item next-btn"><a class="page-link" href="#">Trang sau</a></li>
     </ul>

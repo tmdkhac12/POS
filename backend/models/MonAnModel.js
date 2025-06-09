@@ -7,7 +7,7 @@ const getAllDishes = async function () {
         const [result] = await pool.query(sql);
         return result;
     } catch (error) {
-        throw new Error("Get All Dishes query Error: " + error.message)
+        throw new Error("Get All Dishes (MonAnModel): " + error.message)
     }
 }
 
@@ -18,7 +18,7 @@ const getDishesByGroup = async (group_id) => {
         const [result] = await pool.query(sql, [group_id]);
         return result;
     } catch (error) {
-        throw new Error("Get Dishes By Group query Error: " + error.message)
+        throw new Error("Get Dishes By Group (MonAnModel): " + error.message)
     }
 }
 
@@ -29,7 +29,7 @@ const getAllDishesJoinGroup = async function () {
         const [result] = await pool.execute(sql);
         return result;
     } catch (error) {
-        throw new Error("Get All Dishes Join Group query Error: " + error.message)
+        throw new Error("Get All Dishes Join Group (MonAnModel): " + error.message)
     }
 }
 
@@ -40,7 +40,7 @@ const getDishesJoinGroup = async (limit, offset) => {
         const [result] = await pool.execute(sql, [limit, offset]);
         return result;
     } catch (error) {
-        throw new Error("Get Dishes Join Group query Error: " + error.message)
+        throw new Error("Get Dishes Join Group (MonAnModel): " + error.message)
     }
 }
 
@@ -52,7 +52,7 @@ const getNumberOfDishes = async () => {
 
         return result[0].soluong;
     } catch (error) {
-        throw new Error("Get Number Of Dishes: " + error.message)
+        throw new Error("Get Number Of Dishes (MonAnModel): " + error.message)
     }
 }
 

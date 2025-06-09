@@ -9,7 +9,7 @@
             <input type="search" id="form1" class="form-control" placeholder="Tìm kiếm..." aria-label="Search" />
         </div>
 
-        <table class="table table-bordered mt-3">
+        <table class="table table-bordered mt-3" id="khachhang-table">
             <thead>
                 <tr>
                     <th style="width: 10%;">Mã khách hàng</th>
@@ -27,8 +27,8 @@
                         <td><%= khachHang.ma_khach_hang %></td>
                         <td><%= khachHang.ten_khach_hang %></td>
                         <td><%= khachHang.so_dien_thoai %></td>
-                        <td><%= khachHang.tong_chi_tieu %></td>
-                        <td><%= khachHang.tien_tich_luy %></td>
+                        <td><%= khachHang.tong_chi_tieu.toLocaleString('vi-VN') %></td>
+                        <td><%= khachHang.tien_tich_luy.toLocaleString('vi-VN') %></td>
                         <td><%= khachHang.cap_bac %></td>
                         <td>
                             <div class="d-flex gap-2 justify-content-center">
@@ -46,9 +46,9 @@
     <ul class="pagination justify-content-end pt-3" id="customer-pagination">
         <% const numberOfKhachHang = Math.ceil(khachHangCount / 8) %>
         <li class="page-item prev-btn"><a class="page-link" href="#">Trang trước</a></li>
-        <li class="page-item page-item-btn active"><a class="page-link" href="#">1</a></li>
-        <% for (let i = 1; i < numberOfKhachHang; i++) { %>
-            <li class="page-item page-item-btn"><a class="page-link" href="#"><%= i + 1 %></a></li>
+        <li class="page-item page-item-btn active" data-page="1"><a class="page-link" href="#">1</a></li>
+        <% for (let i = 2; i <= numberOfKhachHang; i++) { %>
+            <li class="page-item page-item-btn" data-page="<%= i %>"><a class="page-link" href="#"><%= i %></a></li>
         <% } %>
         <li class="page-item next-btn"><a class="page-link" href="#">Trang sau</a></li>
     </ul>
