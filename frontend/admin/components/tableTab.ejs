@@ -4,6 +4,10 @@
         <h3>Bàn</h3>
     </header>
 
+    <div class="text-end">
+        <button class="btn btn-primary my-2 me-3 ms-auto" id="add-table-btn" data-bs-toggle="modal" data-bs-target="#add-table-modal">Thêm bàn</button>
+    </div>
+
     <div class="table-container p-3 border border-1">
         <div class="form-outline" data-mdb-input-init>
             <input type="search" id="form1" class="form-control" placeholder="Tìm kiếm..." aria-label="Search" />
@@ -24,9 +28,9 @@
                     <td><%= ban.ma_ban %></td>
                     <td><%= ban.ten_ban %></td>
                     <td>
-                        <div class="d-flex gap-2 justify-content-center">
-                            <button class="btn btn-warning">Cập nhật</button>
-                            <button class="btn btn-danger">Xóa</button>
+                        <div class="d-flex gap-2 justify-content-center" data-name="<%= ban.ten_ban %>" data-id="<%= ban.ma_ban %>">
+                            <button class="btn btn-warning update-table-btn">Cập nhật</button>
+                            <button class="btn btn-danger delete-table-btn">Xóa</button>
                         </div>
                     </td>
                 </tr>
@@ -40,8 +44,83 @@
         <li class="page-item"><a class="page-link" href="#">Trang trước</a></li>
         <li class="page-item page-item-btn active" data-page="1"><a class="page-link" href="#">1</a></li>
         <% for (let i = 2; i <= numberOfTables; i++) { %>
-            <li class="page-item page-item-btn" data-page="<%= i %>"><a class="page-link" href="#"><%= i %></a></li>
+        <li class="page-item page-item-btn" data-page="<%= i %>"><a class="page-link" href="#"><%= i %></a></li>
         <% } %>
         <li class="page-item"><a class="page-link" href="#">Trang sau</a></li>
     </ul>
+
+    <div class="modal" id="add-table-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Thêm bàn</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <form action="">
+                        <label for="table-name" class="form-label">Tên bàn</label><br>
+                        <input type="text" class="form-control input-name" name="table-name" placeholder="Bàn 1..."><br>
+                    </form>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-primary save">Thêm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="update-table-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Sửa thông tin bàn</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <form action="">
+                        <label for="table-name" class="form-label">Tên bàn</label><br>
+                        <input type="text" class="form-control input-name" name="table-name" placeholder="Bàn 1..."><br>
+                    </form>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-primary save">Lưu thay đổi</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="delete-table-modal">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">Xác nhận xóa</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    Bạn có chắc chắn muốn xóa <span class="fw-bold text-danger table-name"></span> không?
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Không</button>
+                    <button type="button" class="btn btn-danger yes">Có</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

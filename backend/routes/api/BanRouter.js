@@ -11,9 +11,62 @@ banRouter.get("/", async (req, res) => {
     
         res.status(200).json({success: true, bans});
     } catch (error) {
-        console.error("Route: '/api/bans?query' - (BanRouter): " + error.message);
+        console.error("GET Route: '/api/bans?query' - (BanRouter): " + error.message);
         res.status(500).json({success: false, message: "Lỗi Server"});
     }
+})
+
+banRouter.post("/", async (req, res) => {
+    try {
+        const body = req.body;
+
+        const isSuccess = await banController.addBan(body.name);
+        const numberOfBans = await banController.countBans();
+
+        if (isSuccess) {
+            res.status(200).json({success: true, message: "Thêm bàn thành công!", numberOfBans});
+        } else {
+            res.status(200).json({success: false, message: "Thêm bàn thất bại!"});
+        }
+    } catch (error) {
+        console.error("POST Route: '/api/bans' - (BanRouter): " + error.message);
+        res.status(500).json({success: false, message: "Lỗi Server"});
+    }
+})
+
+banRouter.put("/", async (req, res) => {
+    try {
+        const body = req.body;
+
+        const isSuccess = await banController.updateBan(body.newName, body.id);
+
+        if (isSuccess) {
+            res.status(200).json({success: true, message: "Sửa thông tin bàn thành công!"});
+        } else {
+            res.status(200).json({success: false, message: "Sửa thông tin bàn bàn thất bại!"});
+        }
+    } catch (error) {
+        console.error("PUT Route: '/api/bans' - (BanRouter): " + error.message);
+        res.status(500).json({success: false, message: "Lỗi Server"});   
+    }
+})
+
+banRouter.delete("/", async (req, res) => {
+    try {
+        const body = req.body;
+
+        const isSuccess = await banController.deleteBan(body.id);
+        const numberOfBans = await banController.countBans();
+
+        if (isSuccess) {
+            res.status(200).json({success: true, message: "Xóa bàn thành công!", numberOfBans});
+        } else {
+            res.status(200).json({success: false, message: "Xóa bàn bàn thất bại!"});
+        }
+    } catch (error) {
+        console.error("PUT Route: '/api/bans' - (BanRouter): " + error.message);
+        res.status(500).json({success: false, message: "Lỗi Server"});   
+    }  
 })
 
 module.exports = banRouter;

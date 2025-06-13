@@ -1,6 +1,7 @@
 // Modules 
 require("dotenv").config();
-const app = require("express")();
+const express = require("express");
+const app = express();
 
 // Static modules
 const initiator = require("./configs/initiator");
@@ -12,7 +13,8 @@ initiator.initStaticFilesServing(app);
 // Define routers for specified routes 
 initiator.initRouters(app);
 
-// Define routers for API
+// Define routers for API 
+app.use(express.json());
 initiator.initApiRouters(app);
 
 // Config View Engine

@@ -32,12 +32,12 @@
             <!-- Content Section -->
             <div class="col-10 content-area p-3">
                 <div class="tab-content">
-                    <%- include("./components/productsTab.ejs", monAns) %>
+                    <%- include("./components/productsTab.ejs") %>
                     <%- include("./components/invoiceTab.ejs") %>
                     <%- include("./components/customerTab.ejs")  %>
                     <%- include("./components/staffTab.ejs") %>
                     <%- include("./components/categoryTab.ejs") %>
-                    <%- include("./components/tableTab.ejs", bans) %>
+                    <%- include("./components/tableTab.ejs") %>
                     <%- include("./components/discountTab.ejs") %>
                     <%- include("./components/statisticalTab.ejs") %>
 
@@ -47,7 +47,6 @@
     </div>
 
     <!-- My JS -->
-    <script src="/admin/js/main.js"></script>
     <script src="/admin/js/category.js"></script>
     <script src="/admin/js/customer.js"></script>
     <script src="/admin/js/discount.js"></script>
@@ -55,6 +54,14 @@
     <script src="/admin/js/product.js"></script>
     <script src="/admin/js/staff.js"></script>
     <script src="/admin/js/table.js"></script>
+
+    <script>
+        document.querySelectorAll("form").forEach(form => {
+            form.addEventListener('submit', (event) => {
+                event.preventDefault();
+            })
+        })
+    </script>
 </body>
 
 </html>
