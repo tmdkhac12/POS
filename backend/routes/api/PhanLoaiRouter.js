@@ -1,7 +1,8 @@
 const phanLoaiRouter = require('express').Router();
 const phanLoaiController = require('../../controller/api/PhanLoaiController.js');
 
-const upload  = require("../../util/UploadImage.js").uploadPhanLoai;
+const upload = require("../../util/UploadImage.js").uploadPhanLoai;
+const { validate } = require('../../middleware/PhanLoaiMiddleware.js');
 
 phanLoaiRouter.get("/", async (req, res) => {
     // localhost:3000/api/phanloais?page=2
@@ -18,16 +19,15 @@ phanLoaiRouter.get("/", async (req, res) => {
     }
 });
 
-phanLoaiRouter.post("/", upload.single("image"), async (req, res) => {
+phanLoaiRouter.post("/", upload.single("image"), validate, async (req, res) => {
     try {
         // Lấy đối tượng body fetch và file
         const body = req.body;
         const file = req.file;
-        // console.log(file);
 
         // Lấy tên phân loại và tên file sau lưu 
         const categoryName = body.categoryName;
-        const imageName = file.filename;
+        const imageName = file ? file.filename : null;
 
         const isSuccess = await phanLoaiController.addPhanLoai(categoryName, imageName);
         const countPhanLoai = await phanLoaiController.countPhanLoai();
@@ -43,18 +43,26 @@ phanLoaiRouter.post("/", upload.single("image"), async (req, res) => {
     }
 })
 
-phanLoaiRouter.put("/:id", upload.single("image"), async (req, res) => {
+phanLoaiRouter.put("/:id", upload.single("image"), validate, async (req, res) => {
     try {
         // Lấy đối tượng body fetch và file
         const body = req.body;
-        const file = req.file;
+        const file = req.file || null;
 
         // Lấy tên phân loại và tên file sau lưu 
-        const id = req.params.id;
-        const categoryName = body.categoryName;
-        const imageName = file.filename;
-        
-        const isSuccess = await phanLoaiController.updatePhanLoai(categoryName, imageName, id);
+        let isSuccess;
+        if (file) {
+            const id = req.params.id;
+            const categoryName = body.categoryName;
+            const imageName = file.filename;
+
+            isSuccess = await phanLoaiController.updatePhanLoai(categoryName, imageName, id);
+        } else {
+            const id = req.params.id;
+            const categoryName = body.categoryName;
+
+            isSuccess = await phanLoaiController.updateNamePhanLoai(categoryName, id);
+        }
 
         if (isSuccess) {
             res.status(200).json({ success: true, message: "Sửa thông tin phân loại thành công!" });

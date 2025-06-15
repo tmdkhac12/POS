@@ -1,5 +1,6 @@
 const banRouter = require("express").Router();
 const banController = require('../../controller/api/BanController.js');
+const { validate } = require("../../middleware/BanMiddleware.js");
 
 banRouter.get("/", async (req, res) => {
     // localhost:3000/api/bans?page=2
@@ -16,7 +17,7 @@ banRouter.get("/", async (req, res) => {
     }
 })
 
-banRouter.post("/", async (req, res) => {
+banRouter.post("/", validate, async (req, res) => {
     try {
         const body = req.body;
 
@@ -34,7 +35,7 @@ banRouter.post("/", async (req, res) => {
     }
 })
 
-banRouter.put("/:id", async (req, res) => {
+banRouter.put("/:id", validate, async (req, res) => {
     try {
         const id = req.params.id;
         const { newName } = req.body;

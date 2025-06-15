@@ -153,7 +153,6 @@ const addPhanLoaiHandler = {
 
 const updatePhanLoaiHandler = {
     id: null,
-    categoryName: null,
 
     d_inputName: document.querySelector("#update-category-modal .input-name"),
     d_inputFile: document.querySelector("#update-category-modal .input-file"),
@@ -171,7 +170,7 @@ const updatePhanLoaiHandler = {
 
         this.d_updateBtn.addEventListener("click" , async () => {
             const id = this.id;
-            const categoryName = this.categoryName;
+            const categoryName = this.d_inputName.value;
             const file = this.d_inputFile.files[0];
 
             const formData = new FormData();
@@ -199,12 +198,14 @@ const updatePhanLoaiHandler = {
             btn.addEventListener("click", () => {
                 bootstrap.Modal.getOrCreateInstance(document.getElementById("update-category-modal")).show();
 
+                // Lưu id lại để truy vấn 
                 this.id = btn.closest("div").getAttribute("data-id");
-                this.categoryName = btn.closest("div").getAttribute("data-name");
-
+                
+                const categoryName = btn.closest("div").getAttribute("data-name");
                 const imageName = btn.closest("div").getAttribute("data-img");
 
-                this.d_inputName.value = this.categoryName;
+                this.d_inputName.value = categoryName;
+                this.d_inputFile.value = "";
                 this.d_imageLabel.setAttribute("src", `/group/${imageName}`);
             })
         })

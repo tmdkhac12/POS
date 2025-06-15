@@ -60,6 +60,18 @@ const updateNhom = async(categoryName, imageName, id) => {
     }   
 }
 
+const updateNameNhom = async(categoryName, id) => {
+    const sql = "update nhom set ten_nhom = ? where ma_nhom = ?";
+
+    try {
+        const [result] = await pool.query(sql, [categoryName, id]);
+
+        return result.affectedRows > 0;
+    } catch (error) {
+        throw new Error("Update Nhom (NhomModel): " + error.message);
+    }   
+}
+
 const softDeleteNhom = async (id) => {
     const sql = "update nhom set is_deleted = 1 where ma_nhom = ?";
 
@@ -75,6 +87,6 @@ const softDeleteNhom = async (id) => {
 module.exports = {
     getAllNhoms, getNhoms, getNumberOfNhoms,
     insertNhom,
-    updateNhom,
+    updateNhom, updateNameNhom,
     softDeleteNhom
 }

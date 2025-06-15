@@ -36,6 +36,15 @@ const updatePhanLoai = async (categoryName, imageName, id) => {
     }   
 }
 
+const updateNamePhanLoai = async (categoryName, id) => {
+    try {
+        return await nhomModel.updateNameNhom(categoryName, id);
+    } catch (error) {
+        console.error("Update Phan Loai (PhanLoaiController): " + error.message);
+        throw error;
+    }
+}
+
 const deletePhanLoai = async (id) => {
     try {
         return await nhomModel.softDeleteNhom(id);
@@ -49,6 +58,6 @@ module.exports = {
     getPaginatedPhanLoais,
     countPhanLoai,
     addPhanLoai,
-    updatePhanLoai,
+    updatePhanLoai, updateNamePhanLoai,
     deletePhanLoai
 }
