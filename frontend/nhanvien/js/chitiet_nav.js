@@ -40,7 +40,7 @@ const NavItemsHandler = {
             const card = `
                 <div class="col-3 d-flex food-card-item">
                     <div class="card shadow-sm flex-fill">
-                        <img class="card-img-top" src="/nhanvien/images/dishes/${items[i].hinh_anh}">
+                        <img class="card-img-top" src="/dishes/${items[i].hinh_anh}">
                         <div class="card-body">
                             <p class="card-text m-0 text-center">${items[i].ten_mon_an}</p>
                             <p class="card-text m-0 text-center fw-bold" data-price="${items[i].don_gia}">${items[i].don_gia.toLocaleString("vi-VN")}</p>

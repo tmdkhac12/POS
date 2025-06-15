@@ -1,7 +1,7 @@
 const pool = require("../configs/connection").promise();
 
 const getAllNhoms = async () => {
-    const sql = "SELECT * FROM nhom";
+    const sql = "SELECT * FROM nhom where is_deleted = 0";
 
     try {
         const [result] = await pool.query(sql);
@@ -13,7 +13,7 @@ const getAllNhoms = async () => {
 }
 
 const getNhoms = async (limit, offset) => {
-    const sql = "select * from nhom limit ? offset ?";
+    const sql = "select * from nhom where is_deleted = 0 limit ? offset ?";
 
     try {
         const [result] = await pool.execute(sql, [limit, offset]);
@@ -25,7 +25,7 @@ const getNhoms = async (limit, offset) => {
 }
 
 const getNumberOfNhoms = async function () {
-    const sql = "select count(*) as soluong from nhom";
+    const sql = "select count(*) as soluong from nhom where is_deleted = 0";
 
     try {
         const [result] = await pool.query(sql);
@@ -36,8 +36,45 @@ const getNumberOfNhoms = async function () {
     }
 }
 
+const insertNhom = async (categoryName, imageName) => {
+    const sql = "insert into nhom(ten_nhom, hinh_anh) values (?,?)";
+
+    try {
+        const [result] = await pool.query(sql, [categoryName, imageName]);
+
+        return result.affectedRows > 0;
+    } catch (error) {
+        throw new Error("Insert Nhom (NhomModel): " + error.message);
+    }
+}
+
+const updateNhom = async(categoryName, imageName, id) => {
+    const sql = "update nhom set ten_nhom = ?, hinh_anh = ? where ma_nhom = ?";
+
+    try {
+        const [result] = await pool.query(sql, [categoryName, imageName, id]);
+
+        return result.affectedRows > 0;
+    } catch (error) {
+        throw new Error("Update Nhom (NhomModel): " + error.message);
+    }   
+}
+
+const softDeleteNhom = async (id) => {
+    const sql = "update nhom set is_deleted = 1 where ma_nhom = ?";
+
+    try {
+        const [result] = await pool.query(sql, [id]);
+
+        return result.affectedRows > 0;
+    } catch (error) {
+        throw new Error("Soft Delete Nhom (NhomModel): " + error.message);
+    }
+}
+
 module.exports = {
-    getAllNhoms,
-    getNhoms,
-    getNumberOfNhoms
+    getAllNhoms, getNhoms, getNumberOfNhoms,
+    insertNhom,
+    updateNhom,
+    softDeleteNhom
 }

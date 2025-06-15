@@ -34,11 +34,12 @@ banRouter.post("/", async (req, res) => {
     }
 })
 
-banRouter.put("/", async (req, res) => {
+banRouter.put("/:id", async (req, res) => {
     try {
-        const body = req.body;
+        const id = req.params.id;
+        const { newName } = req.body;
 
-        const isSuccess = await banController.updateBan(body.newName, body.id);
+        const isSuccess = await banController.updateBan(newName, id);
 
         if (isSuccess) {
             res.status(200).json({success: true, message: "Sửa thông tin bàn thành công!"});
@@ -46,16 +47,16 @@ banRouter.put("/", async (req, res) => {
             res.status(200).json({success: false, message: "Sửa thông tin bàn bàn thất bại!"});
         }
     } catch (error) {
-        console.error("PUT Route: '/api/bans' - (BanRouter): " + error.message);
+        console.error("PUT Route: '/api/bans/:id' - (BanRouter): " + error.message);
         res.status(500).json({success: false, message: "Lỗi Server"});   
     }
 })
 
-banRouter.delete("/", async (req, res) => {
+banRouter.delete("/:id", async (req, res) => {
     try {
-        const body = req.body;
+        const id = req.params.id;
 
-        const isSuccess = await banController.deleteBan(body.id);
+        const isSuccess = await banController.deleteBan(id);
         const numberOfBans = await banController.countBans();
 
         if (isSuccess) {
@@ -64,7 +65,7 @@ banRouter.delete("/", async (req, res) => {
             res.status(200).json({success: false, message: "Xóa bàn bàn thất bại!"});
         }
     } catch (error) {
-        console.error("PUT Route: '/api/bans' - (BanRouter): " + error.message);
+        console.error("DELETE Route: '/api/bans/:id' - (BanRouter): " + error.message);
         res.status(500).json({success: false, message: "Lỗi Server"});   
     }  
 })

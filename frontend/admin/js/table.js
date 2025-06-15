@@ -187,21 +187,21 @@ const updateTableHandler = {
                 const newName = this.d_inputName.value;
                 const id = this.id;
 
-                const res = await fetch("/api/bans", {
+                const res = await fetch(`/api/bans/${id}`, {
                     headers: {
                         "Content-Type": "application/json"
                     },
                     method: "PUT",
                     body: JSON.stringify({
-                        newName,
-                        id
+                        newName
                     })
                 })
 
                 const data = await res.json();
+                
+                alert(data.message);
 
                 if (data.success) {
-                    alert(data.message);
                     bootstrap.Modal.getOrCreateInstance(document.getElementById("update-table-modal")).hide();
                     tablePageHandler.refreshCurrentPage();
                 }
@@ -244,26 +244,19 @@ const deleteTableHandler = {
         this.d_okBtn.addEventListener("click", async () => {
             const id = this.id;
 
-            const res = await fetch("/api/bans", {
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                method: "DELETE",
-                body: JSON.stringify({
-                    id
-                })
+            const res = await fetch(`/api/bans/${id}`, {
+                method: "DELETE"
             });
 
             const data = await res.json();
 
+            alert(data.message);
+            
             if (data.success) {
                 bootstrap.Modal.getOrCreateInstance(document.getElementById("delete-table-modal")).hide();
-                alert(data.message);
                 tablePageHandler.renderPagination(data.numberOfBans);
                 tablePageHandler.refreshCurrentPage();
-            } else {
-                alert(data.message);
-            }
+            } 
         })
     },
 

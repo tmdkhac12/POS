@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Khách Hàng</title>
 
-    <!-- CSS -->
+    <!-- My CSS -->
     <link rel="stylesheet" href="/khachhang/css/style.css">
     <link rel="stylesheet" href="/khachhang/css/food.css">
     <link rel="stylesheet" href="/khachhang/css/cart.css">
@@ -35,7 +35,7 @@
                             <!-- EJS sẽ render ra danh sách nav item -->
                             <% for (let i = 0; i < groups.length; i++) { %>
                             <button class="menu-btn" data-index="<%= i %>">
-                                <img src="/khachhang/images/group/<%= groups[i].hinh_anh %>" alt="<%= groups[i].hinh_anh %>">
+                                <img src="/group/<%= groups[i].hinh_anh %>" alt="<%= groups[i].hinh_anh %>">
                                 <h6 class="mb-0 mt-2"><%= groups[i].ten_nhom %></h6>
                             </button>
                             <% } %>

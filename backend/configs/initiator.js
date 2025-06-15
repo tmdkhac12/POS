@@ -2,6 +2,7 @@ const express = require("express");
 const path = require("path");
 
 const initStaticFilesServing = function (app) {
+    app.use("/", express.static(path.join(__dirname, "../../frontend/images")));
     app.use("/nhanvien", express.static(path.join(__dirname, "../../frontend/nhanvien"), { index: false }));
     app.use("/khachhang", express.static(path.join(__dirname, "../../frontend/khachhang"), { index: false }));
     app.use("/bep", express.static(path.join(__dirname, "../../frontend/bep"), { index: false }));

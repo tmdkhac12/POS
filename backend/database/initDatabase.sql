@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 09, 2025 at 06:42 AM
+-- Generation Time: Jun 13, 2025 at 01:46 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -30,25 +30,27 @@ SET time_zone = "+00:00";
 CREATE TABLE `ban` (
   `ma_ban` int(11) NOT NULL,
   `ten_ban` varchar(255) DEFAULT NULL,
-  `trang_thai` enum('Trống','Có khách') DEFAULT 'Trống'
+  `trang_thai` enum('Trống','Có khách') DEFAULT 'Trống',
+  `is_deleted` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `ban`
 --
 
-INSERT INTO `ban` (`ma_ban`, `ten_ban`, `trang_thai`) VALUES
-(1, 'Bàn 1', 'Trống'),
-(2, 'Bàn 2', 'Trống'),
-(3, 'Bàn 3', 'Trống'),
-(4, 'Bàn 4', 'Trống'),
-(5, 'Bàn 5', 'Trống'),
-(6, 'Bàn 6', 'Có khách'),
-(7, 'Bàn 7', 'Trống'),
-(8, 'Bàn 8', 'Trống'),
-(9, 'Bàn 9', 'Trống'),
-(10, 'Bàn 10', 'Có khách'),
-(11, 'Bàn 11', 'Có khách');
+INSERT INTO `ban` (`ma_ban`, `ten_ban`, `trang_thai`, `is_deleted`) VALUES
+(1, 'Bàn 1', 'Trống', 0),
+(2, 'Bàn 2', 'Trống', 0),
+(3, 'Bàn 3', 'Trống', 0),
+(4, 'Bàn 4', 'Trống', 0),
+(5, 'Bàn 5', 'Trống', 0),
+(6, 'Bàn 6', 'Có khách', 0),
+(7, 'Bàn 7', 'Trống', 0),
+(8, 'Bàn 8', 'Trống', 0),
+(9, 'Bàn 9', 'Trống', 0),
+(10, 'Bàn 10', 'Có khách', 0),
+(11, 'Bàn 11', 'Có khách', 0),
+(12, 'Bàn 12', 'Trống', 0);
 
 -- --------------------------------------------------------
 
@@ -228,18 +230,19 @@ INSERT INTO `monan` (`ma_mon_an`, `ten_mon_an`, `don_gia`, `hinh_anh`, `ma_nhom`
 CREATE TABLE `nhom` (
   `ma_nhom` int(11) NOT NULL,
   `ten_nhom` varchar(255) DEFAULT NULL,
-  `hinh_anh` varchar(255) DEFAULT NULL
+  `hinh_anh` varchar(255) DEFAULT NULL,
+  `is_deleted` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `nhom`
 --
 
-INSERT INTO `nhom` (`ma_nhom`, `ten_nhom`, `hinh_anh`) VALUES
-(1, 'Ramen', 'ramen.jfif'),
-(2, 'Cơm', 'rice.jfif'),
-(3, 'Món chiên', 'fried.jfif'),
-(4, 'Đồ uống', 'juice.avif');
+INSERT INTO `nhom` (`ma_nhom`, `ten_nhom`, `hinh_anh`, `is_deleted`) VALUES
+(1, 'Ramen', 'ramen.jfif', 0),
+(2, 'Cơm', 'rice.jfif', 0),
+(3, 'Món chiên', 'fried.jfif', 0),
+(4, 'Đồ uống', 'juice.avif', 0);
 
 -- --------------------------------------------------------
 
@@ -336,7 +339,7 @@ ALTER TABLE `taikhoan`
 -- AUTO_INCREMENT for table `ban`
 --
 ALTER TABLE `ban`
-  MODIFY `ma_ban` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `ma_ban` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `chitiethoadon`

@@ -56,7 +56,7 @@ const NavItemsHandler = {
             const card = `
                 <div class="col-4 fw-bold">
                     <div class="food-card shadow border border-1" data-dish-id="${items[i].ma_mon_an}" data-price="${items[i].don_gia}">
-                        <img src="/khachhang/images/dishes/${items[i].hinh_anh}">
+                        <img src="/dishes/${items[i].hinh_anh}">
 
                         <div class="card-body p-3">
                             <h5 class="card-title" title="${items[i].ten_mon_an}"><span class="text-danger">${i + 1}. </span>${items[i].ten_mon_an}</h5>
