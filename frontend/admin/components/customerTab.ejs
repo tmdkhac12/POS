@@ -4,6 +4,10 @@
         <h3>Khách hàng</h3>
     </header>
 
+    <div class="text-end">
+        <button class="btn btn-primary my-2 me-3 ms-auto" id="add-customer-btn" data-bs-toggle="modal" data-bs-target="#add-customer-modal">Thêm khách hàng</button>
+    </div>
+
     <div class="table-container p-3 border border-1">
         <div class="form-outline" data-mdb-input-init>
             <input type="search" id="form1" class="form-control" placeholder="Tìm kiếm..." aria-label="Search" />
@@ -18,26 +22,25 @@
                     <th>Tổng chi tiêu</th>
                     <th>Tiền tích lũy</th>
                     <th>Cấp bậc</th>
-                    <th style="width: 25%;">Hành động</th>
+                    <th style="width: 20%;">Hành động</th>
                 </tr>
             </thead>
             <tbody>
                 <% for (const khachHang of khachHangs) { %>
-                    <tr>
-                        <td><%= khachHang.ma_khach_hang %></td>
-                        <td><%= khachHang.ten_khach_hang %></td>
-                        <td><%= khachHang.so_dien_thoai %></td>
-                        <td><%= khachHang.tong_chi_tieu.toLocaleString('vi-VN') %></td>
-                        <td><%= khachHang.tien_tich_luy.toLocaleString('vi-VN') %></td>
-                        <td><%= khachHang.cap_bac %></td>
-                        <td>
-                            <div class="d-flex gap-2 justify-content-center">
-                                <button class="btn btn-success">Xem</button>
-                                <button class="btn btn-warning">Cập nhật</button>
-                                <button class="btn btn-danger">Xóa</button>
-                            </div>
-                        </td>
-                    </tr>
+                <tr>
+                    <td><%= khachHang.ma_khach_hang %></td>
+                    <td><%= khachHang.ten_khach_hang %></td>
+                    <td><%= khachHang.so_dien_thoai %></td>
+                    <td><%= khachHang.tong_chi_tieu.toLocaleString('vi-VN') %></td>
+                    <td><%= khachHang.tien_tich_luy.toLocaleString('vi-VN') %></td>
+                    <td><%= khachHang.cap_bac %></td>
+                    <td>
+                        <div class="d-flex gap-2 justify-content-center" data-id="<%= khachHang.ma_khach_hang %>" data-name="<%= khachHang.ten_khach_hang %>" data-phone="<%= khachHang.so_dien_thoai %>" data-total="<%= khachHang.tong_chi_tieu %>" data-accu="<%= khachHang.tien_tich_luy %>" data-rank="<%= khachHang.cap_bac %>">
+                            <button class="btn btn-warning update-customer-btn">Cập nhật</button>
+                            <button class="btn btn-danger delete-customer-btn">Xóa</button>
+                        </div>
+                    </td>
+                </tr>
                 <% } %>
             </tbody>
         </table>
@@ -48,8 +51,109 @@
         <li class="page-item prev-btn"><a class="page-link" href="#">Trang trước</a></li>
         <li class="page-item page-item-btn active" data-page="1"><a class="page-link" href="#">1</a></li>
         <% for (let i = 2; i <= numberOfKhachHang; i++) { %>
-            <li class="page-item page-item-btn" data-page="<%= i %>"><a class="page-link" href="#"><%= i %></a></li>
+        <li class="page-item page-item-btn" data-page="<%= i %>"><a class="page-link" href="#"><%= i %></a></li>
         <% } %>
         <li class="page-item next-btn"><a class="page-link" href="#">Trang sau</a></li>
     </ul>
+
+    <div class="modal" id="add-customer-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Thêm khách hàng</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <form action="">
+                        <label for="customer-name" class="form-label">Tên khách hàng</label><br>
+                        <input type="text" class="form-control input-name" name="customer-name"><br>
+                        <label for="customer-phone" class="form-label">Số điện thoại</label><br>
+                        <input type="text" class="form-control input-phone" name="customer-phone"><br>
+                        <label for="customer-total" class="form-label">Tổng chi tiêu</label><br>
+                        <input type="text" class="form-control input-total" name="customer-total" value="0"><br>
+                        <label for="customer-accu" class="form-label">Tiền tích lũy</label><br>
+                        <input type="text" class="form-control input-accu" name="customer-accu" value="0"><br>
+                        <label for="rank" class="form-label">Cấp bậc</label><br>
+                        <select name="rank" class="form-select">
+                            <option value="copper">Đồng</option>
+                            <option value="silver">Bạc</option>
+                            <option value="gold">Vàng</option>
+                            <option value="diamond">Kim Cương</option>
+                        </select>
+                    </form>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-primary save">Thêm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="update-customer-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Thêm khách hàng</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <form action="">
+                        <label for="customer-name" class="form-label">Tên khách hàng</label><br>
+                        <input type="text" class="form-control input-name" name="customer-name"><br>
+                        <label for="customer-phone" class="form-label">Số điện thoại</label><br>
+                        <input type="text" class="form-control input-phone" name="customer-phone"><br>
+                        <label for="customer-total" class="form-label">Tổng chi tiêu</label><br>
+                        <input type="text" class="form-control input-total" name="customer-total"><br>
+                        <label for="customer-accu" class="form-label">Tiền tích lũy</label><br>
+                        <input type="text" class="form-control input-accu" name="customer-accu"><br>
+                        <label for="rank" class="form-label">Cấp bậc</label><br>
+                        <select name="rank" class="form-select">
+                            <option value="copper">Đồng</option>
+                            <option value="silver">Bạc</option>
+                            <option value="gold">Vàng</option>
+                            <option value="diamond">Kim Cương</option>
+                        </select>
+                    </form>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-primary save">Lưu thay đổi</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="delete-customer-modal">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">Xác nhận xóa</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    Bạn có chắc chắn muốn xóa khách hàng <span class="fw-bold text-danger customer-name"></span> không?
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Không</button>
+                    <button type="button" class="btn btn-danger yes">Có</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

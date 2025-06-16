@@ -84,10 +84,7 @@ const softDeleteBan = async (id) => {
 }
 
 module.exports = {
-    getAllBans,
-    getBans,
-    getTableById,
-    getNumberOfTable,
+    getAllBans, getBans, getTableById, getNumberOfTable,
     insertTable,
     updateTable,
     softDeleteBan

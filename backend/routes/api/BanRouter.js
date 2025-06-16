@@ -63,7 +63,7 @@ banRouter.delete("/:id", async (req, res) => {
         if (isSuccess) {
             res.status(200).json({success: true, message: "Xóa bàn thành công!", numberOfBans});
         } else {
-            res.status(200).json({success: false, message: "Xóa bàn bàn thất bại!"});
+            res.status(200).json({success: false, message: "Xóa bàn thất bại!"});
         }
     } catch (error) {
         console.error("DELETE Route: '/api/bans/:id' - (BanRouter): " + error.message);

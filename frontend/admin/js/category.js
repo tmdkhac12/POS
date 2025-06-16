@@ -35,6 +35,10 @@ const categoryPageHandler = {
                 // Cập nhật trạng thái active của btn
                 this.ad_pageItemBtns.forEach(item => item.classList.remove("active"))
                 btn.classList.add("active");
+
+                // Cập nhật chức năng của các nút update, delete 
+                updatePhanLoaiHandler.addUpdateBtnsOnClick();
+                deletePhanLoaiHandler.addDeleteBtnsOnClick();
             })
         })
     },
@@ -136,11 +140,11 @@ const addPhanLoaiHandler = {
                 method: "POST",
                 body: formData
             });
-            
+
             const data = await res.json();
 
             alert(data.message);
-            
+
             if (data.success) {
                 bootstrap.Modal.getOrCreateInstance(document.getElementById("add-category-modal")).hide();
                 categoryPageHandler.renderPagination(data.countPhanLoai);
@@ -160,7 +164,7 @@ const updatePhanLoaiHandler = {
     d_updateBtn: document.querySelector("#update-category-modal .save"),
 
     // Getters
-    get ad_updateBtns () {
+    get ad_updateBtns() {
         return document.querySelectorAll(".update-category-btn");
     },
 
@@ -168,7 +172,7 @@ const updatePhanLoaiHandler = {
     init() {
         this.addUpdateBtnsOnClick();
 
-        this.d_updateBtn.addEventListener("click" , async () => {
+        this.d_updateBtn.addEventListener("click", async () => {
             const id = this.id;
             const categoryName = this.d_inputName.value;
             const file = this.d_inputFile.files[0];
@@ -183,7 +187,7 @@ const updatePhanLoaiHandler = {
             })
 
             const data = await res.json();
-            
+
             alert(data.message);
 
             if (data.success) {
@@ -200,7 +204,7 @@ const updatePhanLoaiHandler = {
 
                 // Lưu id lại để truy vấn 
                 this.id = btn.closest("div").getAttribute("data-id");
-                
+
                 const categoryName = btn.closest("div").getAttribute("data-name");
                 const imageName = btn.closest("div").getAttribute("data-img");
 
