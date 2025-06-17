@@ -12,15 +12,41 @@ const getAllHoaDons = async () => {
     }
 }
 
-const getHoaDons = async (limit, offset) => {
-    const sql = "select * from hoadon limit ? offset ?";    
+const getHoaDonOfKhachHang = async (id) => {
+    const sql = "select * from hoadon where ma_khach_hang = ?";    
 
     try {
-        const [result] = await pool.execute(sql, [limit, offset]);
+        const [result] = await pool.execute(sql, [id]);
 
         return result;        
     } catch (error) {
-        throw new Error("Get Hoa Don Limit Offset (HoaDonModel): " + error.message);
+        throw new Error("Get Hoa Don Of Khach Hang (HoaDonModel): " + error.message);
+    }
+}
+
+const getHoaDonById = async (id) => {
+    const sql = "select * from hoadon where ma_hoa_don = ?";    
+
+    try {
+        const [result] = await pool.execute(sql, [id]);
+
+        return result[0];        
+    } catch (error) {
+        throw new Error("Get Hoa Don By Id (HoaDonModel): " + error.message);
+    }
+}
+
+const getHoaDonJoinKhachHangById = async (id) => {
+    const sql = `select hd.*, kh.ten_khach_hang, kh.so_dien_thoai
+                from hoadon hd inner join khachhang kh on hd.ma_khach_hang = kh.ma_khach_hang
+                where ma_hoa_don = ?`;    
+
+    try {
+        const [result] = await pool.execute(sql, [id]);
+
+        return result[0];        
+    } catch (error) {
+        throw new Error("Get Hoa Don By Id (HoaDonModel): " + error.message);
     }
 }
 
@@ -50,9 +76,6 @@ const getNumberOfHoaDon = async () => {
     }
 }
 
-module.exports = {
-    getAllHoaDons,
-    getNumberOfHoaDon,
-    getHoaDons,
-    getHoaDonsJoinKhachHang
+module.exports = { 
+    getAllHoaDons, getNumberOfHoaDon, getHoaDonOfKhachHang, getHoaDonById, getHoaDonJoinKhachHangById, getHoaDonsJoinKhachHang
 }

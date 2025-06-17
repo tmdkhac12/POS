@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 13, 2025 at 01:46 PM
+-- Generation Time: Jun 17, 2025 at 03:29 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -69,6 +69,53 @@ CREATE TABLE `chitiethoadon` (
   `ghi_chu` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `chitiethoadon`
+--
+
+INSERT INTO `chitiethoadon` (`ma_chi_tiet`, `ma_mon_an`, `ma_hoa_don`, `so_luong`, `thanh_tien`, `gia_mon_an`, `thoi_gian_dat`, `ghi_chu`) VALUES
+(1, 1, 1, 2, 156000, 78000, '2025-05-01 10:15:00', NULL),
+(2, 3, 1, 1, 58000, 58000, '2025-05-01 10:16:00', NULL),
+(3, 5, 1, 3, 204000, 68000, '2025-05-01 10:17:00', NULL),
+(4, 2, 2, 1, 68000, 68000, '2025-05-02 12:30:00', NULL),
+(5, 4, 2, 2, 156000, 78000, '2025-05-02 12:31:00', NULL),
+(6, 6, 3, 1, 98000, 98000, '2025-05-03 15:45:00', NULL),
+(7, 7, 3, 2, 206000, 103000, '2025-05-03 15:46:00', NULL),
+(8, 8, 3, 1, 65000, 65000, '2025-05-03 15:47:00', NULL),
+(9, 9, 3, 3, 225000, 75000, '2025-05-03 15:48:00', NULL),
+(10, 10, 4, 2, 110000, 55000, '2025-05-04 09:00:00', NULL),
+(11, 11, 5, 1, 68000, 68000, '2025-05-05 18:20:00', NULL),
+(12, 12, 5, 2, 156000, 78000, '2025-05-05 18:21:00', NULL),
+(13, 13, 5, 1, 78000, 78000, '2025-05-05 18:22:00', NULL),
+(14, 14, 6, 1, 88000, 88000, '2025-05-06 13:10:00', NULL),
+(15, 15, 6, 2, 116000, 58000, '2025-05-06 13:11:00', NULL),
+(16, 16, 7, 1, 35000, 35000, '2025-05-07 14:50:00', NULL),
+(17, 17, 7, 3, 30000, 10000, '2025-05-07 14:51:00', NULL),
+(18, 18, 7, 1, 25000, 25000, '2025-05-07 14:52:00', NULL),
+(19, 19, 7, 2, 50000, 25000, '2025-05-07 14:53:00', NULL),
+(20, 20, 7, 1, 25000, 25000, '2025-05-07 14:54:00', NULL),
+(21, 7, 7, 1, 103000, 103000, '2025-05-07 14:50:00', NULL),
+(22, 1, 7, 2, 156000, 78000, '2025-05-07 14:51:00', NULL),
+(23, 2, 7, 3, 204000, 68000, '2025-05-07 14:52:00', NULL),
+(24, 8, 8, 2, 130000, 65000, '2025-05-08 11:25:00', NULL),
+(25, 9, 8, 1, 75000, 75000, '2025-05-08 11:26:00', NULL),
+(26, 10, 9, 1, 55000, 55000, '2025-05-09 17:40:00', NULL),
+(27, 11, 9, 2, 136000, 68000, '2025-05-09 17:41:00', NULL),
+(28, 3, 9, 1, 58000, 58000, '2025-05-09 17:42:00', NULL),
+(29, 12, 10, 1, 78000, 78000, '2025-05-10 08:30:00', NULL),
+(30, 5, 10, 2, 136000, 68000, '2025-05-10 08:31:00', NULL),
+(31, 13, 11, 3, 234000, 78000, '2025-05-11 16:00:00', NULL),
+(32, 14, 12, 1, 88000, 88000, '2025-05-12 10:10:00', NULL),
+(33, 4, 12, 2, 156000, 78000, '2025-05-12 10:11:00', NULL),
+(34, 15, 13, 2, 116000, 58000, '2025-05-13 19:20:00', NULL),
+(35, 16, 13, 1, 35000, 35000, '2025-05-13 19:21:00', NULL),
+(36, 17, 14, 4, 40000, 10000, '2025-05-14 12:00:00', NULL),
+(37, 18, 14, 1, 25000, 25000, '2025-05-14 12:01:00', NULL),
+(38, 19, 14, 2, 50000, 25000, '2025-05-14 12:02:00', NULL),
+(39, 20, 15, 3, 75000, 25000, '2025-05-15 13:30:00', NULL),
+(40, 6, 15, 1, 98000, 98000, '2025-05-15 13:31:00', NULL),
+(41, 2, 15, 2, 136000, 68000, '2025-05-15 13:32:00', NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -133,26 +180,29 @@ CREATE TABLE `khachhang` (
   `ma_khach_hang` int(11) NOT NULL,
   `ten_khach_hang` varchar(255) DEFAULT NULL,
   `so_dien_thoai` varchar(20) DEFAULT NULL,
-  `tong_chi_tieu` double DEFAULT NULL,
-  `tien_tich_luy` double DEFAULT NULL,
-  `cap_bac` enum('Đồng','Bạc','Vàng','Kim Cương') DEFAULT 'Đồng'
+  `tong_chi_tieu` double DEFAULT 0,
+  `tien_tich_luy` double DEFAULT 0,
+  `cap_bac` enum('Đồng','Bạc','Vàng','Kim Cương') DEFAULT 'Đồng',
+  `is_deleted` tinyint(4) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Đồng: 2%, Bạc: 3%, Vàng: 5%, Kim Cương: 7%';
 
 --
 -- Dumping data for table `khachhang`
 --
 
-INSERT INTO `khachhang` (`ma_khach_hang`, `ten_khach_hang`, `so_dien_thoai`, `tong_chi_tieu`, `tien_tich_luy`, `cap_bac`) VALUES
-(1, 'Nguyễn Minh Khoa', '0901234567', 1500000, 30000, 'Đồng'),
-(2, 'Trần Ngọc Bích', '0912345678', 3200000, 96000, 'Bạc'),
-(3, 'Lê Hoàng Long', '0923456789', 5600000, 280000, 'Vàng'),
-(4, 'Phạm Thanh Huyền', '0934567890', 11000000, 770000, 'Kim Cương'),
-(5, 'Hoàng Nhật Nam', '0945678901', 800000, 16000, 'Đồng'),
-(6, 'Đinh Mai Chi', '0956789012', 2500000, 75000, 'Bạc'),
-(7, 'Vũ Đức Thịnh', '0967890123', 4000000, 200000, 'Vàng'),
-(8, 'Ngô Khánh Linh', '0978901234', 700000, 14000, 'Đồng'),
-(9, 'Bùi Tuấn Kiệt', '0989012345', 10000000, 700000, 'Kim Cương'),
-(10, 'Đoàn Ánh Tuyết', '0990123456', 3000000, 90000, 'Bạc');
+INSERT INTO `khachhang` (`ma_khach_hang`, `ten_khach_hang`, `so_dien_thoai`, `tong_chi_tieu`, `tien_tich_luy`, `cap_bac`, `is_deleted`) VALUES
+(1, 'Nguyễn Minh Khoa', '0901234567', 1500000, 30000, 'Đồng', 0),
+(2, 'Trần Ngọc Bích', '0912345678', 3200000, 96000, 'Bạc', 0),
+(3, 'Lê Hoàng Long', '0923456789', 5600000, 280000, 'Vàng', 0),
+(4, 'Phạm Thanh Huyền', '0934567890', 11000000, 770000, 'Kim Cương', 0),
+(5, 'Hoàng Nhật Nam', '0945678901', 800000, 16000, 'Đồng', 0),
+(6, 'Đinh Mai Chi', '0956789012', 2500000, 75000, 'Bạc', 0),
+(7, 'Vũ Đức Thịnh', '0967890123', 4000000, 200000, 'Vàng', 0),
+(8, 'Ngô Khánh Linh', '0978901234', 700000, 14000, 'Đồng', 0),
+(9, 'Bùi Tuấn Kiệt', '0989012345', 10000000, 700000, 'Kim Cương', 0),
+(10, 'Đoàn Ánh Tuyết', '0990123456', 3000000, 90000, 'Bạc', 0),
+(11, 'Nguyễn Khắc Khổ', '0585869347', 0, 0, 'Đồng', 1),
+(12, 'Lý Cửng', '0933356723', 0, 0, 'Đồng', 1);
 
 -- --------------------------------------------------------
 
@@ -242,7 +292,8 @@ INSERT INTO `nhom` (`ma_nhom`, `ten_nhom`, `hinh_anh`, `is_deleted`) VALUES
 (1, 'Ramen', 'ramen.jfif', 0),
 (2, 'Cơm', 'rice.jfif', 0),
 (3, 'Món chiên', 'fried.jfif', 0),
-(4, 'Đồ uống', 'juice.avif', 0);
+(4, 'Đồ uống', 'juice.avif', 0),
+(5, 'abc', 'z6696451241980_659c4c7ec4d5fb60da5f6ccb7852d835_1749967291170.jpg', 1);
 
 -- --------------------------------------------------------
 
@@ -345,7 +396,7 @@ ALTER TABLE `ban`
 -- AUTO_INCREMENT for table `chitiethoadon`
 --
 ALTER TABLE `chitiethoadon`
-  MODIFY `ma_chi_tiet` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ma_chi_tiet` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- AUTO_INCREMENT for table `currentorder`
@@ -363,7 +414,7 @@ ALTER TABLE `hoadon`
 -- AUTO_INCREMENT for table `khachhang`
 --
 ALTER TABLE `khachhang`
-  MODIFY `ma_khach_hang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `ma_khach_hang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `khuyenmai`
@@ -381,7 +432,7 @@ ALTER TABLE `monan`
 -- AUTO_INCREMENT for table `nhom`
 --
 ALTER TABLE `nhom`
-  MODIFY `ma_nhom` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `ma_nhom` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `taikhoan`
