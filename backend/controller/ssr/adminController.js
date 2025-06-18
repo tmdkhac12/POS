@@ -22,7 +22,7 @@ const getHomePage = async function (req, res) {
             [hoaDons, hoaDonCount]
         ] = await Promise.all([
             Promise.all([banModel.getBans(LIMIT, OFFSET), banModel.getNumberOfTable()]),
-            Promise.all([monAnModel.getDishesJoinGroup(LIMIT, OFFSET), monAnModel.getNumberOfDishes()]),
+            Promise.all([monAnModel.getDishesJoinGroupJoinKM(LIMIT, OFFSET), monAnModel.getNumberOfDishes()]),
             Promise.all([khachHangModel.getKhachHangs(LIMIT, OFFSET), khachHangModel.getNumberOfKhachHang()]),
             Promise.all([nhomModel.getNhoms(LIMIT, OFFSET), nhomModel.getNumberOfNhoms()]),
             Promise.all([taiKhoanModel.getTaiKhoans(LIMIT, OFFSET), taiKhoanModel.getNumberOfTaiKhoan()]),

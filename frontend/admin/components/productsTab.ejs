@@ -4,6 +4,10 @@
         <h3>Sản Phẩm</h3>
     </header>
 
+    <div class="text-end">
+        <button class="btn btn-primary my-2 me-3 ms-auto" id="add-product-btn" data-bs-toggle="modal" data-bs-target="#add-product-modal">Thêm món ăn</button>
+    </div>
+
     <div class="table-container p-3 border border-1">
         <div class="form-outline" data-mdb-input-init>
             <input type="search" id="form1" class="form-control" placeholder="Tìm kiếm..." aria-label="Search" />
@@ -25,13 +29,19 @@
                 <tr>
                     <td><%= monan.ma_mon_an %></td>
                     <td><%= monan.ten_mon_an %></td>
-                    <td><%= monan.don_gia.toLocaleString("vi-VN") %></td>
+                    <td>
+                        <% if (monan.don_gia !== monan.don_gia_sau_khuyen_mai) { %>
+                           <span class="text-decoration-line-through text-muted"><%= monan.don_gia.toLocaleString("vi-VN") %>đ</span>  
+                           <span class="text-danger fw-bold"><%= monan.don_gia_sau_khuyen_mai.toLocaleString("vi-VN") %>đ</span>
+                        <% } else { %>
+                           <span><%= monan.don_gia.toLocaleString("vi-VN") %>đ</span>  
+                        <% } %>
+                    </td>
                     <td><%= monan.ten_nhom %></td>
                     <td>
-                        <div class="d-flex gap-2 justify-content-center">
-                            <button class="btn btn-success">Xem</button>
-                            <button class="btn btn-warning">Cập nhật</button>
-                            <button class="btn btn-danger">Xóa</button>
+                        <div class="d-flex gap-2 justify-content-center" data-id="<%= monan.ma_mon_an %>" data-name="<%= monan.ten_mon_an %>" data-price="<%= monan.don_gia %>" data-category="<%= monan.ma_nhom %>" data-discount="<%= monan.ma_khuyen_mai ? monan.ma_khuyen_mai : 0  %>" data-img="<%= monan.hinh_anh %>">
+                            <button class="btn btn-warning update-product-btn">Cập nhật</button>
+                            <button class="btn btn-danger delete-product-btn">Xóa</button>
                         </div>
                     </td>
                 </tr>
@@ -49,4 +59,123 @@
         <% } %>
         <li class="page-item next-btn"><a class="page-link" href="#">Trang sau</a></li>
     </ul>
+
+    <div class="modal" id="add-product-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Thêm món ăn</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <form action="" enctype="multipart/form-data">
+                        <label for="product-name" class="form-label">Tên món ăn</label><br>
+                        <input type="text" class="form-control input-name" name="product-name"><br>
+
+                        <label for="product-price" class="form-label">Đơn giá</label><br>
+                        <input type="text" class="form-control input-price" name="product-price" placeholder="0"><br>
+                        
+                        <label for="product-category" class="form-label">Phân loại</label><br>
+                        <select name="category" class="form-select select-category">
+                            <% for (const nhom of nhoms) { %>
+                                <option value="<%= nhom.ma_nhom %>"><%= nhom.ten_nhom %></option>
+                            <% } %>
+                        </select> <br>
+
+                        <label for="product-discount" class="form-label">Khuyến mãi</label><br>
+                        <select name="discount" class="form-select select-discount">
+                            <option value="0">- Chọn khuyến mãi -</option>
+                            <% for (const khuyenMai of khuyenMais) { %>
+                                <option value="<%= khuyenMai.ma_khuyen_mai %>"><%= khuyenMai.ten_khuyen_mai %></option>
+                            <% } %>
+                        </select> <br>
+
+                        <label for="myFile" class="form-label">Hình ảnh</label><br>
+                        <input type="file" class="form-control input-file" name="myfile">
+                    </form>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-primary save">Thêm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="update-product-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Sửa thông tin món ăn</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <form action="" enctype="multipart/form-data">
+                        <label for="product-name" class="form-label">Tên món ăn</label><br>
+                        <input type="text" class="form-control input-name" name="product-name"><br>
+
+                        <label for="product-price" class="form-label">Đơn giá</label><br>
+                        <input type="text" class="form-control input-price" name="product-price" placeholder="0"><br>
+                        
+                        <label for="product-category" class="form-label">Phân loại</label><br>
+                        <select name="category" class="form-select select-category">
+                            <% for (const nhom of nhoms) { %>
+                                <option value="<%= nhom.ma_nhom %>"><%= nhom.ten_nhom %></option>
+                            <% } %>
+                        </select> <br>
+
+                        <label for="product-discount" class="form-label">Khuyến mãi</label><br>
+                        <select name="discount" class="form-select select-discount">
+                            <option value="0">- Chọn khuyến mãi -</option>
+                            <% for (const khuyenMai of khuyenMais) { %>
+                                <option value="<%= khuyenMai.ma_khuyen_mai %>"><%= khuyenMai.ten_khuyen_mai %></option>
+                            <% } %>
+                        </select> <br>
+
+                        <label for="myFile" class="form-label">Hình ảnh</label><br>
+                        <input type="file" class="form-control input-file" name="myfile">
+
+                        <img src="" class="mt-3 preview-image">
+                    </form>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-primary save">Lưu thay đổi</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="delete-product-modal">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">Xác nhận xóa</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    Bạn có chắc chắn muốn xóa món ăn <span class="fw-bold text-danger product-name"></span> không?
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Không</button>
+                    <button type="button" class="btn btn-danger yes">Có</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
