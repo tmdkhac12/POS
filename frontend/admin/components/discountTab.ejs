@@ -4,12 +4,16 @@
         <h3>Khuyến mãi</h3>
     </header>
 
+    <div class="text-end">
+        <button class="btn btn-primary my-2 me-3 ms-auto" id="add-discount-btn" data-bs-toggle="modal" data-bs-target="#add-discount-modal">Thêm khuyến mãi</button>
+    </div>
+
     <div class="table-container p-3 border border-1">
         <div class="form-outline" data-mdb-input-init>
             <input type="search" id="form1" class="form-control" placeholder="Tìm kiếm..." aria-label="Search" />
         </div>
 
-        <table class="table table-bordered mt-3" id="discount-table"> 
+        <table class="table table-bordered mt-3" id="discount-table">
             <thead>
                 <tr>
                     <th style="width: 10%;">Mã khuyến mãi</th>
@@ -23,20 +27,20 @@
             </thead>
             <tbody>
                 <% for (const khuyenMai of khuyenMais) { %>
-                    <tr>
-                        <td><%= khuyenMai.ma_khuyen_mai %></td>
-                        <td><%= khuyenMai.ten_khuyen_mai %></td>
-                        <td><%= (khuyenMai.giam_theo_phan_tram ?  khuyenMai.giam_theo_phan_tram + "%" : "") %></td>
-                        <td><%= (khuyenMai.giam_theo_tien ? khuyenMai.giam_theo_tien.toLocaleString("vi-VN") + "đ" : "") %></td>
-                        <td><%= khuyenMai.ngay_bat_dau + " 00:00:00" %></td>
-                        <td><%= khuyenMai.ngay_ket_thuc %></td>
-                        <td>
-                            <div class="d-flex gap-2 justify-content-center">
-                                <button class="btn btn-warning">Cập nhật</button>
-                                <button class="btn btn-danger">Xóa</button>
-                            </div>
-                        </td>
-                    </tr>
+                <tr>
+                    <td><%= khuyenMai.ma_khuyen_mai %></td>
+                    <td><%= khuyenMai.ten_khuyen_mai %></td>
+                    <td><%= (khuyenMai.giam_theo_phan_tram ?  khuyenMai.giam_theo_phan_tram + "%" : "") %></td>
+                    <td><%= (khuyenMai.giam_theo_tien ? khuyenMai.giam_theo_tien.toLocaleString("vi-VN") + "đ" : "") %></td>
+                    <td><%= khuyenMai.ngay_bat_dau + " 00:00:00" %></td>
+                    <td><%= khuyenMai.ngay_ket_thuc %></td>
+                    <td>
+                        <div class="d-flex gap-2 justify-content-center" data-id="<%= khuyenMai.ma_khuyen_mai %>" data-name="<%= khuyenMai.ten_khuyen_mai %>" data-percent="<%= khuyenMai.giam_theo_phan_tram ? khuyenMai.giam_theo_phan_tram : 0 %>" data-money="<%= khuyenMai.giam_theo_tien ? khuyenMai.giam_theo_tien : 0 %>" data-start="<%= khuyenMai.ngay_bat_dau %>" data-end="<%= khuyenMai.ngay_ket_thuc.split(" ")[0] %>">
+                            <button class="btn btn-warning update-discount-btn">Cập nhật</button>
+                            <button class="btn btn-danger delete-discount-btn">Xóa</button>
+                        </div>
+                    </td>
+                </tr>
                 <% } %>
             </tbody>
         </table>
@@ -47,8 +51,133 @@
         <li class="page-item prev-btn"><a class="page-link" href="#">Trang trước</a></li>
         <li class="page-item page-item-btn active" data-page="1"><a class="page-link" href="#">1</a></li>
         <% for (let i = 2; i < numberOKhuyenMai; i++) { %>
-            <li class="page-item page-item-btn" data-page="<%= i %>"><a class="page-link" href="#"><%= i %></a></li>
+        <li class="page-item page-item-btn" data-page="<%= i %>"><a class="page-link" href="#"><%= i %></a></li>
         <% } %>
         <li class="page-item next-btn"><a class="page-link" href="#">Trang sau</a></li>
     </ul>
+
+    <div class="modal" id="add-discount-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Thêm khuyến mãi</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <form action="">
+                        <label class="form-label">Tên khuyến mãi</label><br>
+                        <input type="text" class="form-control input-name"><br>
+
+                        <label>Chọn loại khuyến mãi</label><br>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="loaiKhuyenMai" id="radio1" value="percent" checked>
+                            <label class="form-check-label" for="radio1">Phần trăm</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="loaiKhuyenMai" id="radio2" value="money">
+                            <label class="form-check-label" for="radio2">Tiền</label>
+                        </div>
+
+                        <div class="percent-container input-group">
+                            <input type="text" class="form-control input-percent">
+                            <span class="input-group-text">%</span>
+                        </div>
+                        <div class="money-container input-group d-none">
+                            <input type="text" class="form-control input-money">
+                            <span class="input-group-text">đ</span>
+                        </div>
+
+                        <br><label class="form-label">Ngày bắt đầu</label> <br>
+                        <input class="form-control input-start" type="date" /> <br>
+
+                        <label class="form-label">Ngày kết thúc</label> <br>
+                        <input class="form-control input-end" type="date" /> <br>
+                    </form>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-primary save">Thêm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="update-discount-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Sửa thông tin khuyến mãi</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <form action="">
+                        <label class="form-label">Tên khuyến mãi</label><br>
+                        <input type="text" class="form-control input-name"><br>
+
+                        <label>Chọn loại khuyến mãi</label><br>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="loaiKhuyenMai1" id="radio3" value="percent" checked>
+                            <label class="form-check-label" for="radio3">Phần trăm</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="loaiKhuyenMai1" id="radio4" value="money">
+                            <label class="form-check-label" for="radio4">Tiền</label>
+                        </div>
+
+                        <div class="percent-container input-group">
+                            <input type="text" class="form-control input-percent">
+                            <span class="input-group-text">%</span>
+                        </div>
+                        <div class="money-container input-group d-none">
+                            <input type="text" class="form-control input-money">
+                            <span class="input-group-text">đ</span>
+                        </div>
+
+                        <br><label class="form-label">Ngày bắt đầu</label> <br>
+                        <input class="form-control input-start" type="date" /> <br>
+
+                        <label class="form-label">Ngày kết thúc</label> <br>
+                        <input class="form-control input-end" type="date" /> <br>
+                    </form>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-primary save">Lưu thay đổi</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="delete-discount-modal">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">Xác nhận xóa</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    Bạn có chắc chắn muốn xóa khuyến mãi <span class="fw-bold text-danger discount-name"></span> không?
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Không</button>
+                    <button type="button" class="btn btn-danger yes">Có</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
