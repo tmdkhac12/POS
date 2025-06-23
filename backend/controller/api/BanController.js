@@ -1,18 +1,18 @@
 // API Controller
 const banModel = require("../../models/BanModel.js");
 
-const getPaginatedBans = async (limit, offset) => {
+const getPaginatedBans = async (name, limit, offset) => {
     try {
-        return await banModel.getBans(limit, offset);
+        return await banModel.searchBan(name, limit, offset);
     } catch (error) {
-        console.error("Get Bans (BanController): " + error.message);
+        console.error("Get Paginated Bans (BanController): " + error.message);
         throw error;
     }
 }
 
-const countBans = async () => {
+const countBans = async (name = "") => {
     try {
-        return await banModel.getNumberOfTable();
+        return await banModel.getNumberOfTable(name);
     } catch (error) {
         console.error("Count Bans (BanController): " + error.message);
         throw error;
@@ -24,7 +24,7 @@ const addBan = async (name) => {
         return await banModel.insertTable(name);
     } catch (error) {
         console.error("Add Ban (BanController): " + error.message);
-        throw error;   
+        throw error;
     }
 }
 
@@ -51,5 +51,5 @@ module.exports = {
     countBans,
     addBan,
     updateBan,
-    deleteBan
+    deleteBan,
 }

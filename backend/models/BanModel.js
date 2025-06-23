@@ -35,15 +35,26 @@ const getTableById = async (id) => {
     }
 }
 
-const getNumberOfTable = async () => {
-    const sql = "select count(*) as soluong from ban where is_deleted = 0";
+const getNumberOfTable = async (name) => {
+    const sql = "select count(*) as soluong from ban where ten_ban like ? and is_deleted = 0";
 
     try {
-        const [result] = await pool.query(sql);
+        const [result] = await pool.execute(sql, [`%${name}%`]);
 
         return result[0].soluong;
     } catch (error) {
         throw new Error("Get Number Of Table (BanModel): " + error.message)
+    }
+}
+
+const searchBan = async (name, limit, offset) => {
+    const sql = "select * from ban where ten_ban like ? and is_deleted = 0 LIMIT ? OFFSET ?";
+
+    try {
+        const [result] = await pool.execute(sql, [`%${name}%`, limit, offset]);
+        return result;
+    } catch (error) {
+        throw new Error("Search Ban (BanModel): " + error.message)
     }
 }
 
@@ -87,5 +98,6 @@ module.exports = {
     getAllBans, getBans, getTableById, getNumberOfTable,
     insertTable,
     updateTable,
-    softDeleteBan
+    softDeleteBan,
+    searchBan
 }

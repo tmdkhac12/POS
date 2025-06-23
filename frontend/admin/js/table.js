@@ -1,9 +1,12 @@
 window.addEventListener("DOMContentLoaded", () => {
-    tablePageHandler.addChangePageTable();
+    tablePageHandler.addChangePageEvent();
     addTableHandler.init();
     updateTableHandler.init();
     deleteTableHandler.init();
+    searchHandler.init();
 })
+
+let G_SEARCHKEY = "";
 
 const tablePageHandler = {
     d_paginationContainer: document.querySelector("#table-pagination"),
@@ -18,7 +21,7 @@ const tablePageHandler = {
     },
 
     // Methods
-    addChangePageTable() {
+    addChangePageEvent(search = "") {
         this.ad_pageItemBtns.forEach(btn => {
             btn.addEventListener('click', async () => {
                 // Kiểm tra trạng thái btn, nếu active thì không gọi API 
@@ -29,11 +32,12 @@ const tablePageHandler = {
 
                 // Fetch API lấy dữ liệu 
                 const page = parseInt(btn.getAttribute("data-page"));
-                const data = await this.getPage(page);
+                const data = await this.getPage(page, search);
                 (data.success ? this.renderBans(data.bans) : alert(data.message));
 
                 // Cập nhật trạng thái active của btn
-                this.updateBtnStatus(btn);
+                this.ad_pageItemBtns.forEach(item => item.classList.remove("active"))
+                btn.classList.add("active");
 
                 // Cập nhật chức năng của các nút update, delete 
                 updateTableHandler.addUpdateBtnsOnClick();
@@ -42,14 +46,9 @@ const tablePageHandler = {
         })
     },
 
-    updateBtnStatus(btn) {
-        this.ad_pageItemBtns.forEach(item => item.classList.remove("active"))
-        btn.classList.add("active");
-    },
-
-    async getPage(page) {
+    async getPage(page, search) {
         try {
-            const respond = await fetch(`/api/bans?page=${page}`);
+            const respond = await fetch(`/api/bans?page=${page}&search=${search}`);
             const data = await respond.json();
             return data;
         } catch (error) {
@@ -59,9 +58,9 @@ const tablePageHandler = {
     },
 
     async refreshCurrentPage() {
-        // Fetch API lấy dữ liệu 
+        // Fetch API lấy và render dữ liệu  
         const page = parseInt(this.d_activeBtn.getAttribute("data-page"));
-        const data = await this.getPage(page);
+        const data = await this.getPage(page, G_SEARCHKEY);
         (data.success ? this.renderBans(data.bans) : alert(data.message));
 
         // Cập nhật chức năng của các nút update, delete 
@@ -69,7 +68,7 @@ const tablePageHandler = {
         deleteTableHandler.addDeleteBtnsOnClick();
     },
 
-    renderPagination(number) {
+    renderPagination(number, activeIndex) {
         const oldCount = this.ad_pageItemBtns.length;
         const newCount = Math.ceil(number / 8);
 
@@ -79,29 +78,19 @@ const tablePageHandler = {
         // 1. Xóa toàn bộ nội dung phân trang trước đó 
         this.d_paginationContainer.innerHTML = `
             <li class="page-item"><a class="page-link" href="#">Trang trước</a></li>
-            <li class="page-item page-item-btn" data-page="1"><a class="page-link" href="#">1</a></li>
         `;
 
         // 2. Thêm các trang tương ứng 
-        for (let i = 2; i <= newCount; i++) {
-            if (i === newCount) {
-                this.d_paginationContainer.innerHTML += `
-                    <li class="page-item page-item-btn active" data-page="${i}"><a class="page-link" href="#">${i}</a></li>
-                `;
-            } else {
-                this.d_paginationContainer.innerHTML += `
-                    <li class="page-item page-item-btn" data-page="${i}"><a class="page-link" href="#">${i}</a></li>
-                `;
-            }
+        for (let i = 1; i <= newCount; i++) {
+            this.d_paginationContainer.innerHTML += `
+                <li class="page-item page-item-btn ${i == activeIndex ? "active" : ""}" data-page="${i}"><a class="page-link" href="#">${i}</a></li>
+            `;
         }
 
         // 3. Thêm nút trang sau
         this.d_paginationContainer.innerHTML += `
             <li class="page-item"><a class="page-link" href="#">Trang sau</a></li>
         `;
-
-        // 4. Thêm sự kiện chuyển trang
-        this.addChangePageTable();
     },
 
     renderBans(data) {
@@ -151,11 +140,20 @@ const addTableHandler = {
             });
 
             const data = await res.json();
+            
+            alert(data.message);
 
             if (data.success) {
                 bootstrap.Modal.getOrCreateInstance(document.getElementById("add-table-modal")).hide();
-                alert(data.message);
-                tablePageHandler.renderPagination(data.numberOfBans);
+
+                if (G_SEARCHKEY) {
+                    searchHandler.refreshSearch();
+                    return;
+                }
+
+                const activeIndex = Math.ceil(data.numberOfBans / 8);
+                tablePageHandler.renderPagination(data.numberOfBans, activeIndex);
+                tablePageHandler.addChangePageEvent();
                 tablePageHandler.refreshCurrentPage();
             }
 
@@ -198,7 +196,7 @@ const updateTableHandler = {
                 })
 
                 const data = await res.json();
-                
+
                 alert(data.message);
 
                 if (data.success) {
@@ -251,12 +249,20 @@ const deleteTableHandler = {
             const data = await res.json();
 
             alert(data.message);
-            
+
             if (data.success) {
                 bootstrap.Modal.getOrCreateInstance(document.getElementById("delete-table-modal")).hide();
-                tablePageHandler.renderPagination(data.numberOfBans);
+
+                if (G_SEARCHKEY) {
+                    searchHandler.refreshSearch();
+                    return;
+                }
+
+                const activeIndex = Math.ceil(data.numberOfBans / 8);
+                tablePageHandler.renderPagination(data.numberOfBans, activeIndex);
+                tablePageHandler.addChangePageEvent();
                 tablePageHandler.refreshCurrentPage();
-            } 
+            }
         })
     },
 
@@ -268,5 +274,43 @@ const deleteTableHandler = {
                 this.d_labelName.textContent = btn.closest("div").getAttribute("data-name");
             })
         })
+    }
+}
+
+const searchHandler = {
+    d_searchInput: document.querySelector("#search-table-form input"),
+    d_searchForm: document.querySelector("#search-table-form"),
+
+    // Methods
+    init() {
+        this.d_searchForm.addEventListener("submit", () => {
+            this.search();
+        })
+    },
+
+    refreshSearch() {
+        this.d_searchInput.value = "";
+        this.search();        
+    },
+
+    async search() {
+        // 1. Lấy keyword tìm kiếm 
+        G_SEARCHKEY = this.d_searchInput.value;
+
+        // 2. Gọi API lấy danh sách dữ liệu 
+        const page = 1;
+        const data = await tablePageHandler.getPage(page, G_SEARCHKEY);
+
+        // 3. Thêm phân trang cho dữ liệu và render dữ liệu mặc định ở trang 1 
+        const activeIndex = 1;
+        tablePageHandler.renderPagination(data.total, activeIndex);
+        tablePageHandler.renderBans(data.bans);
+
+        // 4. Thêm sự kiện chuyển trang cho dữ liệu 
+        tablePageHandler.addChangePageEvent(G_SEARCHKEY);
+
+        // 5. Thêm sự kiện cho các nút update/delete 
+        updateTableHandler.addUpdateBtnsOnClick();
+        deleteTableHandler.addDeleteBtnsOnClick();
     }
 }

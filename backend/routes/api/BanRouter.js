@@ -3,16 +3,19 @@ const banController = require('../../controller/api/BanController.js');
 const { validate } = require("../../middleware/BanMiddleware.js");
 
 banRouter.get("/", async (req, res) => {
-    // localhost:3000/api/bans?page=2
+    // localhost:3000/api/bans?page=2&search=
     try {
         const limit = 8;
+        const search = req.query.search;
         const offset = (req.query.page - 1) * limit;
         
-        const bans = await banController.getPaginatedBans(limit, offset);
-    
-        res.status(200).json({success: true, bans});
+        // Gửi về danh sách bàn có LO và tổng số lượng của danh sách đó để phân trang  
+        const bans = await banController.getPaginatedBans(search, limit, offset);
+        const total = await banController.countBans(search);
+
+        res.status(200).json({success: true, bans, total});
     } catch (error) {
-        console.error("GET Route: '/api/bans?query' - (BanRouter): " + error.message);
+        console.error("GET Route: '/api/bans?query=&search=' - (BanRouter): " + error.message);
         res.status(500).json({success: false, message: "Lỗi Server"});
     }
 })
