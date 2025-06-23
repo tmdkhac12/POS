@@ -5,16 +5,18 @@ const validate  = require('../../middleware/TaiKhoanMiddlerware.js').validate;
 const updateValidate  = require('../../middleware/TaiKhoanMiddlerware.js').updateValidate;
 
 taiKhoanRouter.get("/", async (req, res) => {
-    // localhost:3000/api/taikhoans?page=2
+    // localhost:3000/api/taikhoans?page=2&search=
     try {
         const limit = 8;
         const offset = (req.query.page - 1) * limit;
+        const search = req.query.search;
 
-        const taiKhoans = await taiKhoanController.getPaginatedTaiKhoans(limit, offset);
+        const taiKhoans = await taiKhoanController.getPaginatedTaiKhoans(search, limit, offset);
+        const total = await taiKhoanController.countTaiKhoan();
 
-        res.status(200).json({ success: true, taiKhoans });
+        res.status(200).json({ success: true, taiKhoans, total });
     } catch (error) {
-        console.error("GET Route: '/api/taikhoans?query' - (TaiKhoanRouter): " + error.message);
+        console.error("GET Route: '/api/taikhoans?query&search=' - (TaiKhoanRouter): " + error.message);
         res.status(500).json({ success: false, message: "Lỗi Server" });
     }
 })

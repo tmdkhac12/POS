@@ -49,11 +49,13 @@ const updateValidate = (req, res, next) => {
     }
 
     // Validate newPassword
-    if (typeof newPassword !== 'string' || newPassword.length < 3 || newPassword.length > 255) {
-        return res.status(400).json({
-            success: false,
-            message: "Mật khẩu phải từ 3–255 ký tự."
-        });
+    if (newPassword) {
+        if (typeof newPassword !== 'string' || newPassword.length < 3 || newPassword.length > 255) {
+            return res.status(400).json({
+                success: false,
+                message: "Mật khẩu phải từ 3–255 ký tự."
+            });
+        }
     }
 
     // Validate adminPassword

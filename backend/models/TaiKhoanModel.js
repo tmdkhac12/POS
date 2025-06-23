@@ -24,11 +24,25 @@ const getTaiKhoans = async (limit, offset) => {
     }
 }
 
-const getNumberOfTaiKhoan = async () => {
-    const sql = "select count(*) as soluong from taikhoan where is_deleted = 0";
+const searchTaiKhoans = async (name, limit, offset) => {
+    const sql = `select * from taikhoan 
+                where (username like ? or ma_nhom_quyen like ?) and is_deleted = 0 limit ? offset ?`;
 
     try {
-        const [result] = await pool.query(sql);
+        const [result] = await pool.execute(sql, [`%${name}%`, `%${name}%`, limit, offset]);
+
+        return result;
+    } catch (error) {
+        console.error("Search Tai Khoan Limit Offset (TaiKhoanModel): " + error.message);
+    }
+}
+
+const getNumberOfTaiKhoan = async (name) => {
+    const sql = `select count(*) as soluong from taikhoan 
+                where (username like ? or ma_nhom_quyen like ?) and is_deleted = 0`;
+
+    try {
+        const [result] = await pool.execute(sql, [`%${name}%`, `%${name}%`]);
 
         return result[0].soluong;
     } catch (error) {
@@ -98,6 +112,19 @@ const updateTaiKhoan = async (username, hashPassword, roleId, id) => {
     }
 }
 
+const updateWithoutPassword = async (username, roleId, id) => {
+    const sql = `update taikhoan set username = ?, ma_nhom_quyen = ? 
+                where ma_tai_khoan = ?`;
+
+    try {
+        const [result] = await pool.execute(sql, [username, roleId, id]);
+
+        return result.affectedRows > 0;
+    } catch (error) {
+        console.error("Update Tai Khoan Without Password (TaiKhoanModel): " + error.message);
+    }
+}
+
 const softDeleteTaiKhoan = async (id) => {
     const sql = `update taikhoan set is_deleted = 1 where ma_tai_khoan = ?`;
 
@@ -114,6 +141,7 @@ module.exports = {
     getAllTaiKhoans, getNumberOfTaiKhoan, getTaiKhoans, getAdminPassword,
     isExistUsername, isExistUsernameExcept,
     insertTaiKhoan,
-    updateTaiKhoan,
-    softDeleteTaiKhoan
+    updateTaiKhoan, updateWithoutPassword,
+    softDeleteTaiKhoan,
+    searchTaiKhoans
 }

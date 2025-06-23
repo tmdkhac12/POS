@@ -1,17 +1,17 @@
 const nhomModel = require('../../models/NhomModel.js');
 
-const getPaginatedPhanLoais = async (limit, offset) => {
+const getPaginatedPhanLoais = async (name, limit, offset) => {
     try {
-        return await nhomModel.getNhoms(limit, offset);
+        return await nhomModel.searchNhoms(name, limit, offset);
     } catch (error) {
         console.error("Get Paginated Phan Loai (PhanLoaiController): " + error.message);
         throw error;
     }
 }
 
-const countPhanLoai = async () => {
+const countPhanLoai = async (name = "") => {
     try {
-        return await nhomModel.getNumberOfNhoms();
+        return await nhomModel.getNumberOfNhoms(name);
     } catch (error) {
         console.error("Count Phan Loai (PhanLoaiController): " + error.message);
         throw error;

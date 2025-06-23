@@ -1,8 +1,9 @@
 window.addEventListener("DOMContentLoaded", () => {
-    categoryPageHandler.addChangePageCategory();
+    categoryPageHandler.addChangePageEvent();
     addPhanLoaiHandler.init();
     updatePhanLoaiHandler.init();
     deletePhanLoaiHandler.init();
+    categorySearchHandler.init();
 })
 
 const categoryPageHandler = {
@@ -18,7 +19,7 @@ const categoryPageHandler = {
     },
 
     // Methods
-    addChangePageCategory() {
+    addChangePageEvent(search = "") {
         this.ad_pageItemBtns.forEach(btn => {
             btn.addEventListener('click', async () => {
                 // Kiểm tra trạng thái btn, nếu active thì không gọi API 
@@ -29,7 +30,7 @@ const categoryPageHandler = {
 
                 // Fetch API lấy dữ liệu 
                 const page = parseInt(btn.getAttribute("data-page"));
-                const data = await this.getPage(page);
+                const data = await this.getPage(page, search);
                 if (data.success ? this.renderPhanLoais(data.phanLoais) : alert(data.message));
 
                 // Cập nhật trạng thái active của btn
@@ -43,9 +44,9 @@ const categoryPageHandler = {
         })
     },
 
-    async getPage(page) {
+    async getPage(page, search) {
         try {
-            const respond = await fetch(`/api/phanloais?page=${page}`);
+            const respond = await fetch(`/api/phanloais?page=${page}&search=${search}`);
             const data = await respond.json();
             return data;
         } catch (error) {
@@ -57,7 +58,7 @@ const categoryPageHandler = {
     async refreshCurrentPage() {
         // Fetch API lấy dữ liệu 
         const page = parseInt(this.d_activeBtn.getAttribute("data-page"));
-        const data = await this.getPage(page);
+        const data = await this.getPage(page, G_SEARCHKEY);
         (data.success ? this.renderPhanLoais(data.phanLoais) : alert(data.message));
 
         // Cập nhật chức năng của các nút update, delete 
@@ -65,7 +66,7 @@ const categoryPageHandler = {
         deletePhanLoaiHandler.addDeleteBtnsOnClick();
     },
 
-    renderPagination(number) {
+    renderPagination(number, activeIndex) {
         const oldCount = this.ad_pageItemBtns.length;
         const newCount = Math.ceil(number / 8);
 
@@ -75,29 +76,19 @@ const categoryPageHandler = {
         // 1. Xóa toàn bộ nội dung phân trang trước đó 
         this.d_paginationContainer.innerHTML = `
             <li class="page-item"><a class="page-link" href="#">Trang trước</a></li>
-            <li class="page-item page-item-btn" data-page="1"><a class="page-link" href="#">1</a></li>
         `;
 
         // 2. Thêm các trang tương ứng 
-        for (let i = 2; i <= newCount; i++) {
-            if (i === newCount) {
-                this.d_paginationContainer.innerHTML += `
-                    <li class="page-item page-item-btn active" data-page="${i}"><a class="page-link" href="#">${i}</a></li>
-                `;
-            } else {
-                this.d_paginationContainer.innerHTML += `
-                    <li class="page-item page-item-btn" data-page="${i}"><a class="page-link" href="#">${i}</a></li>
-                `;
-            }
+        for (let i = 1; i <= newCount; i++) {
+            this.d_paginationContainer.innerHTML += `
+                <li class="page-item page-item-btn ${i == activeIndex ? "active" : ""}" data-page="${i}"><a class="page-link" href="#">${i}</a></li>
+            `;
         }
 
         // 3. Thêm nút trang sau
         this.d_paginationContainer.innerHTML += `
             <li class="page-item"><a class="page-link" href="#">Trang sau</a></li>
         `;
-
-        // 4. Thêm sự kiện chuyển trang
-        this.addChangePageCategory();
     },
 
     renderPhanLoais(data) {
@@ -145,10 +136,20 @@ const addPhanLoaiHandler = {
 
             alert(data.message);
 
+            
             if (data.success) {
                 bootstrap.Modal.getOrCreateInstance(document.getElementById("add-category-modal")).hide();
-                categoryPageHandler.renderPagination(data.countPhanLoai);
+                
+                if (G_SEARCHKEY) {
+                    categorySearchHandler.refreshSearch();
+                    return;
+                }
+
+                const activeIndex = Math.ceil(data.countPhanLoai / 8);
+                categoryPageHandler.renderPagination(data.countPhanLoai, activeIndex);
                 categoryPageHandler.refreshCurrentPage();
+                categoryPageHandler.addChangePageEvent();
+                document.querySelector("#add-category-modal form").reset();
             }
 
         })
@@ -246,8 +247,16 @@ const deletePhanLoaiHandler = {
 
             if (data.success) {
                 bootstrap.Modal.getOrCreateInstance(document.getElementById("delete-category-modal")).hide();
-                categoryPageHandler.renderPagination(data.countPhanLoai);
+
+                if (G_SEARCHKEY) {
+                    categorySearchHandler.refreshSearch();
+                    return;
+                }
+
+                const activeIndex = Math.ceil(data.countPhanLoai / 8);
+                categoryPageHandler.renderPagination(data.countPhanLoai, activeIndex);
                 categoryPageHandler.refreshCurrentPage();
+                categoryPageHandler.addChangePageEvent();
             }
         })
     },
@@ -260,5 +269,44 @@ const deletePhanLoaiHandler = {
                 this.d_labelName.textContent = btn.closest("div").getAttribute("data-name");
             })
         })
+    }
+}
+
+const categorySearchHandler = {
+    d_searchInput: document.querySelector("#search-category-form input"),
+    d_searchForm: document.querySelector("#search-category-form"),
+
+    // Methods
+    init() {
+        this.d_searchForm.addEventListener("submit", () => {
+            this.search();
+        })
+    },
+
+    refreshSearch() {
+        this.d_searchInput.value = "";
+        this.search();        
+    },
+
+    async search() {
+        // 1. Lấy keyword tìm kiếm 
+        G_SEARCHKEY = this.d_searchInput.value;
+
+        // 2. Gọi API lấy danh sách dữ liệu 
+        const page = 1;
+        const data = await categoryPageHandler.getPage(page, G_SEARCHKEY);
+        console.log(data);
+
+        // 3. Thêm phân trang cho dữ liệu và render dữ liệu mặc định ở trang 1 
+        const activeIndex = 1;
+        categoryPageHandler.renderPagination(data.total, activeIndex);
+        categoryPageHandler.renderPhanLoais(data.phanLoais);
+
+        // 4. Thêm sự kiện chuyển trang cho dữ liệu 
+        categoryPageHandler.addChangePageEvent(G_SEARCHKEY);
+
+        // 5. Thêm sự kiện cho các nút update/delete 
+        updatePhanLoaiHandler.addUpdateBtnsOnClick();
+        deletePhanLoaiHandler.addDeleteBtnsOnClick();
     }
 }

@@ -5,14 +5,16 @@ const upload = require("../../util/UploadImage.js").uploadPhanLoai;
 const { validate } = require('../../middleware/PhanLoaiMiddleware.js');
 
 phanLoaiRouter.get("/", async (req, res) => {
-    // localhost:3000/api/phanloais?page=2
+    // localhost:3000/api/phanloais?page=2&saerch=
     try {
         const limit = 8;
         const offset = (req.query.page - 1) * limit;
+        const search = req.query.search;
 
-        const phanLoais = await phanLoaiController.getPaginatedPhanLoais(limit, offset);
+        const phanLoais = await phanLoaiController.getPaginatedPhanLoais(search, limit, offset);
+        const total = await phanLoaiController.countPhanLoai(search);
 
-        res.status(200).json({ success: true, phanLoais });
+        res.status(200).json({ success: true, phanLoais, total });
     } catch (error) {
         console.error("GET Route: '/api/phanloais?query' - (PhanLoaiRouter): " + error.message);
         res.status(500).json({ success: false, message: "Lỗi Server" });

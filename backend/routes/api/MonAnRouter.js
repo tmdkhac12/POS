@@ -9,10 +9,12 @@ monAnRouter.get("/", async (req, res) => {
     try {
         const limit = 8;
         const offset = (req.query.page - 1) * limit;
+        const search = req.query.search;
 
-        const monAns = await monAnController.getPaginatedMonAns(limit, offset);
+        const monAns = await monAnController.getPaginatedMonAns(search, limit, offset);
+        const total = await monAnController.coutnMonAn(search);
 
-        res.status(200).json({ success: true, monAns });
+        res.status(200).json({ success: true, monAns, total });
     } catch (error) {
         console.error("Route: '/api/monans?query' - (MonAnRouter): " + error.message);
         res.status(500).json({ success: false, message: "Lỗi Server" });

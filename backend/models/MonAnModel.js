@@ -49,11 +49,38 @@ const getDishesJoinGroupJoinKM = async (limit, offset) => {
     }
 }
 
-const getNumberOfDishes = async () => {
-    const sql = "select count(*) as soluong from monan where is_deleted = 0";
+const searchDishes = async (name, limit, offset) => {
+    const sql = `SELECT 
+                    m.*, 
+                    
+                    CASE 
+                        WHEN m.ma_khuyen_mai IS NOT NULL AND NOW() BETWEEN km.ngay_bat_dau AND km.ngay_ket_thuc
+                        THEN ROUND(m.don_gia 
+                                - COALESCE(km.giam_theo_tien, 0)
+                                - (m.don_gia * COALESCE(km.giam_theo_phan_tram, 0) / 100), 0)
+                        ELSE m.don_gia
+                    END AS don_gia_sau_khuyen_mai,
+                    
+                    n.ten_nhom
+                    
+                FROM monan m  
+                INNER JOIN nhom n ON m.ma_nhom = n.ma_nhom
+                LEFT JOIN khuyenmai km ON m.ma_khuyen_mai = km.ma_khuyen_mai
+                where m.ten_mon_an like ? and m.is_deleted = 0 LIMIT ? OFFSET ?`;
 
     try {
-        const [result] = await pool.query(sql);
+        const [result] = await pool.execute(sql, [`%${name}%`,limit, offset]);
+        return result;
+    } catch (error) {
+        throw new Error("Get Dishes Join Group (MonAnModel): " + error.message)
+    }
+}
+
+const getNumberOfDishes = async (name) => {
+    const sql = "select count(*) as soluong from monan where ten_mon_an like ? and is_deleted = 0";
+
+    try {
+        const [result] = await pool.execute(sql, [`%${name}%`]);
 
         return result[0].soluong;
     } catch (error) {
@@ -116,5 +143,6 @@ module.exports = {
     getDishesByGroup, getDishesJoinGroup, getNumberOfDishes, getDishesJoinGroupJoinKM,
     insertMonAn,
     updateMonAn, updateMonAnWithoutImg,
-    softDeleteMonAn
+    softDeleteMonAn,
+    searchDishes
 }

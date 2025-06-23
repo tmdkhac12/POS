@@ -1,9 +1,9 @@
 const taiKhoanModel = require('../../models/TaiKhoanModel.js');
 const bcrypt = require('bcrypt');
 
-const getPaginatedTaiKhoans = async (limit, offset) => {
+const getPaginatedTaiKhoans = async (name, limit, offset) => {
     try {
-        return await taiKhoanModel.getTaiKhoans(limit, offset);
+        return await taiKhoanModel.searchTaiKhoans(name, limit, offset);
     } catch (error) {
         console.error("Get Tai Khoans (TaiKhoanController): " + error.message);
         throw error;
@@ -25,16 +25,24 @@ const addTaiKhoan = async (username, password, roleId) => {
 
 const updateTaiKhoan = async (username, newPassword, adminUsername, adminPassword, roleId, id) => {
     try {
+        // Kiểm tra username đã tồn tại chưa
         if (await taiKhoanModel.isExistUsernameExcept(username, id))
             return -1;
 
+        // Kiểm tra mật khẩu admin có chính xác 
         const adminHashed = await taiKhoanModel.getAdminPassword(adminUsername); 
         if (!await bcrypt.compare(adminPassword, adminHashed)) {
             return -2;
         }
 
-        const hashNewPassword = await bcrypt.hash(newPassword, 12);
-        return await taiKhoanModel.updateTaiKhoan(username, hashNewPassword, roleId, id);
+        // Có update mật khẩu hay không?
+        if (!newPassword) {
+            return await taiKhoanModel.updateWithoutPassword(username, roleId, id);
+        } else {
+            const hashNewPassword = await bcrypt.hash(newPassword, 12);
+            return await taiKhoanModel.updateTaiKhoan(username, hashNewPassword, roleId, id);
+        }
+
     } catch (error) {
         console.error("Update Tai Khoan (TaiKhoanController): " + error.message);
         throw error;
@@ -50,9 +58,9 @@ const deleteTaiKhoan = async (id) => {
     }
 }
 
-const countTaiKhoan = async () => {
+const countTaiKhoan = async (name = "") => {
     try {
-        return await taiKhoanModel.getNumberOfTaiKhoan();
+        return await taiKhoanModel.getNumberOfTaiKhoan(name);
     } catch (error) {
         console.error("Count Tai Khoan (TaiKhoanController): " + error.message);
         throw error;

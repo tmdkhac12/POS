@@ -24,11 +24,23 @@ const getNhoms = async (limit, offset) => {
     }
 }
 
-const getNumberOfNhoms = async function () {
-    const sql = "select count(*) as soluong from nhom where is_deleted = 0";
+const searchNhoms = async (name, limit, offset) => {
+    const sql = "select * from nhom where ten_nhom like ? and is_deleted = 0 limit ? offset ?";
 
     try {
-        const [result] = await pool.query(sql);
+        const [result] = await pool.execute(sql, [`%${name}%`, limit, offset]);
+
+        return result;
+    } catch (error) {
+        throw new Error("Search Nhoms Limit Offset (NhomModel): " + error.message);
+    }
+}
+
+const getNumberOfNhoms = async function (name) {
+    const sql = "select count(*) as soluong from nhom where ten_nhom like ? and is_deleted = 0";
+
+    try {
+        const [result] = await pool.execute(sql, [`%${name}%`]);
 
         return result[0].soluong;
     } catch (error) {
@@ -88,5 +100,6 @@ module.exports = {
     getAllNhoms, getNhoms, getNumberOfNhoms,
     insertNhom,
     updateNhom, updateNameNhom,
-    softDeleteNhom
+    softDeleteNhom,
+    searchNhoms
 }

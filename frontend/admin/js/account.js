@@ -1,8 +1,9 @@
 window.addEventListener("DOMContentLoaded", () => {
-    accountPageHandler.addChangePageAccount();
+    accountPageHandler.addChangePageEvent();
     addAccountHandler.init();
     updateAccountHandler.init();
     deleteAccountHandler.init();
+    accountSearchHandler.init();
 })
 
 const accountPageHandler = {
@@ -18,7 +19,7 @@ const accountPageHandler = {
     },
 
     // Methods
-    addChangePageAccount() {
+    addChangePageEvent(search = "") {
         this.ad_pageItemBtns.forEach(btn => {
             btn.addEventListener('click', async () => {
                 // Kiểm tra trạng thái btn, nếu active thì không gọi API 
@@ -29,7 +30,7 @@ const accountPageHandler = {
 
                 // Fetch API lấy dữ liệu 
                 const page = parseInt(btn.getAttribute("data-page"));
-                const data = await this.getPage(page);
+                const data = await this.getPage(page, search);
                 (data.success ? this.renderTaiKhoans(data.taiKhoans) : alert(data.message));
 
                 // Cập nhật trạng thái active của btn
@@ -42,9 +43,9 @@ const accountPageHandler = {
         })
     },
 
-    async getPage(page) {
+    async getPage(page, search) {
         try {
-            const respond = await fetch(`/api/taikhoans?page=${page}`);
+            const respond = await fetch(`/api/taikhoans?page=${page}&search=${search}`);
             const data = await respond.json();
             return data;
         } catch (error) {
@@ -56,7 +57,7 @@ const accountPageHandler = {
     async refreshCurrentPage() {
         // Fetch API lấy dữ liệu 
         const page = parseInt(this.d_activeBtn.getAttribute("data-page"));
-        const data = await this.getPage(page);
+        const data = await this.getPage(page, G_SEARCHKEY);
         (data.success ? this.renderTaiKhoans(data.taiKhoans) : alert(data.message));
 
         // Cập nhật chức năng của các nút update, delete 
@@ -64,7 +65,7 @@ const accountPageHandler = {
         deleteAccountHandler.addDeleteBtnsOnClick();
     },
 
-    renderPagination(number) {
+    renderPagination(number, activeIndex) {
         const oldCount = this.ad_pageItemBtns.length;
         const newCount = Math.ceil(number / 8);
 
@@ -74,29 +75,19 @@ const accountPageHandler = {
         // 1. Xóa toàn bộ nội dung phân trang trước đó 
         this.d_paginationContainer.innerHTML = `
             <li class="page-item"><a class="page-link" href="#">Trang trước</a></li>
-            <li class="page-item page-item-btn" data-page="1"><a class="page-link" href="#">1</a></li>
         `;
 
         // 2. Thêm các trang tương ứng 
-        for (let i = 2; i <= newCount; i++) {
-            if (i === newCount) {
-                this.d_paginationContainer.innerHTML += `
-                    <li class="page-item page-item-btn active" data-page="${i}"><a class="page-link" href="#">${i}</a></li>
-                `;
-            } else {
-                this.d_paginationContainer.innerHTML += `
-                    <li class="page-item page-item-btn" data-page="${i}"><a class="page-link" href="#">${i}</a></li>
-                `;
-            }
+        for (let i = 1; i <= newCount; i++) {
+            this.d_paginationContainer.innerHTML += `
+                <li class="page-item page-item-btn ${i == activeIndex ? "active" : ""}" data-page="${i}"><a class="page-link" href="#">${i}</a></li>
+            `;
         }
 
         // 3. Thêm nút trang sau
         this.d_paginationContainer.innerHTML += `
             <li class="page-item"><a class="page-link" href="#">Trang sau</a></li>
         `;
-
-        // 4. Thêm sự kiện chuyển trang
-        this.addChangePageAccount();
     },
 
     renderTaiKhoans(data) {
@@ -143,7 +134,7 @@ const addAccountHandler = {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({username, password, confirmPassword, roleId})
+                body: JSON.stringify({ username, password, confirmPassword, roleId })
             });
 
             const data = await res.json();
@@ -152,7 +143,14 @@ const addAccountHandler = {
 
             if (data.success) {
                 bootstrap.Modal.getOrCreateInstance(document.getElementById("add-account-modal")).hide();
-                accountPageHandler.renderPagination(data.numberOfAccounts);
+
+                if (G_SEARCHKEY) {
+                    accountSearchHandler.refreshSearch();
+                    return;
+                }
+
+                const activeIndex = Math.ceil(data.countPhanLoai / 8);
+                accountPageHandler.renderPagination(data.numberOfAccounts, activeIndex);
                 accountPageHandler.refreshCurrentPage();
                 document.querySelector("#add-account-modal form").reset();
             }
@@ -202,6 +200,7 @@ const updateAccountHandler = {
             if (data.success) {
                 bootstrap.Modal.getOrCreateInstance(document.getElementById("update-account-modal")).hide();
                 accountPageHandler.refreshCurrentPage();
+                document.querySelector("#update-account-modal form").reset();
             }
         })
     },
@@ -254,8 +253,16 @@ const deleteAccountHandler = {
 
             if (data.success) {
                 bootstrap.Modal.getOrCreateInstance(document.getElementById("delete-account-modal")).hide();
-                accountPageHandler.renderPagination(data.numberOfAccounts);
+
+                if (G_SEARCHKEY) {
+                    accountSearchHandler.refreshSearch();
+                    return;
+                }
+
+                const activeIndex = Math.ceil(data.countPhanLoai / 8);
+                accountPageHandler.renderPagination(data.numberOfAccounts, activeIndex);
                 accountPageHandler.refreshCurrentPage();
+                accountPageHandler.addChangePageEvent();
             }
         })
     },
@@ -268,6 +275,45 @@ const deleteAccountHandler = {
                 this.d_labelName.textContent = btn.closest("div").getAttribute("data-username");
             })
         })
+    }
+}
+
+const accountSearchHandler = {
+    d_searchInput: document.querySelector("#search-account-form input"),
+    d_searchForm: document.querySelector("#search-account-form"),
+
+    // Methods
+    init() {
+        this.d_searchForm.addEventListener("submit", () => {
+            this.search();
+        })
+    },
+
+    refreshSearch() {
+        this.d_searchInput.value = "";
+        this.search();
+    },
+
+    async search() {
+        // 1. Lấy keyword tìm kiếm 
+        G_SEARCHKEY = this.d_searchInput.value;
+
+        // 2. Gọi API lấy danh sách dữ liệu 
+        const page = 1;
+        const data = await accountPageHandler.getPage(page, G_SEARCHKEY);
+        console.log(data);
+
+        // 3. Thêm phân trang cho dữ liệu và render dữ liệu mặc định ở trang 1 
+        const activeIndex = 1;
+        accountPageHandler.renderPagination(data.total, activeIndex);
+        accountPageHandler.renderTaiKhoans(data.taiKhoans);
+
+        // 4. Thêm sự kiện chuyển trang cho dữ liệu 
+        accountPageHandler.addChangePageEvent(G_SEARCHKEY);
+
+        // 5. Thêm sự kiện cho các nút update/delete 
+        updateAccountHandler.addUpdateBtnsOnClick();
+        deleteAccountHandler.addDeleteBtnsOnClick();
     }
 }
 

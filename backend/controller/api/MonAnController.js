@@ -1,8 +1,8 @@
 const monAnModel = require('../../models/MonAnModel.js');
 
-const getPaginatedMonAns = async (limit, offset) => {
+const getPaginatedMonAns = async (name, limit, offset) => {
     try {
-        return await monAnModel.getDishesJoinGroupJoinKM(limit, offset);
+        return await monAnModel.searchDishes(name, limit, offset);
     } catch (error) {
         console.error("Get Mon Ans (MonAnController): " + error.message);
         throw error;
@@ -45,9 +45,9 @@ const deleteMonAn = async (id) => {
     }
 }
 
-const coutnMonAn = async () => {
+const coutnMonAn = async (name) => {
     try {
-        return await monAnModel.getNumberOfDishes();
+        return await monAnModel.getNumberOfDishes(name);
     } catch (error) {
         console.error("Count Mon An (MonAnController): " + error.message);
         throw error;
