@@ -2,9 +2,9 @@
 const hoaDonModel = require("../../models/HoaDonModel.js");
 const chiTietHoaDonModel = require('../../models/ChiTietHoaDonModel.js');
 
-const getPaginatedHoaDons = async (limit, offset) => {
+const getPaginatedHoaDons = async (key, start, end, limit, offset) => {
     try {
-        return await hoaDonModel.getHoaDonsJoinKhachHang(limit, offset);
+        return await hoaDonModel.searchHoaDon(key, start, end, limit, offset);
     } catch (error) {
         console.error("Get getPaginatedHoaDons (HoaDonController): " + error.message);
         throw error;
@@ -18,12 +18,22 @@ const viewHoaDon = async (id) => {
 
         return { hoaDon, chiTiets };
     } catch (error) {
-        console.error("Get getPaginatedHoaDons (HoaDonController): " + error.message);
+        console.error("View Hoa Don (HoaDonController): " + error.message);
+        throw error;
+    }
+}
+
+const countHoaDon = async (key = "", start = "", end = "") => {
+    try {
+        return await hoaDonModel.getNumberOfHoaDon(key, start, end);
+    } catch (error) {
+        console.error("Count Hoa Don (HoaDonController): " + error.message);
         throw error;
     }
 }
 
 module.exports = {
     getPaginatedHoaDons,
-    viewHoaDon
+    viewHoaDon,
+    countHoaDon
 }

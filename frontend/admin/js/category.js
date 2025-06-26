@@ -66,12 +66,8 @@ const categoryPageHandler = {
         deletePhanLoaiHandler.addDeleteBtnsOnClick();
     },
 
-    renderPagination(number, activeIndex) {
-        const oldCount = this.ad_pageItemBtns.length;
+    renderPaginationAndEvent(number, activeIndex) {
         const newCount = Math.ceil(number / 8);
-
-        if (newCount === oldCount)
-            return;
 
         // 1. Xóa toàn bộ nội dung phân trang trước đó 
         this.d_paginationContainer.innerHTML = `
@@ -89,6 +85,9 @@ const categoryPageHandler = {
         this.d_paginationContainer.innerHTML += `
             <li class="page-item"><a class="page-link" href="#">Trang sau</a></li>
         `;
+
+        // 4. Thêm sự kiện chuyển trang 
+        this.addChangePageEvent(G_SEARCHKEY);
     },
 
     renderPhanLoais(data) {
@@ -146,9 +145,8 @@ const addPhanLoaiHandler = {
                 }
 
                 const activeIndex = Math.ceil(data.countPhanLoai / 8);
-                categoryPageHandler.renderPagination(data.countPhanLoai, activeIndex);
+                categoryPageHandler.renderPaginationAndEvent(data.countPhanLoai, activeIndex);
                 categoryPageHandler.refreshCurrentPage();
-                categoryPageHandler.addChangePageEvent();
                 document.querySelector("#add-category-modal form").reset();
             }
 
@@ -254,9 +252,8 @@ const deletePhanLoaiHandler = {
                 }
 
                 const activeIndex = Math.ceil(data.countPhanLoai / 8);
-                categoryPageHandler.renderPagination(data.countPhanLoai, activeIndex);
+                categoryPageHandler.renderPaginationAndEvent(data.countPhanLoai, activeIndex);
                 categoryPageHandler.refreshCurrentPage();
-                categoryPageHandler.addChangePageEvent();
             }
         })
     },
@@ -299,13 +296,10 @@ const categorySearchHandler = {
 
         // 3. Thêm phân trang cho dữ liệu và render dữ liệu mặc định ở trang 1 
         const activeIndex = 1;
-        categoryPageHandler.renderPagination(data.total, activeIndex);
+        categoryPageHandler.renderPaginationAndEvent(data.total, activeIndex);
         categoryPageHandler.renderPhanLoais(data.phanLoais);
 
-        // 4. Thêm sự kiện chuyển trang cho dữ liệu 
-        categoryPageHandler.addChangePageEvent(G_SEARCHKEY);
-
-        // 5. Thêm sự kiện cho các nút update/delete 
+        // 4. Thêm sự kiện cho các nút update/delete 
         updatePhanLoaiHandler.addUpdateBtnsOnClick();
         deletePhanLoaiHandler.addDeleteBtnsOnClick();
     }

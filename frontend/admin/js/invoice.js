@@ -1,16 +1,21 @@
 window.addEventListener("DOMContentLoaded", () => {
-    invoicePageHandler.addChangePageInvoice();
+    invoicePageHandler.addChangePageEvent();
     viewInvoiceHandler.init();
+    searchInvoiceHandler.init();
 })
 
+let G_STARTDATE, G_ENDDATE;
+
 const invoicePageHandler = {
+    d_paginationContainer: document.querySelector("#invoice-pagination"),
+    
     // Getters
     get ad_pageItemBtns() {
         return document.querySelectorAll("#invoice-pagination .page-item-btn");
     },
 
     // Methods
-    addChangePageInvoice() {
+    addChangePageEvent(name = "", start = "", end = "") {
         this.ad_pageItemBtns.forEach(btn => {
             btn.addEventListener('click', async () => {
                 // Kiểm tra trạng thái btn, nếu active thì không gọi API 
@@ -21,9 +26,7 @@ const invoicePageHandler = {
 
                 // Fetch API lấy dữ liệu 
                 const page = parseInt(btn.getAttribute("data-page"));
-
-                const respond = await fetch(`/api/hoadons?page=${page}`);
-                const data = await respond.json();
+                const data = await this.getPage(page, name, start, end);
                 (data.success ? this.renderInvoices(data.hoaDons) : alert(data.message));
 
                 // Cập nhật trạng thái active của btn
@@ -46,7 +49,7 @@ const invoicePageHandler = {
                 <td>${element.ten_khach_hang}</td>
                 <td>${element.so_dien_thoai}</td>
                 <td>${element.tong_tien.toLocaleString("vi-VN") + "đ"}</td>
-                <td>${element.thoi_gian_tao}</td>
+                <td>${formatDatetime(element.thoi_gian_tao)}</td>
                 <td>${element.hinh_thuc_thanh_toan}</td>
                 <td>
                     <div class="d-flex gap-2 justify-content-center" data-id="${element.ma_hoa_don}">
@@ -56,7 +59,42 @@ const invoicePageHandler = {
             </tr>
         `
         }
-    }
+    },
+
+    async getPage(page, name, start, end) {
+        try {
+            const respond = await fetch(`/api/hoadons?page=${page}&search=${name}&start=${start}&end=${end}`);
+            const data = await respond.json();
+            return data;
+        } catch (error) {
+            console.log(error);
+            return null;
+        }
+    },
+
+    renderPaginationAndEvent(number, activeIndex) {
+        const newCount = Math.ceil(number / 8);
+
+        // 1. Xóa toàn bộ nội dung phân trang trước đó 
+        this.d_paginationContainer.innerHTML = `
+            <li class="page-item"><a class="page-link" href="#">Trang trước</a></li>
+        `;
+
+        // 2. Thêm các trang tương ứng 
+        for (let i = 1; i <= newCount; i++) {
+            this.d_paginationContainer.innerHTML += `
+                <li class="page-item page-item-btn ${i == activeIndex ? "active" : ""}" data-page="${i}"><a class="page-link" href="#">${i}</a></li>
+            `;
+        }
+
+        // 3. Thêm nút trang sau
+        this.d_paginationContainer.innerHTML += `
+            <li class="page-item"><a class="page-link" href="#">Trang sau</a></li>
+        `;
+
+        // 4. Thêm sự kiện chuyển trang 
+        this.addChangePageEvent(G_SEARCHKEY, G_STARTDATE, G_ENDDATE);
+    },
 }
 
 const viewInvoiceHandler = {
@@ -103,7 +141,7 @@ const viewInvoiceHandler = {
     renderView(hoadon, chitiets) {
         this.d_inputName.value = hoadon.ten_khach_hang;
         this.d_inputPhone.value = hoadon.so_dien_thoai;
-        this.d_inputTime.value = hoadon.thoi_gian_tao;
+        this.d_inputTime.value = formatDatetime(hoadon.thoi_gian_tao);
         this.d_inputPayment.value = hoadon.hinh_thuc_thanh_toan;
 
         this.d_tableBody.innerHTML = "";
@@ -128,4 +166,50 @@ const viewInvoiceHandler = {
             </tr>
         `
     }
+}
+
+const searchInvoiceHandler = {
+    d_searchInput: document.querySelector("#search-invoice-form input"),
+    d_startInput: document.querySelector("#search-invoice-form .startDate"),
+    d_endInput: document.querySelector("#search-invoice-form .endDate"),
+    d_searchForm: document.querySelector("#search-invoice-form"),
+
+    // Methods
+    init() {
+        this.d_searchForm.addEventListener("submit", () => {
+            this.search();
+        })
+    },
+
+    refreshSearch() {
+        this.d_searchInput.value = "";
+        this.search();        
+    },
+
+    async search() {
+        // 1. Lấy keyword tìm kiếm 
+        G_SEARCHKEY = this.d_searchInput.value;
+        G_STARTDATE = this.d_startInput.value;
+        G_ENDDATE = this.d_endInput.value;
+
+        // 2. Gọi API lấy danh sách dữ liệu 
+        const page = 1;
+        const data = await invoicePageHandler.getPage(page, G_SEARCHKEY, G_STARTDATE, G_ENDDATE);
+        console.log(data);
+
+        // 3. Thêm phân trang cho dữ liệu và render dữ liệu mặc định ở trang 1 
+        const activeIndex = 1;
+        invoicePageHandler.renderPaginationAndEvent(data.total, activeIndex);
+        invoicePageHandler.renderInvoices(data.hoaDons);
+
+        // 4. Thêm sự kiện cho các nút view
+        viewInvoiceHandler.addViewBtnsOnClick();
+    }
+}
+
+function formatDatetime(datetimeStr) {
+    const [datePart, timePart] = datetimeStr.split(" ");
+    const [year, month, day] = datePart.split("-");
+
+    return `${day}/${month}/${year} ${timePart}`;
 }

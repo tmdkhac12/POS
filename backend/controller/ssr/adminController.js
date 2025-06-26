@@ -23,11 +23,11 @@ const getHomePage = async function (req, res) {
         ] = await Promise.all([
             Promise.all([banModel.getBans(LIMIT, OFFSET), banModel.getNumberOfTable("")]),
             Promise.all([monAnModel.getDishesJoinGroupJoinKM(LIMIT, OFFSET), monAnModel.getNumberOfDishes("")]),
-            Promise.all([khachHangModel.getKhachHangs(LIMIT, OFFSET), khachHangModel.getNumberOfKhachHang()]),
+            Promise.all([khachHangModel.getKhachHangs(LIMIT, OFFSET), khachHangModel.getNumberOfKhachHang("")]),
             Promise.all([nhomModel.getNhoms(LIMIT, OFFSET), nhomModel.getNumberOfNhoms("")]),
             Promise.all([taiKhoanModel.getTaiKhoans(LIMIT, OFFSET), taiKhoanModel.getNumberOfTaiKhoan("")]),
             Promise.all([khuyenMaiModel.getKhuyenMais(LIMIT, OFFSET), khuyenMaiModel.getNumberOfKhuyenMai()]),
-            Promise.all([hoaDonModel.getHoaDonsJoinKhachHang(LIMIT, OFFSET), hoaDonModel.getNumberOfHoaDon()]),
+            Promise.all([hoaDonModel.getHoaDonsJoinKhachHang(LIMIT, OFFSET), hoaDonModel.getNumberOfHoaDon("", null, null)]),
         ])
     
         const homePageData = {
@@ -48,7 +48,7 @@ const getHomePage = async function (req, res) {
             hoaDonCount
         }
     
-        // console.log(hoaDons[0]);
+        // console.log(hoaDonCount);
         res.render("./admin/index", homePageData);
     } catch (error) {
         console.error(error.message);

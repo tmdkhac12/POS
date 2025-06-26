@@ -9,10 +9,12 @@ khachHangRouter.get("/", async (req, res) => {
     try {
         const limit = 8;
         const offset = (req.query.page - 1) * limit;
+        const search = req.query.search;
 
-        const khachHangs = await khachHangController.getPaginatedKhachHangs(limit, offset);
+        const khachHangs = await khachHangController.getPaginatedKhachHangs(search, limit, offset);
+        const total = await khachHangController.countKhachHang(search);
 
-        res.status(200).send({ success: true, khachHangs });
+        res.status(200).send({ success: true, khachHangs, total });
     } catch (error) {
         console.error("Route: '/api/khachhangs?query' - (KhachHangRouter): " + error.message);
         res.status(500).json({ success: false, message: "Lỗi Server" });

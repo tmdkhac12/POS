@@ -1,17 +1,17 @@
 const khachHangModel = require('../../models/KhachHangModel.js');
 
-const getPaginatedKhachHangs = async (limit, offset) => {
+const getPaginatedKhachHangs = async (name, limit, offset) => {
     try {
-        return await khachHangModel.getKhachHangs(limit, offset);
+        return await khachHangModel.searchKhachHangs(name, limit, offset);
     } catch (error) {
         console.error("Get Khach Hangs (KhachHangController): " + error.message);
         throw error;
     }
 }
 
-const countKhachHang = async () => {
+const countKhachHang = async (name = "") => {
     try {
-        return await khachHangModel.getNumberOfKhachHang();
+        return await khachHangModel.getNumberOfKhachHang(name);
     } catch (error) {
         console.error("Count Khach Hang (KhachHangController): " + error.message);
         throw error;

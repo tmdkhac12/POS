@@ -6,10 +6,17 @@ hoaDonRouter.get("/", async (req, res) => {
     try {
         const limit = 8;
         const offset = (req.query.page - 1) * limit;
+        const key = req.query.search;
+        const start = req.query.start ? req.query.start + " 00:00:00" : null;
+        const end = req.query.end ? req.query.end + " 23:59:59" : null;
+
+        // console.log({key, start, end});
+
+        const hoaDons = await hoaDonController.getPaginatedHoaDons(key, start, end, limit, offset);
+        const total = await hoaDonController.countHoaDon(key, start, end);
         
-        const hoaDons = await hoaDonController.getPaginatedHoaDons(limit, offset);
-    
-        res.status(200).json({success: true, hoaDons});
+
+        res.status(200).json({success: true, hoaDons, total});
     } catch (error) {
         console.error("GET Route: '/api/hoadons?query' - (HoaDonRouter): " + error.message);
         res.status(500).json({success: false, message: "Lỗi Server"});

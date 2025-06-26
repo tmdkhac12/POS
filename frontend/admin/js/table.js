@@ -68,12 +68,8 @@ const tablePageHandler = {
         deleteTableHandler.addDeleteBtnsOnClick();
     },
 
-    renderPagination(number, activeIndex) {
-        const oldCount = this.ad_pageItemBtns.length;
+    renderPaginationAndEvent(number, activeIndex) {
         const newCount = Math.ceil(number / 8);
-
-        if (newCount === oldCount)
-            return;
 
         // 1. Xóa toàn bộ nội dung phân trang trước đó 
         this.d_paginationContainer.innerHTML = `
@@ -91,6 +87,9 @@ const tablePageHandler = {
         this.d_paginationContainer.innerHTML += `
             <li class="page-item"><a class="page-link" href="#">Trang sau</a></li>
         `;
+
+        // 4. Thêm sự kiện chuyển trang 
+        this.addChangePageEvent(G_SEARCHKEY);
     },
 
     renderBans(data) {
@@ -152,8 +151,7 @@ const addTableHandler = {
                 }
 
                 const activeIndex = Math.ceil(data.numberOfBans / 8);
-                tablePageHandler.renderPagination(data.numberOfBans, activeIndex);
-                tablePageHandler.addChangePageEvent();
+                tablePageHandler.renderPaginationAndEvent(data.numberOfBans, activeIndex);
                 tablePageHandler.refreshCurrentPage();
             }
 
@@ -259,8 +257,7 @@ const deleteTableHandler = {
                 }
 
                 const activeIndex = Math.ceil(data.numberOfBans / 8);
-                tablePageHandler.renderPagination(data.numberOfBans, activeIndex);
-                tablePageHandler.addChangePageEvent();
+                tablePageHandler.renderPaginationAndEvent(data.numberOfBans, activeIndex);
                 tablePageHandler.refreshCurrentPage();
             }
         })
@@ -303,13 +300,10 @@ const searchHandler = {
 
         // 3. Thêm phân trang cho dữ liệu và render dữ liệu mặc định ở trang 1 
         const activeIndex = 1;
-        tablePageHandler.renderPagination(data.total, activeIndex);
+        tablePageHandler.renderPaginationAndEvent(data.total, activeIndex);
         tablePageHandler.renderBans(data.bans);
 
-        // 4. Thêm sự kiện chuyển trang cho dữ liệu 
-        tablePageHandler.addChangePageEvent(G_SEARCHKEY);
-
-        // 5. Thêm sự kiện cho các nút update/delete 
+        // 4. Thêm sự kiện cho các nút update/delete 
         updateTableHandler.addUpdateBtnsOnClick();
         deleteTableHandler.addDeleteBtnsOnClick();
     }

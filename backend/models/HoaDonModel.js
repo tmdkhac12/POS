@@ -64,11 +64,30 @@ const getHoaDonsJoinKhachHang = async (limit, offset) => {
     }
 }
 
-const getNumberOfHoaDon = async () => {
-    const sql = "select count(*) as soluong from hoadon";
+const searchHoaDon = async (key, start, end, limit, offset) => {
+    const sql = `select hd.*, kh.ten_khach_hang, kh.so_dien_thoai 
+                from hoadon hd inner join khachhang kh on hd.ma_khach_hang = kh.ma_khach_hang
+                where (kh.ten_khach_hang like ? or kh.so_dien_thoai like ?) 
+                    and (? is null or thoi_gian_tao >= ?) and (? is null or thoi_gian_tao <= ?)
+                limit ? offset ?`;
 
     try {
-        const [result] = await pool.query(sql);
+        const [result] = await pool.execute(sql, [`%${key}%`, `%${key}%`, start, start, end, end, limit, offset]);
+
+        return result;        
+    } catch (error) {
+        throw new Error("Search Hoa Don (HoaDonModel): " + error.message);
+    }
+}
+
+const getNumberOfHoaDon = async (key, start, end) => {
+    const sql = `select count(*) as soluong 
+                from hoadon hd inner join khachhang kh on hd.ma_khach_hang = kh.ma_khach_hang
+                where (kh.ten_khach_hang like ? or kh.so_dien_thoai like ?) 
+                and (? is null or thoi_gian_tao >= ?) and (? is null or thoi_gian_tao <= ?)`;
+
+    try {
+        const [result] = await pool.execute(sql, [`%${key}%`, `%${key}%`, start, start, end, end]);
 
         return result[0].soluong;        
     } catch (error) {
@@ -77,5 +96,6 @@ const getNumberOfHoaDon = async () => {
 }
 
 module.exports = { 
-    getAllHoaDons, getNumberOfHoaDon, getHoaDonOfKhachHang, getHoaDonById, getHoaDonJoinKhachHangById, getHoaDonsJoinKhachHang
+    getAllHoaDons, getNumberOfHoaDon, getHoaDonOfKhachHang, getHoaDonById, getHoaDonJoinKhachHangById, getHoaDonsJoinKhachHang,
+    searchHoaDon
 }

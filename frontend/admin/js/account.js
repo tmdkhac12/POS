@@ -65,12 +65,8 @@ const accountPageHandler = {
         deleteAccountHandler.addDeleteBtnsOnClick();
     },
 
-    renderPagination(number, activeIndex) {
-        const oldCount = this.ad_pageItemBtns.length;
+    renderPaginationAndEvent(number, activeIndex) {
         const newCount = Math.ceil(number / 8);
-
-        if (newCount === oldCount)
-            return;
 
         // 1. Xóa toàn bộ nội dung phân trang trước đó 
         this.d_paginationContainer.innerHTML = `
@@ -88,6 +84,9 @@ const accountPageHandler = {
         this.d_paginationContainer.innerHTML += `
             <li class="page-item"><a class="page-link" href="#">Trang sau</a></li>
         `;
+
+        // 4. Thêm sự kiện chuyển trang 
+        this.addChangePageEvent(G_SEARCHKEY);
     },
 
     renderTaiKhoans(data) {
@@ -150,7 +149,7 @@ const addAccountHandler = {
                 }
 
                 const activeIndex = Math.ceil(data.countPhanLoai / 8);
-                accountPageHandler.renderPagination(data.numberOfAccounts, activeIndex);
+                accountPageHandler.renderPaginationAndEvent(data.numberOfAccounts, activeIndex);
                 accountPageHandler.refreshCurrentPage();
                 document.querySelector("#add-account-modal form").reset();
             }
@@ -260,9 +259,8 @@ const deleteAccountHandler = {
                 }
 
                 const activeIndex = Math.ceil(data.countPhanLoai / 8);
-                accountPageHandler.renderPagination(data.numberOfAccounts, activeIndex);
+                accountPageHandler.renderPaginationAndEvent(data.numberOfAccounts, activeIndex);
                 accountPageHandler.refreshCurrentPage();
-                accountPageHandler.addChangePageEvent();
             }
         })
     },
@@ -305,13 +303,10 @@ const accountSearchHandler = {
 
         // 3. Thêm phân trang cho dữ liệu và render dữ liệu mặc định ở trang 1 
         const activeIndex = 1;
-        accountPageHandler.renderPagination(data.total, activeIndex);
+        accountPageHandler.renderPaginationAndEvent(data.total, activeIndex);
         accountPageHandler.renderTaiKhoans(data.taiKhoans);
 
-        // 4. Thêm sự kiện chuyển trang cho dữ liệu 
-        accountPageHandler.addChangePageEvent(G_SEARCHKEY);
-
-        // 5. Thêm sự kiện cho các nút update/delete 
+        // 4. Thêm sự kiện cho các nút update/delete 
         updateAccountHandler.addUpdateBtnsOnClick();
         deleteAccountHandler.addDeleteBtnsOnClick();
     }

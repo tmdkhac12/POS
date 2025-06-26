@@ -103,12 +103,8 @@ const productPageHandler = {
         }
     },
 
-    renderPagination(number, activeIndex) {
-        const oldCount = this.ad_pageItemBtns.length;
+    renderPaginationAndEvent(number, activeIndex) {
         const newCount = Math.ceil(number / 8);
-
-        if (newCount === oldCount)
-            return;
 
         // 1. Xóa toàn bộ nội dung phân trang trước đó 
         this.d_paginationContainer.innerHTML = `
@@ -126,6 +122,9 @@ const productPageHandler = {
         this.d_paginationContainer.innerHTML += `
             <li class="page-item"><a class="page-link" href="#">Trang sau</a></li>
         `;
+
+        // 4. Thêm sự kiện chuyển trang 
+        this.addChangePageEvent(G_SEARCHKEY);
     }
 }
 
@@ -172,9 +171,8 @@ const addProductHandler = {
                 }
 
                 const activeIndex = Math.ceil(data.countPhanLoai / 8);
-                productPageHandler.renderPagination(data.numberOfMonAns, activeIndex);
+                productPageHandler.renderPaginationAndEvent(data.numberOfMonAns, activeIndex);
                 productPageHandler.refreshCurrentPage();
-                productPageHandler.addChangePageEvent();
                 document.querySelector("#add-product-modal form").reset();
             }
 
@@ -302,9 +300,8 @@ const deleteProductHandler = {
                 }
                 
                 const activeIndex = Math.ceil(data.countPhanLoai / 8);
-                productPageHandler.renderPagination(data.numberOfMonAns, activeIndex);
+                productPageHandler.renderPaginationAndEvent(data.numberOfMonAns, activeIndex);
                 productPageHandler.refreshCurrentPage();
-                productPageHandler.addChangePageEvent();
             }
         })
     },
@@ -347,13 +344,10 @@ const productSearchHandler = {
 
         // 3. Thêm phân trang cho dữ liệu và render dữ liệu mặc định ở trang 1 
         const activeIndex = 1;
-        productPageHandler.renderPagination(data.total, activeIndex);
+        productPageHandler.renderPaginationAndEvent(data.total, activeIndex);
         productPageHandler.renderMonAns(data.monAns);
 
-        // 4. Thêm sự kiện chuyển trang cho dữ liệu 
-        productPageHandler.addChangePageEvent(G_SEARCHKEY);
-
-        // 5. Thêm sự kiện cho các nút update/delete 
+        // 4. Thêm sự kiện cho các nút update/delete 
         updateProductHandler.addUpdateBtnsOnClick();
         deleteProductHandler.addDeleteBtnsOnClick();
     }

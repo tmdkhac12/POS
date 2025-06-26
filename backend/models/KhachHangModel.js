@@ -24,11 +24,24 @@ const getKhachHangs = async (limit, offset) => {
     }
 }
 
-const getNumberOfKhachHang = async () => {
-    const sql = "select count(*) as soluong from khachhang where is_deleted = 0";
+const searchKhachHangs = async (name, limit, offset) => {
+    const sql = `select * from khachhang 
+                where (ten_khach_hang like ? or so_dien_thoai like ? or cap_bac like ?) and is_deleted = 0 limit ? offset ?`;
 
     try {
-        const [result] = await pool.query(sql);
+        const [result] = await pool.execute(sql, [`%${name}%`, `%${name}%`, `%${name}%`, limit, offset]);
+        return result;
+    } catch (error) {
+        throw new Error("Get Khach Hang Limit Offset (KhachHangModel): " + error.message);
+    }
+}
+
+const getNumberOfKhachHang = async (name) => {
+    const sql = `select count(*) as soluong from khachhang
+                 where ten_khach_hang like ? or so_dien_thoai like ? or cap_bac like ? and is_deleted = 0`;
+
+    try {
+        const [result] = await pool.execute(sql, [`%${name}%`, `%${name}%`, `%${name}%`]);
 
         return result[0].soluong;
     } catch (error) {
@@ -78,5 +91,6 @@ module.exports = {
     getAllKhachHangs, getNumberOfKhachHang, getKhachHangs,
     insertKhachHang5P,
     updateKhachHang,
-    softDeleteKhachHang
+    softDeleteKhachHang,
+    searchKhachHangs 
 }

@@ -66,10 +66,10 @@ const searchDishes = async (name, limit, offset) => {
                 FROM monan m  
                 INNER JOIN nhom n ON m.ma_nhom = n.ma_nhom
                 LEFT JOIN khuyenmai km ON m.ma_khuyen_mai = km.ma_khuyen_mai
-                where m.ten_mon_an like ? and m.is_deleted = 0 LIMIT ? OFFSET ?`;
+                where m.ten_mon_an like ? or n.ten_nhom like ? and m.is_deleted = 0 LIMIT ? OFFSET ?`;
 
     try {
-        const [result] = await pool.execute(sql, [`%${name}%`,limit, offset]);
+        const [result] = await pool.execute(sql, [`%${name}%`, `%${name}%`, limit, offset]);
         return result;
     } catch (error) {
         throw new Error("Get Dishes Join Group (MonAnModel): " + error.message)
@@ -77,10 +77,12 @@ const searchDishes = async (name, limit, offset) => {
 }
 
 const getNumberOfDishes = async (name) => {
-    const sql = "select count(*) as soluong from monan where ten_mon_an like ? and is_deleted = 0";
+    const sql = `select count(*) as soluong
+                from monan m join nhom n on m.ma_nhom = n.ma_nhom 
+                where (m.ten_mon_an like ? or n.ten_nhom like ?) and m.is_deleted = 0`;
 
     try {
-        const [result] = await pool.execute(sql, [`%${name}%`]);
+        const [result] = await pool.execute(sql, [`%${name}%`, `%${name}%`]);
 
         return result[0].soluong;
     } catch (error) {
