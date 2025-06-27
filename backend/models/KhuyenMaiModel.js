@@ -24,11 +24,31 @@ const getKhuyenMais = async (limit, offset) => {
     }
 }
 
-const getNumberOfKhuyenMai = async () => {
-    const sql = "select count(*) as soluong from khuyenmai where is_deleted = 0";
+const searchKhuyenMais = async (name, start, end, limit, offset) => {
+    const sql = `SELECT * FROM khuyenmai
+                WHERE is_deleted = 0 
+                and ten_khuyen_mai like ? 
+                and (? IS NULL OR ngay_bat_dau >= ?) AND (? IS NULL OR ngay_ket_thuc <= ?)
+                LIMIT ? OFFSET ?`;
 
     try {
-        const [result] = await pool.query(sql);
+        const [result] = await pool.execute(sql, [`%${name}%`, start, start, end, end, limit, offset]);
+
+        return result;
+    } catch (error) {
+        throw new Error("Search Khuyen Mai Limit Offset (KhuyenMaiModel): " + error.message);
+    }
+}
+
+const getNumberOfKhuyenMai = async (name, start, end) => {
+    const sql = `select count(*) as soluong 
+                from khuyenmai 
+                where is_deleted = 0
+                and ten_khuyen_mai like ? 
+                and (? IS NULL OR ngay_bat_dau >= ?) AND (? IS NULL OR ngay_ket_thuc <= ?)`;
+
+    try {
+        const [result] = await pool.execute(sql, [`%${name}%`, start, start, end, end]);
 
         return result[0].soluong;
     } catch (error) {
@@ -78,5 +98,6 @@ module.exports = {
     getAllKhuyenMais, getNumberOfKhuyenMai, getKhuyenMais,
     insertKhuyenMai,
     updateKhuyenMai,
-    deleteKhuyenMai
+    deleteKhuyenMai,
+    searchKhuyenMais
 }

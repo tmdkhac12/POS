@@ -8,10 +8,15 @@ khuyenMaiRouter.get("/", async (req, res) => {
     try {
         const limit = 8;
         const offset = (req.query.page - 1) * limit;
+        const name = req.query.search;
+        const start = req.query.start ? req.query.start + " 00:00:00" : null;
+        const end = req.query.end ? req.query.end + " 23:59:59" : null;
 
-        const khuyenMais = await khuyenMaiController.getPaginatedKhuyenMais(limit, offset);
+        // console.log({key, start, end});
+        const khuyenMais = await khuyenMaiController.getPaginatedKhuyenMais(name, start, end, limit, offset);
+        const total = await khuyenMaiController.countKhuyenMai(name, start, end);
 
-        res.status(200).send({ success: true, khuyenMais });
+        res.status(200).send({ success: true, khuyenMais, total });
     } catch (error) {
         console.error("Route: '/api/khuyenMais?query' - (KhuyenMaiRouter): " + error.message);
         res.status(500).json({ success: false, message: "Lỗi Server" });

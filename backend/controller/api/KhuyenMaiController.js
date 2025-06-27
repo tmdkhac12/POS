@@ -1,8 +1,8 @@
 const khuyenMaiModel = require('../../models/KhuyenMaiModel.js');
 
-const getPaginatedKhuyenMais = async (limit, offset) => {
+const getPaginatedKhuyenMais = async (name, start, end, limit, offset) => {
     try {
-        return await khuyenMaiModel.getKhuyenMais(limit, offset);
+        return await khuyenMaiModel.searchKhuyenMais(name, start, end, limit, offset);
     } catch (error) {
         console.error("Get getPaginatedKhuyenMais (KhuyenMaiController): " + error.message);
         throw error;
@@ -42,9 +42,9 @@ const deleteKhuyenMai = async (id) => {
     }
 }
 
-const countKhuyenMai = async () => {
+const countKhuyenMai = async (name = "", start = null, end = null) => {
     try {
-        return await khuyenMaiModel.getNumberOfKhuyenMai();
+        return await khuyenMaiModel.getNumberOfKhuyenMai(name, start, end);
     } catch (error) {
         console.error("Count Khuyen Mai (KhuyenMaiController): " + error.message);
         throw error;

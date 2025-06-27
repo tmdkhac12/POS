@@ -23,7 +23,7 @@ const viewHoaDon = async (id) => {
     }
 }
 
-const countHoaDon = async (key = "", start = "", end = "") => {
+const countHoaDon = async (key = "", start = null, end = null) => {
     try {
         return await hoaDonModel.getNumberOfHoaDon(key, start, end);
     } catch (error) {

@@ -15,7 +15,6 @@ hoaDonRouter.get("/", async (req, res) => {
         const hoaDons = await hoaDonController.getPaginatedHoaDons(key, start, end, limit, offset);
         const total = await hoaDonController.countHoaDon(key, start, end);
         
-
         res.status(200).json({success: true, hoaDons, total});
     } catch (error) {
         console.error("GET Route: '/api/hoadons?query' - (HoaDonRouter): " + error.message);

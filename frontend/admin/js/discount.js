@@ -1,8 +1,9 @@
 window.addEventListener("DOMContentLoaded", () => {
-    discountPageHandler.addChangePageDiscount();
+    discountPageHandler.addChangePageEvent();
     addDiscountHandler.init();
     updateDiscountHandler.init();
     deleteDiscountHandler.init();
+    discountSearchHandler.init();
 })
 
 const discountPageHandler = {
@@ -17,7 +18,8 @@ const discountPageHandler = {
         return Array.from(this.ad_pageItemBtns).find(item => item.classList.contains("active"));
     },
 
-    addChangePageDiscount() {
+    // Methods 
+    addChangePageEvent(name = "", start = "", end = "") {
         this.ad_pageItemBtns.forEach(btn => {
             btn.addEventListener('click', async () => {
                 // Kiểm tra trạng thái btn, nếu active thì không gọi API 
@@ -28,7 +30,7 @@ const discountPageHandler = {
 
                 // Fetch API lấy dữ liệu 
                 const page = parseInt(btn.getAttribute("data-page"));
-                const data = await this.getPage(page);
+                const data = await this.getPage(page, name, start, end);
                 (data.success ? this.renderDiscounts(data.khuyenMais) : alert(data.message));
 
                 // Cập nhật trạng thái active của btn
@@ -41,9 +43,9 @@ const discountPageHandler = {
         })
     },
 
-    async getPage(page) {
+    async getPage(page, name, start, end) {
         try {
-            const respond = await fetch(`/api/khuyenmais?page=${page}`);
+            const respond = await fetch(`/api/khuyenmais?page=${page}&search=${name}&start=${start}&end=${end}`);
             const data = await respond.json();
             return data;
         } catch (error) {
@@ -55,7 +57,7 @@ const discountPageHandler = {
     async refreshCurrentPage() {
         // Fetch API lấy dữ liệu 
         const page = parseInt(this.d_activeBtn.getAttribute("data-page"));
-        const data = await this.getPage(page);
+        const data = await this.getPage(page, G_SEARCHKEY, G_STARTDATE, G_ENDDATE);
         (data.success ? this.renderDiscounts(data.khuyenMais) : alert(data.message));
 
         // Cập nhật chức năng của các nút update, delete 
@@ -74,8 +76,8 @@ const discountPageHandler = {
                 <td>${element.ten_khuyen_mai}</td>
                 <td>${element.giam_theo_phan_tram ? element.giam_theo_phan_tram + "%" : ""}</td>
                 <td>${element.giam_theo_tien ? element.giam_theo_tien.toLocaleString("vi-VN") + "đ" : ""}</td>
-                <td>${element.ngay_bat_dau + " 00:00:00"}</td>
-                <td>${element.ngay_ket_thuc}</td>
+                <td>${formatDatetime(element.ngay_bat_dau) + " 00:00:00"}</td>
+                <td>${formatDatetime(element.ngay_ket_thuc)}</td>
                 <td>
                     <div class="d-flex gap-2 justify-content-center" data-id="${element.ma_khuyen_mai}" data-name="${element.ten_khuyen_mai}" data-percent="${element.giam_theo_phan_tram ? element.giam_theo_phan_tram : 0}" data-money="${element.giam_theo_tien ? element.giam_theo_tien : 0}" data-start="${element.ngay_bat_dau}" data-end="${element.ngay_ket_thuc.split(" ")[0]}">
                         <button class="btn btn-warning update-discount-btn">Cập nhật</button>
@@ -87,30 +89,19 @@ const discountPageHandler = {
         }
     },
 
-    renderPagination(number) {
-        const oldCount = this.ad_pageItemBtns.length;
+    renderPaginationAndEvent(number, activeIndex) {
         const newCount = Math.ceil(number / 8);
-
-        if (newCount === oldCount)
-            return;
 
         // 1. Xóa toàn bộ nội dung phân trang trước đó 
         this.d_paginationContainer.innerHTML = `
             <li class="page-item"><a class="page-link" href="#">Trang trước</a></li>
-            <li class="page-item page-item-btn" data-page="1"><a class="page-link" href="#">1</a></li>
         `;
 
         // 2. Thêm các trang tương ứng 
-        for (let i = 2; i <= newCount; i++) {
-            if (i === newCount) {
-                this.d_paginationContainer.innerHTML += `
-                    <li class="page-item page-item-btn active" data-page="${i}"><a class="page-link" href="#">${i}</a></li>
-                `;
-            } else {
-                this.d_paginationContainer.innerHTML += `
-                    <li class="page-item page-item-btn" data-page="${i}"><a class="page-link" href="#">${i}</a></li>
-                `;
-            }
+        for (let i = 1; i <= newCount; i++) {
+            this.d_paginationContainer.innerHTML += `
+                <li class="page-item page-item-btn ${i == activeIndex ? "active" : ""}" data-page="${i}"><a class="page-link" href="#">${i}</a></li>
+            `;
         }
 
         // 3. Thêm nút trang sau
@@ -118,9 +109,9 @@ const discountPageHandler = {
             <li class="page-item"><a class="page-link" href="#">Trang sau</a></li>
         `;
 
-        // 4. Thêm sự kiện chuyển trang
-        this.addChangePageDiscount();
-    },
+        // 4. Thêm sự kiện chuyển trang 
+        this.addChangePageEvent(G_SEARCHKEY, G_STARTDATE, G_ENDDATE);
+    }
 }
 
 const addDiscountHandler = {
@@ -157,7 +148,14 @@ const addDiscountHandler = {
 
             if (data.success) {
                 bootstrap.Modal.getOrCreateInstance(document.getElementById("add-discount-modal")).hide();
-                discountPageHandler.renderPagination(data.numberOfKhuyenMais);
+
+                if (G_SEARCHKEY || G_STARTDATE || G_ENDDATE) {
+                    discountSearchHandler.refreshSearch();
+                    return;
+                }
+
+                const activeIndex = Math.ceil(data.numberOfKhuyenMais / 8);
+                discountPageHandler.renderPaginationAndEvent(data.numberOfKhuyenMais, activeIndex);
                 discountPageHandler.refreshCurrentPage();
                 document.querySelector("#add-discount-modal form").reset();
             }
@@ -327,7 +325,14 @@ const deleteDiscountHandler = {
 
             if (data.success) {
                 bootstrap.Modal.getOrCreateInstance(document.getElementById("delete-discount-modal")).hide();
-                discountPageHandler.renderPagination(data.numberOfKhuyenMais);
+
+                if (G_SEARCHKEY || G_STARTDATE || G_ENDDATE) {
+                    discountSearchHandler.refreshSearch();
+                    return;
+                }
+                
+                const activeIndex = Math.ceil(data.numberOfKhuyenMais / 8);
+                discountPageHandler.renderPaginationAndEvent(data.numberOfKhuyenMais, activeIndex);
                 discountPageHandler.refreshCurrentPage();
             }
         })
@@ -341,5 +346,47 @@ const deleteDiscountHandler = {
                 this.d_labelName.textContent = btn.closest("div").getAttribute("data-name");
             })
         })
+    }
+}
+
+const discountSearchHandler = {
+    d_searchInput: document.querySelector("#search-discount-form input"),
+    d_startInput: document.querySelector("#search-discount-form .startDate"),
+    d_endInput: document.querySelector("#search-discount-form .endDate"),
+    d_searchForm: document.querySelector("#search-discount-form"),
+
+    // Methods
+    init() {
+        this.d_searchForm.addEventListener("submit", () => {
+            this.search();
+        })
+    },
+
+    refreshSearch() {
+        this.d_searchInput.value = "";
+        this.d_startInput.value = "";
+        this.d_endInput.value = "";
+        this.search();        
+    },
+
+    async search() {
+        // 1. Lấy keyword tìm kiếm 
+        G_SEARCHKEY = this.d_searchInput.value;
+        G_STARTDATE = this.d_startInput.value;
+        G_ENDDATE = this.d_endInput.value;
+
+        // 2. Gọi API lấy danh sách dữ liệu 
+        const page = 1;
+        const data = await discountPageHandler.getPage(page, G_SEARCHKEY, G_STARTDATE, G_ENDDATE);
+        console.log(data);
+
+        // 3. Thêm phân trang cho dữ liệu và render dữ liệu mặc định ở trang 1 
+        const activeIndex = 1;
+        discountPageHandler.renderPaginationAndEvent(data.total, activeIndex);
+        discountPageHandler.renderDiscounts(data.khuyenMais);
+
+        // 4. Thêm sự kiện cho các nút update/delete 
+        updateDiscountHandler.addUpdateBtnsOnClick();
+        deleteDiscountHandler.addDeleteBtnsOnClick();
     }
 }

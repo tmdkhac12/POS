@@ -26,7 +26,7 @@ const getHomePage = async function (req, res) {
             Promise.all([khachHangModel.getKhachHangs(LIMIT, OFFSET), khachHangModel.getNumberOfKhachHang("")]),
             Promise.all([nhomModel.getNhoms(LIMIT, OFFSET), nhomModel.getNumberOfNhoms("")]),
             Promise.all([taiKhoanModel.getTaiKhoans(LIMIT, OFFSET), taiKhoanModel.getNumberOfTaiKhoan("")]),
-            Promise.all([khuyenMaiModel.getKhuyenMais(LIMIT, OFFSET), khuyenMaiModel.getNumberOfKhuyenMai()]),
+            Promise.all([khuyenMaiModel.getKhuyenMais(LIMIT, OFFSET), khuyenMaiModel.getNumberOfKhuyenMai("", null, null)]),
             Promise.all([hoaDonModel.getHoaDonsJoinKhachHang(LIMIT, OFFSET), hoaDonModel.getNumberOfHoaDon("", null, null)]),
         ])
     
@@ -51,7 +51,7 @@ const getHomePage = async function (req, res) {
         // console.log(hoaDonCount);
         res.render("./admin/index", homePageData);
     } catch (error) {
-        console.error(error.message);
+        console.error("Admin Contorller: " + error.message);
         res.status(500).send("Lỗi server");
     }
 }

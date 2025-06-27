@@ -1,3 +1,12 @@
+<% 
+    function formatDatetime(datetimeStr) {
+        const [datePart, timePart] = datetimeStr.split(" ");
+        const [year, month, day] = datePart.split("-");
+
+        return timePart ? `${day}/${month}/${year} ${timePart}` : `${day}/${month}/${year}`;
+    }
+%>
+
 <!-- Discount tab -->
 <div class="tab-pane fade" id="discount">
     <header>
@@ -8,14 +17,25 @@
         <button class="btn btn-primary my-2 me-3 ms-auto" id="add-discount-btn" data-bs-toggle="modal" data-bs-target="#add-discount-modal">Thêm khuyến mãi</button>
     </div>
 
+    <form id="search-discount-form" class="row align-items-end mb-3">
+        <div class="col-3">
+            <label class="form-label">Tìm kiếm</label>
+            <input type="search" class="form-control" placeholder="Tìm kiếm..." aria-label="Search" />
+        </div>
+        <div class="col-3">
+            <label class="form-label">Từ ngày</label>
+            <input type="date" class="form-control startDate">
+        </div>
+        <div class="col-3">
+            <label class="form-label">Đến ngày</label>
+            <input type="date" class="form-control endDate">
+        </div>
+        <div class="col-1" >
+            <button class="btn btn-primary" type="submit">Lọc</button>
+        </div>
+    </form>
+    
     <div class="table-container p-3 border border-1">
-        <form id="search-discount-form">
-            <div class="input-group">
-                <input type="search" class="form-control" placeholder="Tìm kiếm..." aria-label="Search" />
-                <button class="btn btn-primary" type="submit">OK</button>
-            </div>
-        </form>
-
         <table class="table table-bordered mt-3" id="discount-table">
             <thead>
                 <tr>
@@ -35,8 +55,8 @@
                     <td><%= khuyenMai.ten_khuyen_mai %></td>
                     <td><%= (khuyenMai.giam_theo_phan_tram ?  khuyenMai.giam_theo_phan_tram + "%" : "") %></td>
                     <td><%= (khuyenMai.giam_theo_tien ? khuyenMai.giam_theo_tien.toLocaleString("vi-VN") + "đ" : "") %></td>
-                    <td><%= khuyenMai.ngay_bat_dau + " 00:00:00" %></td>
-                    <td><%= khuyenMai.ngay_ket_thuc %></td>
+                    <td><%= formatDatetime(khuyenMai.ngay_bat_dau) + " 00:00:00" %></td>
+                    <td><%= formatDatetime(khuyenMai.ngay_ket_thuc) %></td>
                     <td>
                         <div class="d-flex gap-2 justify-content-center" data-id="<%= khuyenMai.ma_khuyen_mai %>" data-name="<%= khuyenMai.ten_khuyen_mai %>" data-percent="<%= khuyenMai.giam_theo_phan_tram ? khuyenMai.giam_theo_phan_tram : 0 %>" data-money="<%= khuyenMai.giam_theo_tien ? khuyenMai.giam_theo_tien : 0 %>" data-start="<%= khuyenMai.ngay_bat_dau %>" data-end="<%= khuyenMai.ngay_ket_thuc.split(" ")[0] %>">
                             <button class="btn btn-warning update-discount-btn">Cập nhật</button>

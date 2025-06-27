@@ -183,6 +183,8 @@ const searchInvoiceHandler = {
 
     refreshSearch() {
         this.d_searchInput.value = "";
+        this.d_startInput.value = "";
+        this.d_endInput.value = "";
         this.search();        
     },
 
@@ -211,5 +213,5 @@ function formatDatetime(datetimeStr) {
     const [datePart, timePart] = datetimeStr.split(" ");
     const [year, month, day] = datePart.split("-");
 
-    return `${day}/${month}/${year} ${timePart}`;
+    return timePart ? `${day}/${month}/${year} ${timePart}` : `${day}/${month}/${year}`;
 }
