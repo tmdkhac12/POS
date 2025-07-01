@@ -1,10 +1,23 @@
 const pool = require("../configs/connection").promise()
 
 const getDishesByGroup = async (group_id) => {
-    const sql = "SELECT * FROM monan WHERE ma_nhom = ? and is_deleted = 0"
+    const sql = `SELECT 
+                    m.*, 
+                    
+                    CASE 
+                        WHEN m.ma_khuyen_mai IS NOT NULL AND NOW() BETWEEN km.ngay_bat_dau AND km.ngay_ket_thuc
+                        THEN ROUND(m.don_gia 
+                                - COALESCE(km.giam_theo_tien, 0)
+                                - (m.don_gia * COALESCE(km.giam_theo_phan_tram, 0) / 100), 0)
+                        ELSE m.don_gia
+                    END AS don_gia_sau_khuyen_mai
+                    
+                FROM monan m  
+                LEFT JOIN khuyenmai km ON m.ma_khuyen_mai = km.ma_khuyen_mai
+                where m.is_deleted = 0 and ma_nhom = ?`;
 
     try {
-        const [result] = await pool.query(sql, [group_id]);
+        const [result] = await pool.execute(sql, [group_id]);
         return result;
     } catch (error) {
         throw new Error("Get Dishes By Group (MonAnModel): " + error.message)

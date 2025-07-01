@@ -27,6 +27,7 @@
 
 .cart-item-details {
     flex-grow: 1;
+    word-break: break-word;
 }
 
 .cart-item-details p {

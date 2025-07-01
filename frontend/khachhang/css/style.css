@@ -1,14 +1,3 @@
-/* @font-face {
-    font-family: 'ACTexto-Medium';
-    src: url('../assets/ACTexto-Medium.otf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
-
-body {
-    font-family: "ACTexto-Medium", sans-serif !important;
-} */
-
 body {
     font-weight: 500 !important;
 }
@@ -67,4 +56,32 @@ body {
 
 .menu-container::-webkit-scrollbar {
     display: none;
+}
+
+/* CSS Detail Modal */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input:focus {
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+#detail-modal .quantity-controls button,
+#update-modal .quantity-controls button {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 1.2px solid #6c757d;
+    background: none;
+    color: #6c757d;
+    font-weight: bold;
+}
+
+#detail-modal h4,
+#update-modal h4 {
+    word-break: break-all;
 }

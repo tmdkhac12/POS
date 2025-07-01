@@ -33,13 +33,10 @@ const NavItemsHandler = {
                 // Cập nhật label cho nav item đang chọn
                 this.updateSelectingLabel();
 
-                // Thêm sự kiện add to cart cho các món ăn 
-                foodCardHandler.addToCartHandler();
+                // Thêm sự kiện show detail cho các món ăn 
+                foodCardHandler.addFoodCardsOnClick();
             });
         });
-
-        // Add add to card event onclick handler 
-        foodCardHandler.addToCartHandler();
     },
 
     updateSelectingLabel() {
@@ -53,16 +50,31 @@ const NavItemsHandler = {
         this.foodItemsContainer.innerHTML = ''; // Xóa nội dung cũ
 
         for (let i = 0; i < items.length; i++) {
+            let priceHTML = ``;
+
+            if (items[i].don_gia !== items[i].don_gia_sau_khuyen_mai) {
+                priceHTML += `
+                    <div>
+                        <span class="text-decoration-line-through text-muted">${items[i].don_gia.toLocaleString("vi-VN")}đ</span> <br>
+                        <span class="card-text text-danger fw-bold">${items[i].don_gia_sau_khuyen_mai.toLocaleString("vi-VN")}đ</span>
+                    </div>
+                `
+            } else {
+                priceHTML += `
+                    <span class="card-text text-danger m-0">${items[i].don_gia.toLocaleString("vi-VN")}đ</span>
+                `
+            }
+
             const card = `
-                <div class="col-4 fw-bold">
-                    <div class="food-card shadow border border-1" data-dish-id="${items[i].ma_mon_an}" data-price="${items[i].don_gia}">
+                <div class="col-4 fw-bold d-flex">
+                    <div class="food-card shadow border border-1 card flex-fill" data-dish-id="${items[i].ma_mon_an}" data-price="${items[i].don_gia_sau_khuyen_mai}" data-bs-toggle="modal" data-bs-target="#detail-modal">
                         <img src="/dishes/${items[i].hinh_anh}">
 
                         <div class="card-body p-3">
                             <h5 class="card-title" title="${items[i].ten_mon_an}"><span class="text-danger">${i + 1}. </span>${items[i].ten_mon_an}</h5>
 
                             <div class="d-flex justify-content-between align-items-center">
-                                <p class="card-text text-danger m-0">${items[i].don_gia.toLocaleString("vi-VN")}đ</p>
+                                ${priceHTML}
                                 <button class="add-to-cart">
                                     <i class="bi bi-cart"></i>
                                 </button>
@@ -78,15 +90,11 @@ const NavItemsHandler = {
 }
 
 const ScrollBarHandler = {
-    menuContainer: null,
-    prevBtn: null,
-    nextBtn: null,
+    menuContainer: document.querySelector("#menuContainer"),
+    prevBtn: document.getElementById('prevBtn'),
+    nextBtn: document.getElementById('nextBtn'),
 
     init() {
-        this.menuContainer = document.querySelector("#menuContainer");
-        this.prevBtn = document.getElementById('prevBtn');
-        this.nextBtn = document.getElementById('nextBtn');
-
         // Thêm xử lý sự kiện cho các button 
         prevBtn.addEventListener('click', () => this.scrollMenu('left'));
         nextBtn.addEventListener('click', () => this.scrollMenu('right'));

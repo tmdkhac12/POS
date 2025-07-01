@@ -1,5 +1,6 @@
 #food-items .food-card {
     border-radius: 18px;
+    cursor: pointer;
 }
 
 .food-card img {
