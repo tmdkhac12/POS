@@ -37,6 +37,15 @@ const updateBan = async (name, id) => {
     }
 }
 
+const updateBanStatus = async (status, id) => {
+    try {
+        return await banModel.updateTableStatus(status, id);
+    } catch (error) {
+        console.error("Update Ban Status (BanController): " + error.message);
+        throw error;
+    }
+}
+
 const deleteBan = async (id) => {
     try {
         return await banModel.softDeleteBan(id);
@@ -50,6 +59,6 @@ module.exports = {
     getPaginatedBans,
     countBans,
     addBan,
-    updateBan,
+    updateBan, updateBanStatus,
     deleteBan,
 }

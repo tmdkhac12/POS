@@ -191,12 +191,12 @@ const cartHandler = {
                 // 2. Đổ dữ liệu cho modal 
                 const imgPath = btn.closest("li").querySelector("img").getAttribute("src");
                 const header = btn.closest("li").querySelector("img").getAttribute("alt");
+                const price = btn.closest("li").querySelector(".price").textContent;
                 const quantity = btn.closest("li").querySelector(".cart-item-controls input").value;
                 const note = btn.closest("li").querySelector(".cart-item-details .note")?.textContent || "";
                 const index = parseInt(btn.previousElementSibling.getAttribute("data-index"));
-                console.log(index);
 
-                updateModalHandler.dumpData(index, imgPath, header, quantity, note);
+                updateModalHandler.dumpData(index, imgPath, header, price, quantity, note);
             })
         })
 
@@ -253,11 +253,12 @@ const updateModalHandler = {
         this.addSaveBtnOnClick();
     },
 
-    dumpData(index, img, header, quantity, note) {
+    dumpData(index, img, header, price, quantity, note) {
         this.index = index;
 
         this.d_updateModal.querySelector("img").setAttribute("src", img);
         this.d_updateModal.querySelector("h4").textContent = header;
+        this.d_updateModal.querySelector("p").textContent = price;
         this.d_updateModal.querySelector("input").value = quantity;
         this.d_updateModal.querySelector("textarea").value = note;
     },

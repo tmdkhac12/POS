@@ -62,6 +62,27 @@ const getDishesJoinGroupJoinKM = async (limit, offset) => {
     }
 }
 
+const getPrice = async (dishId) => {
+    const sql = `SELECT 
+                    CASE 
+                        WHEN m.ma_khuyen_mai IS NOT NULL AND NOW() BETWEEN km.ngay_bat_dau AND km.ngay_ket_thuc
+                        THEN ROUND(m.don_gia 
+                                - COALESCE(km.giam_theo_tien, 0)
+                                - (m.don_gia * COALESCE(km.giam_theo_phan_tram, 0) / 100), 0)
+                        ELSE m.don_gia
+                    END AS don_gia_sau_khuyen_mai
+                FROM monan m  
+                LEFT JOIN khuyenmai km ON m.ma_khuyen_mai = km.ma_khuyen_mai
+                where m.is_deleted = 0 AND m.ma_mon_an = ?`
+
+    try {
+        const [result] = await pool.execute(sql, [dishId]);
+        return result[0].don_gia_sau_khuyen_mai;
+    } catch (error) {
+        throw new Error("Get Price (MonAnModel): " + error.message)
+    }
+}
+
 const searchDishes = async (name, limit, offset) => {
     const sql = `SELECT 
                     m.*, 
@@ -154,8 +175,8 @@ const softDeleteMonAn = async (id) => {
     }
 }
 
-module.exports = { 
-    getDishesByGroup, getDishesJoinGroup, getNumberOfDishes, getDishesJoinGroupJoinKM,
+module.exports = {
+    getDishesByGroup, getDishesJoinGroup, getNumberOfDishes, getDishesJoinGroupJoinKM, getPrice,
     insertMonAn,
     updateMonAn, updateMonAnWithoutImg,
     softDeleteMonAn,

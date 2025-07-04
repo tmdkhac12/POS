@@ -59,6 +59,12 @@
     cursor: default;
 }
 
-.card {
+#food-items .card {
     cursor: pointer;
+}
+
+#food-items .card-body p {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }

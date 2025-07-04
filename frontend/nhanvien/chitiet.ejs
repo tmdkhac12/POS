@@ -8,7 +8,6 @@
 
     <!-- BS5 CSS & JS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer> </script>
 
     <!-- My CSS -->
@@ -17,6 +16,8 @@
 
     <!-- Icon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 </head>
 
@@ -55,7 +56,7 @@
 
                 <!-- Food Card Items -->
                 <div class="row" id="food-items">
-                    <!-- JS sẽ render món tại đây -->
+                    <!-- JS sẽ render card món ăn tại đây -->
                 </div>
             </div>
 
@@ -69,46 +70,27 @@
 
                     <!-- Card Body -->
                     <div class="card-body p-0">
-                        <ul class="list-group">
-                            <!-- An Item  -->
-                            <li class="list-group-item list-group-item-action">
-                                <div class="row">
-                                    <div class="col-4">
-                                        <p class="font-weight-bold">Tra Dao</p>
-                                        <p>25,000</p>
-                                    </div>
-                                    <div class="col-8 d-flex justify-content-between align-items-center">
-                                        <a href="#" class="text-muted"><i class="fa fa-edit"></i></a>
-
-                                        <div class="d-flex justify-content-center">
-                                            <button type="button" class="quantity-left-minus btn btn-outline-secondary btn-number" data-type="minus">
-                                                <i class="fa fa-minus" aria-hidden="true"></i>
-                                            </button>
-                                            <input type="text" id="quantity" name="quantity" style="width: 25%;" class="input-number text-center" value="1" min="1" max="100">
-                                            <button type="button" class="quantity-right-plus btn btn-outline-secondary btn-number" data-type="plus">
-                                                <i class="fa fa-plus" aria-hidden="true"></i>
-                                            </button>
-                                        </div>
-
-                                        <p class="font-weight-bold">25,000</p>
-                                        <a href="#" class="text-muted">
-                                            <i class="fa fa-trash" aria-hidden="true"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            </li>
+                        <ul class="list-group" id="cart-container">
+                            <!-- JS sẽ render ra danh sách orders tại đây  -->
                         </ul>
                     </div>
 
                     <div class="card-footer">
-                        <div class="total text-end">
-                            <p>Thành Tiền</p>
-                            <p class="font-weight-bold text-success">25,000</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="total" style="vertical-align: middle;">
+                                <p>Tổng cộng:</p>
+                                <p class="text-danger p-0" id="total-price-label">0đ</p>
+                            </div>
+
+                            <button class="border-0 d-flex flex-column justify-content-center" id="change-table-btn" style="background: none;" data-bs-toggle="modal" data-bs-target="#change-table-modal">
+                                <i class="fa-solid fa-arrow-right-arrow-left"></i>
+                                Chuyển bàn
+                            </button>
                         </div>
 
-                        <div class="buttons d-flex">
-                            <button type="button" class="btn btn-primary flex-grow-1 mr-1">Lưu</button>
-                            <button type="button" class="btn btn-danger flex-grow-1 ml-1">Thanh Toán</button>
+                        <div class="buttons d-flex mt-2">
+                            <button type="button" class="btn btn-primary fw-bold w-50 me-1">LƯU</button>
+                            <button type="button" class="btn btn-danger fw-bold w-50 ms-1">THANH TOÁN</button>
                         </div>
                     </div>
                 </div>
@@ -116,23 +98,142 @@
         </div>
     </div>
 
+    <!-- Change Table Modal  -->
+    <div class="modal fade" id="change-table-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Chuyển bàn</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                </div>
+                <div class="modal-body">
+                    <label class="form-label">Chọn bàn cần chuyển đến:</label>
+                    <select class="form-select">
+                        <option value="0">-- Chọn bàn --</option>
+                        <!-- EJS render danh sách bàn động ở đây -->
+                        <% for (const table of tables) { %>
+                            <option value="<%= table.ma_ban %>"><%= table.ten_ban %></option>
+                        <% } %>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-primary" id="confirm-change-table">Chuyển</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <div id="dishes-data-json" style="display:none;"><%- JSON.stringify(dishes) %></div>
-    
+
+    <!-- Detail Modal -->
+    <div class="modal fade" id="detail-modal">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-4">
+                <!-- Modal Header -->
+                <div class="modal-header border-0 py-2" style="background-color: #f0f0f0;">
+                    <h5 class="modal-title">Chi tiết món ăn</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <!-- Modal Body -->
+                <div class="modal-body row">
+                    <!-- Image -->
+                    <div class="col-4">
+                        <img src="" class="img-fluid rounded-3 mb-3" style="max-height: 130px;" alt="Món ăn">
+                    </div>
+
+                    <!-- Info -->
+                    <div class="col-8">
+                        <h4 class="fw-bold fs-6 text-dark">Cơm Cà Ri Gà</h4>
+                        <p class="text-danger fw-bold text-end">75.000đ</p>
+
+                        <div class="d-flex align-items-center justify-content-between">
+                            <label class="me-2 fw-semibold">Số lượng:</label>
+
+                            <div class="quantity-controls d-flex align-items-center">
+                                <button class="decrease-btn">-</button>
+                                <input type="number" class="form-control text-center border-0" value="1" min="1" style="width: 50px;">
+                                <button class="increase-btn text-danger border-danger">+</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Footer -->
+                <div class="footer px-3">
+                    <!-- Note -->
+                    <div class="mb-3">
+                        <label for="note" class="fw-semibold mb-1">Ghi chú:</label>
+                        <textarea id="note" rows="2" class="form-control" placeholder="Nhập ghi chú cho món ăn (nếu có)"></textarea>
+                    </div>
+
+                    <!-- Add to cart -->
+                    <button type="button" class="btn btn-danger w-100 mb-3" id="add-to-cart">
+                        <i class="bi bi-cart-plus me-1"></i> Thêm vào giỏ hàng
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Update Modal -->
+    <div class="modal fade" id="update-modal">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-4">
+                <!-- Modal Header -->
+                <div class="modal-header border-0 py-2" style="background-color: #f0f0f0;">
+                    <h5 class="modal-title">Sửa thông tin món ăn</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <!-- Modal Body -->
+                <div class="modal-body row">
+                    <!-- Image -->
+                    <div class="col-4">
+                        <img src="" class="img-fluid rounded-3 mb-3" style="max-height: 130px;" alt="Món ăn">
+                    </div>
+
+                    <!-- Info -->
+                    <div class="col-8">
+                        <h4 class="fw-bold fs-6 text-dark">Cơm Cà Ri Gà</h4>
+                        <p class="text-danger fw-bold text-end price">75.000đ</p>
+
+                        <div class="d-flex align-items-center justify-content-between">
+                            <label class="me-2 fw-semibold">Số lượng:</label>
+
+                            <div class="quantity-controls d-flex align-items-center">
+                                <button class="decrease-btn">-</button>
+                                <input type="number" class="form-control text-center border-0" value="1" min="1" style="width: 50px;">
+                                <button class="increase-btn text-danger border-danger">+</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Footer -->
+                <div class="footer px-3">
+                    <!-- Note -->
+                    <div class="mb-3">
+                        <label for="note" class="fw-semibold mb-1">Ghi chú:</label>
+                        <textarea id="note" rows="2" class="form-control" placeholder="Nhập ghi chú cho món ăn (nếu có)"></textarea>
+                    </div>
+
+                    <!-- Add to cart -->
+                    <button type="button" class="btn btn-warning w-100 mb-3" id="save">
+                        Lưu thay đổi
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- My JS -->
     <script src="/nhanvien/js/chitiet_listorder.js"></script>
     <script src="/nhanvien/js/chitiet_nav.js"></script>
-    <script>
-        window.addEventListener("scroll", function() {
-            const sidebar = document.querySelector("#order-section");
-
-            if (window.scrollY >= 39) {
-                sidebar.style.height = "100vh";
-            } else {
-                sidebar.style.height = "calc(100vh - 40px)";
-            }
-        });
-    </script>
-
 </body>
 
 </html>

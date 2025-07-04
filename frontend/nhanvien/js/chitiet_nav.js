@@ -11,6 +11,7 @@ const NavItemsHandler = {
     a_foodData: JSON.parse(document.querySelector("#dishes-data-json").textContent),
 
     init() {
+        // Display first group foods
         this.displayFoodItems(this.a_foodData[0]);
 
         // Add active class for first button 
@@ -29,6 +30,8 @@ const NavItemsHandler = {
                 let index = parseInt(btn.getAttribute("data-index"));
                 this.displayFoodItems(this.a_foodData[index]);
 
+                // Thêm sự kiện show detail cho card  
+                foodCardHandler.addFoodCardsOnClick();
             });
         });
     },
@@ -37,13 +40,28 @@ const NavItemsHandler = {
         this.foodItemsContainer.innerHTML = ''; // Xóa nội dung cũ
 
         for (let i = 0; i < items.length; i++) {
+            let priceHTML = ``;
+
+            if (items[i].don_gia !== items[i].don_gia_sau_khuyen_mai) {
+                priceHTML += `
+                    <div>
+                        <p class="text-decoration-line-through text-muted text-center m-0">${items[i].don_gia.toLocaleString("vi-VN")}đ</p>
+                        <p class="card-text text-danger text-center fw-bold price">${items[i].don_gia_sau_khuyen_mai.toLocaleString("vi-VN")}đ</p>
+                    </div>
+                `
+            } else {
+                priceHTML += `
+                    <p class="card-text text-center m-0 fw-bold price">${items[i].don_gia.toLocaleString("vi-VN")}đ</p>
+                `
+            }
+
             const card = `
                 <div class="col-3 d-flex food-card-item">
-                    <div class="card shadow-sm flex-fill">
-                        <img class="card-img-top" src="/dishes/${items[i].hinh_anh}">
+                    <div class="card shadow-sm flex-fill" data-bs-toggle="modal" data-bs-target="#detail-modal" data-dish-id="${items[i].ma_mon_an}">
+                        <img class="card-img-top" src="/dishes/${items[i].hinh_anh}" alt="${items[i].ten_mon_an}">
                         <div class="card-body">
                             <p class="card-text m-0 text-center">${items[i].ten_mon_an}</p>
-                            <p class="card-text m-0 text-center fw-bold" data-price="${items[i].don_gia}">${items[i].don_gia.toLocaleString("vi-VN")}</p>
+                            ${priceHTML}
                         </div>
                     </div>
                 </div>

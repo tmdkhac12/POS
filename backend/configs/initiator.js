@@ -27,6 +27,7 @@ const initApiRouters = (app) => {
     app.use("/api/phanloais", require('../routes/api/PhanLoaiRouter.js'));
     app.use("/api/khuyenmais", require('../routes/api/KhuyenMaiRouter.js'));
     app.use("/api/hoadons", require('../routes/api/HoaDonRouter.js'));
+    app.use("/api/current-order", require('../routes/api/CurrentOrderRouter.js'));
 }
 
 module.exports = {

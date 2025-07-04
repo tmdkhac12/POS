@@ -1,6 +1,8 @@
 const banRouter = require("express").Router();
 const banController = require('../../controller/api/BanController.js');
+
 const { validate } = require("../../middleware/BanMiddleware.js");
+const { validateUpdateStatus } = require("../../middleware/BanMiddleware.js");
 
 banRouter.get("/", async (req, res) => {
     // localhost:3000/api/bans?page=2&search=
@@ -52,6 +54,24 @@ banRouter.put("/:id", validate, async (req, res) => {
         }
     } catch (error) {
         console.error("PUT Route: '/api/bans/:id' - (BanRouter): " + error.message);
+        res.status(500).json({success: false, message: "Lỗi Server"});   
+    }
+})
+
+banRouter.patch("/:id/status", validateUpdateStatus, async (req, res) => {
+    try {
+        const id = req.params.id;
+        const status = req.body.status;
+
+        const isSuccess = await banController.updateBanStatus(status, id);
+
+        if (isSuccess) {
+            res.status(200).json({success: true});
+        } else {
+            res.status(400).json({success: false, message: "Cập nhật trạng thái bàn thất bại!"});
+        }
+    } catch (error) {
+        console.error("PATCH Route: '/api/bans/:id' - (BanRouter): " + error.message);
         res.status(500).json({success: false, message: "Lỗi Server"});   
     }
 })

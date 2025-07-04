@@ -22,6 +22,20 @@ const getBans = async (limit, offset) => {
     }
 } 
 
+const getEmptyTable = async () => {
+    const sql = `SELECT DISTINCT b.ma_ban, b.ten_ban 
+                FROM currentorder c 
+                RIGHT JOIN ban b ON c.ma_ban = b.ma_ban 
+                WHERE b.is_deleted = 0 and ma_order IS NULL`;
+    
+    try {
+        const [result] = await pool.query(sql);
+        return result;
+    } catch (error) {
+        throw new Error("Get Empty Table (BanModel): " + error.message)
+    }
+}
+
 const getTableById = async (id) => {
     const sql = "SELECT * FROM ban WHERE ma_ban = ? and is_deleted = 0";
 
@@ -82,6 +96,18 @@ const updateTable = async (name, id) => {
     }
 }
 
+const updateTableStatus = async (status, id) => {
+    const sql = "update ban set trang_thai = ? where ma_ban = ?";
+
+    try {
+        const [result] = await pool.execute(sql, [status, id]);
+
+        return result.affectedRows > 0;
+    } catch (error) {
+        throw new Error("Update Table Status (BanModel): " + error.message)
+    }
+}
+
 const softDeleteBan = async (id) => {
     const sql = "update ban set is_deleted = 1 where ma_ban = ?";
 
@@ -95,9 +121,9 @@ const softDeleteBan = async (id) => {
 }
 
 module.exports = {
-    getAllBans, getBans, getTableById, getNumberOfTable,
+    getAllBans, getBans, getTableById, getNumberOfTable, getEmptyTable,
     insertTable,
-    updateTable,
+    updateTable, updateTableStatus,
     softDeleteBan,
     searchBan
 }

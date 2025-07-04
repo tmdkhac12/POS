@@ -23,6 +23,9 @@ const getChiTietPage = async function (req, res) {
     const tableId = req.params.id;
 
     try {
+        // Lấy danh sách bàn 
+        const tables = await banModel.getEmptyTable();
+
         // Lấy thông tin bàn 
         const tableInfo = await banModel.getTableById(tableId);
         if (tableInfo === undefined) {
@@ -40,6 +43,7 @@ const getChiTietPage = async function (req, res) {
         }
 
         const chiTietPageData = {
+            tables,
             tableInfo,
             groups,
             dishes
@@ -51,7 +55,6 @@ const getChiTietPage = async function (req, res) {
         console.log("Error in getChiTietPage: ", error.message);
         res.status(500).send("Lỗi Server");
     }
-
 }
 
 module.exports = {

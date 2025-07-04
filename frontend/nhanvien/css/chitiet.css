@@ -1,8 +1,9 @@
-html, body {
-    height: 100%;
+#food-items {
+    overflow-y: auto;
+    max-height: calc(100vh - 180px);
 }
 
-.fa-arrow-left { 
+.fa-arrow-left {
     color: white;
 }
 
@@ -10,17 +11,17 @@ html, body {
     padding-top: 16px;
 }
 
-.card > img {
+.card>img {
     object-fit: cover;
     height: 15vh;
 }
 
-.card-body p {
-    margin: 0;
-}
-
 .food-card-item p {
     font-size: 14px;
+}
+
+.card-footer {
+    font-weight: 500 !important;
 }
 
 .card-footer p {
@@ -29,8 +30,83 @@ html, body {
 }
 
 #order-section {
-    position: sticky;
-    top: 0;
+    position: fixed;
+    top: 40;
     right: 0;
     height: calc(100vh - 40px);
+}
+
+/* Cart CSS */
+#cart-container {
+    overflow-y: auto;
+    max-height: calc(100vh - 125px - 55px - 40px);
+}
+
+.list-group-item {
+    align-items: center;
+}
+
+.list-group-item img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    margin-right: 0.5rem;
+}
+
+.list-group-item .cart-item-details {
+    flex: 1;
+    font-weight: 500;
+    word-break: break-word;
+}
+
+.list-group-item .cart-item-details p {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.list-group-item .cart-item-controls {
+    flex: 0.4;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.list-group-item .cart-item-controls p {
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+#detail-modal .quantity-controls button,
+#update-modal .quantity-controls button {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 1.2px solid #6c757d;
+    background: none;
+    color: #6c757d;
+    font-weight: bold;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input:focus {
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+#change-table-btn {
+    transition: transform 0.2s;
+}
+
+#change-table-btn:hover {
+    transform: translateY(-2px);
+}
+
+#change-table-btn i {
+    flex: 1;
+    font-size: 1.5rem;
 }
