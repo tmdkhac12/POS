@@ -242,7 +242,12 @@ const foodCardHandler = {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ maMon, maBan, soLuong, ghiChu })
+                body: JSON.stringify({
+                    maBan,
+                    orders: [
+                        { maMon, soLuong, ghiChu }
+                    ]
+                })
             });
             const data = await res.json();
 
@@ -296,6 +301,12 @@ const tableHandler = {
 
     addChangeTableEvent() {
         document.querySelector("#confirm-change-table").addEventListener("click", async () => {
+            if (cartHandler.ad_cartItems.length < 1) {
+                alert("Không thể chuyển bàn trống!");
+                bootstrap.Modal.getOrCreateInstance(document.querySelector("#change-table-modal")).hide();
+                return;
+            }
+
             // 1. Lấy thông tin bàn muốn chuyển 
             const oldTableId = parseInt(window.location.href.split('/')[5]);
             const newTableId = document.querySelector("#change-table-modal select").value;

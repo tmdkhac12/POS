@@ -2,6 +2,8 @@ const currentOrderModel = require('../../models/CurrentOrderModel.js');
 const monAnModel = require('../../models/MonAnModel.js'); 
 const banModel = require('../../models/BanModel.js');
 
+const pool = require('../../configs/connection.js').promise();
+
 const getCurrentOrdersByTable = async (tableId) => {
     try {
         return await currentOrderModel.getCurrentOrdersByTable(tableId);
@@ -11,13 +13,33 @@ const getCurrentOrdersByTable = async (tableId) => {
     }
 }
 
-const addToCurrentOrder = async (dishId, tableId, quantity, note) => {
+const addToCurrentOrder = async (tableId, orders) => {
+    const conn = await pool.getConnection();
+    
     try {
-        const price = await monAnModel.getPrice(dishId);
-        return await currentOrderModel.insertOrder(dishId, tableId, price, quantity, note);
+        await conn.beginTransaction();
+
+        for (const order of orders) {
+            const dishId = order.maMon;
+            const quantity = order.soLuong;
+            const note = order.ghiChu;
+
+            const price = await monAnModel.getPrice(dishId);
+            const isSuccess =  await currentOrderModel.insertOrder(dishId, tableId, price, quantity, note, conn);
+
+            if (!isSuccess) {
+                throw new Error("Thêm món ăn thất bại");
+            }
+        }
+
+        await conn.commit();
+        return true;
     } catch (error) {
         console.error("Add To Current Order (CurrentOrderController): " + error.message);
-        throw error;
+        await conn.rollback();
+        return false;
+    } finally {
+        conn.release();
     }
 }
 

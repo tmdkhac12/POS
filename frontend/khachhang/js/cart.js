@@ -1,8 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
-    cartHandler.loadCart();
-    cartHandler.updateTotal();
-
     cartHandler.init();
+    orderedCartHandler.init();
     updateModalHandler.init();
 })
 
@@ -40,25 +38,9 @@ const cartHandler = {
     },
 
     init() {
-        // Sự kiện xác nhận đặt món.  
-        this.d_confirmBtn.addEventListener("click", () => {
-            if (confirm("Bạn có chắc muốn gọi những món trên?")) {
-                // 1. Chuyển các món trong cart qua orderedCart  
-                this.ad_cartItems.forEach(item => {
-                    this.d_orderedCartItemsContainer.appendChild(item.cloneNode(true));
-                });
-
-                this.d_cartItemsContainer.innerHTML = "";
-
-                // 2. Chuyển qua tab các món đã đặt 
-                bootstrap.Tab.getOrCreateInstance(document.querySelector("a[href='#mon-da-dat']")).show();
-
-                // 3. Cập nhật tổng tiền trên cart, orderedCart, xóa localStorage.
-                this.updateTotal();
-                orderedCartHandler.updateTotal();
-                localStorage.clear();
-            }
-        });
+        this.loadCart();
+        this.updateTotal();
+        this._addConfirmOrderEvent();
     },
 
     addLocalStorage(o_foodInfo) {
@@ -109,13 +91,7 @@ const cartHandler = {
         this.d_cartItemsContainer.innerHTML = "";
 
         for (let i = 0; i < ao_cart.length; i++) {
-            let noteHTML = "";
-
-            if (ao_cart[i].ghiChu) {
-                noteHTML += `
-                    <p class="pe-2">Ghi Chú: <span class="fw-lighter fst-italic note">${ao_cart[i].ghiChu}</span></p> 
-                `
-            }
+            const noteHTML = this._getNoteHTML(ao_cart[i].ghiChu);
 
             const li = `
                 <li class="list-group-item cart-item d-flex">
@@ -142,9 +118,70 @@ const cartHandler = {
             this.d_cartItemsContainer.innerHTML += li;
         }
 
-        // Cập nhật tổng tiền 
+        // Cập nhật tổng tiền, thêm sự kiện cho các items  
         this.updateTotal();
+        this._addCartItemsQuantityControlEvent();
+        this._addUpdateCartItemsEvent();
+        this._addRemoveCartItemsEvent();
+    },
 
+    updateTotal() {
+        let total = 0;
+
+        this.ad_cartItems.forEach(item => {
+            const price = parseFloat(item.querySelector(".price").getAttribute("data-price"));
+            const quantity = item.querySelector(".quantity").value;
+            total += price * quantity;
+        });
+
+        document.querySelector("#pre-cart-total").innerHTML = formatCurrency(total);
+    },
+
+    _addConfirmOrderEvent() {
+        this.d_confirmBtn.addEventListener("click", async () => {
+            if (confirm("Bạn có chắc muốn gọi những món trên?")) {
+                // 1. Lấy thông tin các món ăn và đẩy vào orders
+                const cart = this.ao_cart;
+                const orders = [];
+
+                for (const dish of cart) {
+                    const maMon = dish.maMon;
+                    const soLuong = dish.soLuong;
+                    const ghiChu = dish.ghiChu;
+
+                    orders.push({ maMon, soLuong, ghiChu });
+                }
+
+                const tableId = window.location.href.split('/')[5];
+
+                // 2. Gọi API đặt món  
+                const res = await fetch("/api/current-order", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        maBan: tableId,
+                        orders
+                    })
+                })
+                const data = await res.json();
+
+                // 3. Cập nhật thông tin trên cart, orderedCart, xóa localStorage.
+                if (data.success) {
+                    this.updateTotal();
+                    await orderedCartHandler.updateTableStatus("Có khách");
+                    await orderedCartHandler.renderOrders();
+                    localStorage.clear();
+                    this.loadCart();
+                } else {
+                    alert(data.message);
+                }
+            }
+        });
+    },
+
+    _addCartItemsQuantityControlEvent() {
         // Thêm sự kiện giảm số lượng món 
         this.ad_decreaseBtns.forEach(btn => {
             btn.addEventListener("click", () => {
@@ -181,8 +218,9 @@ const cartHandler = {
                 this.loadCart();
             })
         })
+    },
 
-        // Thêm sự kiện chỉnh sửa món ăn
+    _addUpdateCartItemsEvent() {
         this.ad_updateItemBtns.forEach(btn => {
             btn.addEventListener("click", () => {
                 // 1. Show modal chi tiết món 
@@ -199,8 +237,9 @@ const cartHandler = {
                 updateModalHandler.dumpData(index, imgPath, header, price, quantity, note);
             })
         })
+    },
 
-        // Thêm sự kiện xóa món ăn khỏi giỏ hàng 
+    _addRemoveCartItemsEvent() {
         this.ad_removeItemBtns.forEach(btn => {
             btn.addEventListener("click", () => {
                 if (confirm("Bạn có chắc muốn xóa món này?")) {
@@ -212,34 +251,131 @@ const cartHandler = {
         })
     },
 
-    updateTotal() {
-        let total = 0;
+    _getNoteHTML(note) {
+        if (note) {
+            return `<p class="pe-2">Ghi Chú: <span class="fw-lighter fst-italic note">${note}</span></p>`
+        }
+        return "";
+    },
 
-        this.ad_cartItems.forEach(item => {
-            const price = parseFloat(item.querySelector(".price").getAttribute("data-price"));
-            const quantity = item.querySelector(".quantity").value;
-            total += price * quantity;
-        });
-
-        document.querySelector("#pre-cart-total").innerHTML = formatCurrency(total);
-    }
 };
 
 const orderedCartHandler = {
+    d_orderedCartContainer: document.querySelector("#ordered-cart-items"),
+
+    // Getters
     get ad_orderedCartItems() {
         return document.querySelectorAll("#ordered-cart-items .cart-item");
     },
 
-    updateTotal() {
+    init() {
+        this.renderOrders();
+    },
+
+    // Methods
+    async renderOrders() {
+        try {
+            const tableId = window.location.href.split('/')[5];
+            const res = await fetch(`/api/current-order/${tableId}`);
+            const data = await res.json();
+
+            this.d_orderedCartContainer.innerHTML = "";
+            const orders = data.orders;
+
+            if (orders.length > 0) {
+                bootstrap.Tab.getOrCreateInstance(document.querySelector("a[href='#mon-da-dat']")).show();
+            }
+
+            for (let i = 0; i < orders.length; i++) {
+                const obj = this._getObj(orders[i].ma_mon_an);
+
+                const imgPath = obj.hinh_anh;
+                const name = obj.ten_mon_an;
+                const noteHTML = this._getNoteHTML(orders[i].ghi_chu);
+                const statusHTML = this._getStatusHTML(orders[i].trang_thai);
+
+                const li = `
+                    <li class="list-group-item cart-item d-flex">
+                        <img src="/dishes/${imgPath}" alt="${name}">
+                        <div class="cart-item-details">
+                            <p><span class="text-danger">${i + 1}. </span>${name}</p>
+                            <p class="text-danger mt-2 price" data-price="${orders[i].don_gia_ap_dung}">${orders[i].don_gia_ap_dung.toLocaleString("vi-VN")}đ</p>
+                            ${noteHTML}
+                        </div>
+                        <div class="cart-item-quantity me-2" data-order-id="${orders[i].ma_order}">
+                            <span class="quantity text-danger my-2" data-quantity=${orders[i].so_luong}>${orders[i].so_luong}x</span>
+                        </div>
+                        <div class="cart-item-status">
+                            ${statusHTML}
+                        </div>
+                    </li>
+                `
+
+                this.d_orderedCartContainer.innerHTML += li;
+            }
+
+            this._updateTotal();
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    _updateTotal() {
         let total = 0;
 
         this.ad_orderedCartItems.forEach(item => {
             const price = parseFloat(item.querySelector(".price").getAttribute("data-price"));
-            const quantity = item.querySelector(".quantity").value;
+            const quantity = parseInt(item.querySelector(".quantity").getAttribute("data-quantity"));
             total += price * quantity;
         });
 
         document.querySelector("#ordered-cart-total").innerHTML = formatCurrency(total);
+    },
+
+    _getNoteHTML(note) {
+        if (note) {
+            return `<p class="pe-2">Ghi Chú: <span class="fw-lighter fst-italic note">${note}</span></p>`;
+        }
+        return "";
+    },
+
+    _getStatusHTML(status) {
+        if (status === 'Chờ xác nhận') return `<span class="badge bg-secondary">Chờ xác nhận</span>`;
+        if (status === 'Đã nhận') return `<span class="badge bg-info">Đã nhận</span>`;
+        if (status === 'Đang chế biến') return `<span class="badge bg-warning">Đang chế biến</span>`;
+        if (status === 'Hoàn thành') return `<span class="badge bg-success">Hoàn thành</span>`;
+
+        return ''; // Nếu status không khớp
+    },
+
+    _getObj(maMon) {
+        for (const arr of NavItemsHandler.a_foodData) {
+            const obj = arr.find(item => item.ma_mon_an === maMon);
+
+            if (obj) {
+                return obj;
+            }
+        }
+        return null;
+    },
+
+    async updateTableStatus(status) {
+        if (this.ad_orderedCartItems.length === 0) {
+            const tableId = window.location.href.split('/')[5];
+
+            const res = await fetch(`/api/bans/${tableId}/status`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ status })
+            })
+            const data = await res.json();
+
+            if (!data.success) {
+                alert(data.message);
+            }
+        }
     }
 }
 
@@ -249,8 +385,8 @@ const updateModalHandler = {
     d_updateModal: document.querySelector("#update-modal"),
 
     init() {
-        this.addQuantityControlsEvent();
-        this.addSaveBtnOnClick();
+        this._addQuantityControlsEvent();
+        this._addSaveBtnOnClick();
     },
 
     dumpData(index, img, header, price, quantity, note) {
@@ -263,7 +399,7 @@ const updateModalHandler = {
         this.d_updateModal.querySelector("textarea").value = note;
     },
 
-    addSaveBtnOnClick() {
+    _addSaveBtnOnClick() {
         this.d_updateModal.querySelector("#save").addEventListener("click", () => {
             const newQuantity = this.d_updateModal.querySelector("input").value;
             const newNote = this.d_updateModal.querySelector("textarea").value;
@@ -274,7 +410,7 @@ const updateModalHandler = {
         })
     },
 
-    addQuantityControlsEvent() {
+    _addQuantityControlsEvent() {
         // Lấy các DOM 
         const decreaseBtn = this.d_updateModal.querySelector(".decrease-btn");
         const increaseBtn = this.d_updateModal.querySelector(".increase-btn");

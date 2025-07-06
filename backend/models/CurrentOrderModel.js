@@ -11,12 +11,12 @@ const getCurrentOrdersByTable = async (tableId) => {
     }
 }
 
-const insertOrder = async (dishId, tableId, price, quantity, note) => {
+const insertOrder = async (dishId, tableId, price, quantity, note, conn = pool) => {
     const sql = `insert into currentorder(ma_mon_an, ma_ban, don_gia_ap_dung, so_luong, ghi_chu)
                 values (?, ?, ?, ?, ?)`;
 
     try {
-        const [result] = await pool.execute(sql, [dishId, tableId, price, quantity, note]);
+        const [result] = await conn.execute(sql, [dishId, tableId, price, quantity, note]);
 
         return result.affectedRows > 0;
     } catch (error) {

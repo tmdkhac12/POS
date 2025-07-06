@@ -19,15 +19,15 @@ const NavItemsHandler = {
         this.updateSelectingLabel();
 
         // Add nav item onclick event handler  
-        const buttons = document.querySelectorAll('.menu-btn');
-        buttons.forEach(btn => {
-            btn.addEventListener('click', () => {
+        const navItems = document.querySelectorAll('.menu-btn');
+        navItems.forEach(navItem => {
+            navItem.addEventListener('click', () => {
                 // Thêm active vào button được click
-                buttons.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
+                navItems.forEach(b => b.classList.remove('active'));
+                navItem.classList.add('active');
 
-                // Lấy index của thẻ đang được chọn
-                let index = parseInt(btn.getAttribute("data-index"));
+                // Lấy index của thẻ nav đang được chọn
+                let index = parseInt(navItem.getAttribute("data-index"));
                 this.displayFoodItems(this.a_foodData[index]);
 
                 // Cập nhật label cho nav item đang chọn
@@ -50,20 +50,7 @@ const NavItemsHandler = {
         this.foodItemsContainer.innerHTML = ''; // Xóa nội dung cũ
 
         for (let i = 0; i < items.length; i++) {
-            let priceHTML = ``;
-
-            if (items[i].don_gia !== items[i].don_gia_sau_khuyen_mai) {
-                priceHTML += `
-                    <div>
-                        <span class="text-decoration-line-through text-muted">${items[i].don_gia.toLocaleString("vi-VN")}đ</span> <br>
-                        <span class="card-text text-danger fw-bold">${items[i].don_gia_sau_khuyen_mai.toLocaleString("vi-VN")}đ</span>
-                    </div>
-                `
-            } else {
-                priceHTML += `
-                    <span class="card-text text-danger m-0">${items[i].don_gia.toLocaleString("vi-VN")}đ</span>
-                `
-            }
+            let priceHTML = this._getPriceHTML(items[i].don_gia, items[i].don_gia_sau_khuyen_mai);
 
             const card = `
                 <div class="col-4 fw-bold d-flex">
@@ -85,6 +72,21 @@ const NavItemsHandler = {
             `
 
             this.foodItemsContainer.innerHTML += card;
+        }
+    },
+
+    _getPriceHTML(originPrice, discountPrice) {
+        if (originPrice !== discountPrice) {
+            return `
+                <div>
+                    <span class="text-decoration-line-through text-muted">${originPrice.toLocaleString("vi-VN")}đ</span> <br>
+                    <span class="card-text text-danger fw-bold">${discountPrice.toLocaleString("vi-VN")}đ</span>
+                </div>
+            `
+        } else {
+            return `
+                <span class="card-text text-danger m-0">${originPrice.toLocaleString("vi-VN")}đ</span>
+            `
         }
     }
 }

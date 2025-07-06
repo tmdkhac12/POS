@@ -16,12 +16,10 @@ currentOrderRouter.get("/:tableId", async (req, res) => {
 
 currentOrderRouter.post("/", async (req, res) => {
     try {
-        const dishId = req.body.maMon;
         const tableId = req.body.maBan;
-        const quantity = req.body.soLuong;
-        const note = req.body.ghiChu || null;
+        const orders = req.body.orders;
 
-        const isSuccess = await currentOrderController.addToCurrentOrder(dishId, tableId, quantity, note);
+        const isSuccess = await currentOrderController.addToCurrentOrder(tableId, orders);
         if (isSuccess) {
             res.status(200).json({ success: true });
         } else {

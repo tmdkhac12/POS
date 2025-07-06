@@ -71,7 +71,7 @@
 
 .tab-pane .cart-list {
     overflow-y: auto;
-    max-height: calc(105vh - 200px);
+    max-height: calc(100vh - 135px - 40px);
 }
 
 .tab-pane .cart-list::-webkit-scrollbar {
@@ -84,4 +84,9 @@
 
 #cart-total {
     font-size: 20px;
+}
+
+.cart-item-quantity {
+    width: 3rem;
+    font-size: 0.9rem;
 }
