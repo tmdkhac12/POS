@@ -1,6 +1,18 @@
 const currentOrderRouter = require('express').Router();
 const currentOrderController = require('../../controller/api/CurrentOrderController.js');
 
+currentOrderRouter.get("/occupied-table-orders-status", async (req, res) => {
+    try {
+        const results = await currentOrderController.getOccupiedTableOrdersStatus();
+
+        res.status(200).json({ success: true, results});
+    } catch (error) {
+        console.error("GET Route: '/api/current-order/occupied-table-orders' - (CurrentOrderRouter): " + error.message);
+        res.status(500).json({ success: false, message: "Lỗi Server" });
+    }
+})
+
+
 currentOrderRouter.get("/:tableId", async (req, res) => {
     try {
         const tableId = req.params.tableId;
@@ -25,7 +37,6 @@ currentOrderRouter.post("/", async (req, res) => {
         } else {
             res.status(400).json({ success: false, message: "Thêm món ăn vào đơn hàng thất bại!" });
         }
-
     } catch (error) {
         console.error("POST Route: '/api/current-order/' - (CurrentOrderRouter): " + error.message);
         res.status(500).json({ success: false, message: "Lỗi Server" });
@@ -65,6 +76,24 @@ currentOrderRouter.patch("/move-table", async (req, res) => {
         
     } catch (error) {
         console.error("PATCH Route: '/api/current-order/move-table' - (CurrentOrderRouter): " + error.message);
+        res.status(500).json({ success: false, message: "Lỗi Server" });
+    }
+})
+
+currentOrderRouter.patch("/status", async (req, res) => {
+    try {
+        const orders = req.body.orders;
+
+        const isSuccess = await currentOrderController.updateOrdersStatus(orders);
+
+        if (isSuccess) {
+            res.status(200).json({ success: true });
+        } else {
+            res.status(400).json({ success: false, message: "Cập nhật trạng thái món ăn thất bại!" });
+        }
+        
+    } catch (error) {
+        console.error("PATCH Route: '/api/current-order/status' - (CurrentOrderRouter): " + error.message);
         res.status(500).json({ success: false, message: "Lỗi Server" });
     }
 })

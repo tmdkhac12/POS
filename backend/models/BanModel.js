@@ -49,6 +49,18 @@ const getTableById = async (id) => {
     }
 }
 
+const getOccupiedTables = async () => {
+    const sql = "select * from ban where trang_thai = 'Có khách'";
+
+    try {
+        const [result] = await pool.query(sql);
+
+        return result;
+    } catch (error) {
+        throw new Error("Get Occupied Tables (BanModel): " + error.message)
+    }
+}
+
 const getNumberOfTable = async (name) => {
     const sql = "select count(*) as soluong from ban where ten_ban like ? and is_deleted = 0";
 
@@ -121,7 +133,7 @@ const softDeleteBan = async (id) => {
 }
 
 module.exports = {
-    getAllBans, getBans, getTableById, getNumberOfTable, getEmptyTable,
+    getAllBans, getBans, getTableById, getNumberOfTable, getEmptyTable, getOccupiedTables,
     insertTable,
     updateTable, updateTableStatus,
     softDeleteBan,

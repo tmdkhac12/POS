@@ -23,18 +23,18 @@
             <div class="col-4 p-3 left-column">
                 <h5 id="table-title"><%= bans[0].ten_ban %></h5>
                 <div class="order-content">
-                    <ul class="list-group order-list" id="order-list">
+                    <ul class="list-group" id="order-list">
                         <!-- JS sẽ render dữ liệu món ăn -->
 
                     </ul>
                 </div>
-                <div class="payment-button">
-                    <button class="btn btn-primary w-100">Lưu</button>
+                <div class="save-button">
+                    <button class="btn btn-primary w-100" id="save-button">Lưu</button>
                 </div>
             </div>
 
             <!-- Cột phải: Thông tin bàn -->
-            <div class="col-8 p-3">
+            <div class="col-8 p-3 right-column">
                 <!-- Header -->
                 <div class="row mb-3">
                     <div class="col">
@@ -70,7 +70,7 @@
                     <!-- EJS sẽ render danh sách bàn -->
                     <% for (const ban of bans) { %>
                         <div class="col-3">
-                            <div class="card shadow-sm table-card" id="table-<%= ban.ma_ban %>" data-table-id="<%= ban.ma_ban %>" data-status="<%= ban.trang_thai === "Trống" ? "empty" : "occupied" %>">
+                            <div class="card shadow-sm table-card" data-table-id="<%= ban.ma_ban %>" data-status="<%= ban.trang_thai === "Trống" ? "empty" : "occupied" %>">
                                 <div class="card-header d-flex justify-content-between">
                                     <p class="card-text m-0 fw-light"><%= ban.trang_thai === "Trống" ? "Bàn trống" : "Đang sử dụng" %></p>
                                     <a href="#" class="stretched-link">
@@ -87,6 +87,8 @@
             </div>
         </div>
     </div>
+
+    <div id="dishes-data-json" style="display:none;"><%- JSON.stringify(dishes) %></div>
 
     <!-- My JS -->
     <script src="/bep/js/main.js"></script>

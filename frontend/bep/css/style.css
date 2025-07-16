@@ -72,50 +72,37 @@
     font-weight: bolder !important;
 }
 
-.order-list {
-    height: calc(85vh - 20px);
+#order-list {
+    height: calc(100vh - 106px);
     overflow-y: auto;
+    font-size: 0.9rem;
 }
 
 .left-column {
-    min-height: 100vh;
+    height: 100vh;
     display: flex;
     flex-direction: column;
-    position: sticky;
+    position: fixed;
     top: 0;
     background-color: #f8f9fa;
 }
 
-.order-content {
-    flex: 1;
+.right-column {
+    position: absolute;
+    right: 0;
 }
 
-.payment-button {
+.order-content {
+    flex-grow: 1;
+}
+
+.save-button {
     padding-top: 10px;
 }
 
-/* Dropdown trạng thái */
-.status-dropdown .btn {
-    min-width: 120px;
+.unsaved-indicator {
+    position: absolute;
+    top: 0;
+    right: 5px;
+    display: none;
 }
-
-.status-received {
-    background-color: #6C757D !important;
-    color: #FFFFFF !important;
-}
-
-.status-processing {
-    background-color: #FFC107 !important;
-    color: #000000 !important;
-}
-
-.status-completed {
-    background-color: #28A745 !important;
-    color: #FFFFFF !important;
-}
-
-.completed-item {
-    text-decoration: line-through;
-    color: #6C757D;
-}
-

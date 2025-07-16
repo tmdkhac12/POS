@@ -11,6 +11,17 @@ const getCurrentOrdersByTable = async (tableId) => {
     }
 }
 
+const getCurrentOrdersStatusByTable = async (tableId) => {
+    const sql = "SELECT ma_order, trang_thai FROM currentorder where ma_ban = ?";
+
+    try {
+        const [result] = await pool.execute(sql, [tableId]);
+        return result;
+    } catch (error) {
+        throw new Error("Get Current Orders Status By Table (CurrentOrderModel): " + error.message)
+    }
+}
+
 const insertOrder = async (dishId, tableId, price, quantity, note, conn = pool) => {
     const sql = `insert into currentorder(ma_mon_an, ma_ban, don_gia_ap_dung, so_luong, ghi_chu)
                 values (?, ?, ?, ?, ?)`;
@@ -50,6 +61,19 @@ const changeTable = async (oldTableId, newTableId) => {
     }
 }
 
+const updateOrderStatus = async (orderId, status, conn = pool) => {
+    const sql = `update currentorder set trang_thai = ?
+                where ma_order = ?`;
+
+    try {
+        const [result] = await conn.execute(sql, [status, orderId]);
+
+        return result.affectedRows > 0;
+    } catch (error) {
+        throw new Error("Update Order Status (CurrentOrderModel): " + error.message)
+    }
+}
+
 const hardDeleteOrder = async (orderId) => {
     const sql = `delete from currentorder where ma_order = ?`;
 
@@ -63,8 +87,8 @@ const hardDeleteOrder = async (orderId) => {
 }
 
 module.exports = {
-    getCurrentOrdersByTable,
+    getCurrentOrdersByTable, getCurrentOrdersStatusByTable,
     insertOrder,
-    updateOrder, changeTable,
+    updateOrder, updateOrderStatus, changeTable,
     hardDeleteOrder
 }

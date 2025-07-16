@@ -32,7 +32,7 @@
 
 .cart-item-details p {
     margin: 0;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
 }
 
 .cart-item-options {
@@ -88,5 +88,12 @@
 
 .cart-item-quantity {
     width: 3rem;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
+    text-align: center;
+}
+
+.cart-item-status {
+    font-size: 0.85rem;
+    width: 85px;
+    text-align: center;
 }

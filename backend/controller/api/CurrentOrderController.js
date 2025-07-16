@@ -13,6 +13,25 @@ const getCurrentOrdersByTable = async (tableId) => {
     }
 }
 
+const getOccupiedTableOrdersStatus = async () => {
+    try {
+        const occupiedTables =  await banModel.getOccupiedTables();
+
+        const result = [];
+        for (const table of occupiedTables) {
+            const orders = await currentOrderModel.getCurrentOrdersStatusByTable(table.ma_ban); 
+            const tmp = {ma_ban: table.ma_ban, orders};
+
+            result.push(tmp);
+        }
+
+        return result;
+    } catch (error) {
+        console.error("Get Orders By Occupied Tables (CurrentOrderController): " + error.message);
+        throw error;
+    }
+}
+
 const addToCurrentOrder = async (tableId, orders) => {
     const conn = await pool.getConnection();
     
@@ -28,7 +47,7 @@ const addToCurrentOrder = async (tableId, orders) => {
             const isSuccess =  await currentOrderModel.insertOrder(dishId, tableId, price, quantity, note, conn);
 
             if (!isSuccess) {
-                throw new Error("Thêm món ăn thất bại");
+                throw new Error("Lỗi khi gọi insertOrder");
             }
         }
 
@@ -65,6 +84,34 @@ const changeTable = async (oldTableId, newTableId) => {
     }
 }
 
+const updateOrdersStatus = async (orders) => {
+    const conn = await pool.getConnection();
+    
+    try {
+        await conn.beginTransaction();
+
+        for (const order of orders) {
+            const orderId = order.orderId;
+            const status = order.status;
+
+            const isSuccess = await currentOrderModel.updateOrderStatus(orderId, status, conn);
+
+            if (!isSuccess) {
+                throw new Error("Lỗi khi gọi currentOrderModel.updateOrderStatus");
+            }
+        }
+
+        conn.commit();
+        return true;
+    } catch (error) {
+        console.error("Update Orders Status (CurrentOrderController): " + error.message);
+        conn.rollback();
+        return false;
+    } finally {
+        conn.release();
+    }
+}
+
 const deleteCurrentOrder = async (orderId) => {
     try {
         return await currentOrderModel.hardDeleteOrder(orderId);
@@ -75,8 +122,8 @@ const deleteCurrentOrder = async (orderId) => {
 }
 
 module.exports = {
-    getCurrentOrdersByTable,
+    getCurrentOrdersByTable, getOccupiedTableOrdersStatus,
     addToCurrentOrder,
-    updateCurrentOrder, changeTable,
+    updateCurrentOrder, updateOrdersStatus, changeTable,
     deleteCurrentOrder
 }
