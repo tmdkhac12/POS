@@ -174,6 +174,7 @@ const cartHandler = {
                     await orderedCartHandler.renderOrders();
                     localStorage.clear();
                     this.loadCart();
+                    placeOrder();
                 } else {
                     alert(data.message);
                 }

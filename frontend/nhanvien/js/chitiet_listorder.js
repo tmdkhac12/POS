@@ -62,6 +62,8 @@ const cartHandler = {
                     if (data.success) {
                         await this.renderOrders();
                         await tableHandler.updateTableStatus("Trống");
+
+                        sendSocket();
                     } else {
                         alert(data.message);
                     }
@@ -201,6 +203,7 @@ const updateModalHandler = {
             // Xử lý sau cập nhật 
             if (data.success) {
                 cartHandler.renderOrders();
+                sendSocket();
             } else {
                 alert(data.message);
             }
@@ -255,6 +258,7 @@ const foodCardHandler = {
             if (data.success) {
                 await tableHandler.updateTableStatus("Có khách");
                 await cartHandler.renderOrders();
+                sendSocket();
             } else {
                 alert(data.message);
             }
@@ -325,6 +329,7 @@ const tableHandler = {
             alert(data.message);
             if (data.success) {
                 await cartHandler.renderOrders();
+                sendSocket();
                 bootstrap.Modal.getOrCreateInstance(document.querySelector("#change-table-modal")).hide();
             }
         })

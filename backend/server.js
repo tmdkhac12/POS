@@ -1,7 +1,10 @@
 // Modules 
 require("dotenv").config();
 const express = require("express");
+const http = require('http');
+
 const app = express();
+const server = http.createServer(app);
 
 // Static modules
 const initiator = require("./configs/initiator");
@@ -20,6 +23,9 @@ initiator.initApiRouters(app);
 // Config View Engine
 configViewEngine(app); 
 
+// Config Socket IO
+initiator.initSocketIO(server);
+
 // Catch invalid client request url 
 app.get("*", function (req, res) {
     res.send("Invalid URL, 404 not Found");
@@ -27,6 +33,6 @@ app.get("*", function (req, res) {
 
 // Running server 
 const port = process.env.PORT || 3000;
-app.listen(port, () => {
+server.listen(port, () => {
     console.log(`Server is running at "http://localhost:${port}/<module_name>"`);
 })

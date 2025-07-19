@@ -149,6 +149,7 @@ const loadOrdersHandler = {
 
                 // 4. Gọi API để lấy chi tiết món ăn của bàn
                 this.renderOrders(this.tableId);
+                updateCustomerRoom();
             });
         });
     },
@@ -176,6 +177,7 @@ const loadOrdersHandler = {
             if (data.success) {
                 await this.renderOrders(this.tableId);
                 await this.updateTablesStatus();
+                sendSocket();
             } else {
                 alert(data.message);
             }

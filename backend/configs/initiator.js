@@ -1,5 +1,6 @@
 const express = require("express");
 const path = require("path");
+const { Server } = require('socket.io');
 
 const initStaticFilesServing = function (app) {
     app.use("/", express.static(path.join(__dirname, "../../frontend/images")));
@@ -30,8 +31,45 @@ const initApiRouters = (app) => {
     app.use("/api/current-order", require('../routes/api/CurrentOrderRouter.js'));
 }
 
+const initSocketIO = (server) => {
+    const io = new Server(server);
+
+    io.on("connection", (socket) => {
+        const { tableId, role } = socket.handshake.auth;
+        
+        let customerRoom = "customer-" + tableId;
+
+        if (role === "staff") {
+            socket.join("staff");
+        } else if (role === "kitchen") {
+            socket.join("kitchen");
+        } else if (role === "customer") {
+            socket.join(customerRoom);
+        }
+
+        socket.on("change room", (tableId) => {
+            customerRoom = "customer-" + tableId;
+        })
+
+        socket.on("place order", () => {
+            io.to("staff").emit("place order");
+            io.to("kitchen").emit("place order");
+        })
+
+        socket.on("update order", () => {
+            if (role === "kitchen") {
+                io.to("staff").emit("update order");
+            } else if (role === "staff") {
+                io.to("kitchen").emit("update order");
+            }
+            io.to(customerRoom).emit("update order");
+        })
+    })
+}
+
 module.exports = {
     initStaticFilesServing,
     initRouters,
-    initApiRouters
+    initApiRouters,
+    initSocketIO
 };
