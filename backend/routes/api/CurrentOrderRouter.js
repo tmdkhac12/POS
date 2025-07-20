@@ -13,7 +13,7 @@ currentOrderRouter.get("/occupied-table-orders-status", async (req, res) => {
 })
 
 
-currentOrderRouter.get("/:tableId", async (req, res) => {
+currentOrderRouter.get("/table/:tableId", async (req, res) => {
     try {
         const tableId = req.params.tableId;
 
@@ -21,7 +21,7 @@ currentOrderRouter.get("/:tableId", async (req, res) => {
 
         res.status(200).json({ success: true, orders });
     } catch (error) {
-        console.error("GET Route: '/api/current-order/:tableId' - (CurrentOrderRouter): " + error.message);
+        console.error("GET Route: '/api/current-order/table/:tableId' - (CurrentOrderRouter): " + error.message);
         res.status(500).json({ success: false, message: "Lỗi Server" });
     }
 })

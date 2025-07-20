@@ -10,6 +10,15 @@ const getPaginatedBans = async (name, limit, offset) => {
     }
 }
 
+const getTable = async (id) => {
+    try {
+        return await banModel.getTableById(id);
+    } catch (error) {
+        console.error("Get Table (BanController): " + error.message);
+        throw error;
+    }
+} 
+
 const countBans = async (name = "") => {
     try {
         return await banModel.getNumberOfTable(name);
@@ -56,7 +65,7 @@ const deleteBan = async (id) => {
 }
 
 module.exports = {
-    getPaginatedBans,
+    getPaginatedBans, getTable,
     countBans,
     addBan,
     updateBan, updateBanStatus,

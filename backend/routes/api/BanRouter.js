@@ -22,6 +22,18 @@ banRouter.get("/", async (req, res) => {
     }
 })
 
+banRouter.get("/:id", async (req, res) => {
+    try {
+        const id = req.params.id;
+        const ban = await banController.getTable(id);
+
+        res.status(200).json({success: true, ban});
+    } catch (error) {
+        console.error("GET Route: '/api/bans/:id' - (BanRouter): " + error.message);
+        res.status(500).json({success: false, message: "Lỗi Server"});
+    }
+})
+
 banRouter.post("/", validate, async (req, res) => {
     try {
         const body = req.body;

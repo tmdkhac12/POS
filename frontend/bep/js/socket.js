@@ -1,26 +1,58 @@
 const socket = io({
     auth: {
-        tableId: loadOrdersHandler.tableId,
+        tableId: GLOBAL.tableId,
         role: "kitchen"
     }
 })
 
-// Nghe sự kiện cập nhật của nhân viên 
-socket.on("update order", async () => {
-    await loadOrdersHandler.renderOrders();
+// Nghe sự kiện cập nhật món của nhân viên 
+socket.on("update order", async (tableId) => {
+    const currentTableId = GLOBAL.tableId;
+
+    if (currentTableId === tableId) {
+        await loadOrdersHandler.renderOrders(currentTableId);
+    }
+
+    tableHandler.updateTableStatus(currentTableId);
+    tableHandler.updatePendingStatus(currentTableId);
+})
+
+// Nghe sự kiện chuyển bàn của nhân viên 
+socket.on("change table", async (oldTableId, newTableId) => {
+    const currentTableId = GLOBAL.tableId;
+
+    console.log({currentTableId, oldTableId, newTableId});
+
+    if (currentTableId === newTableId || currentTableId === oldTableId) {
+        await loadOrdersHandler.renderOrders(currentTableId);
+    }
+
+    tableHandler.updateTableStatus(oldTableId);
+    tableHandler.updateTableStatus(newTableId);
+
+    tableHandler.updatePendingStatus(oldTableId);
+    tableHandler.updatePendingStatus(newTableId);
 })
 
 // Nghe sự kiện đặt món của khách hàng 
-socket.on("place order", async () => {
-    await loadOrdersHandler.renderOrders();
+socket.on("place order", async (tableId) => {
+    const currentTableId = GLOBAL.tableId;
+
+    if (currentTableId === tableId) {
+        await loadOrdersHandler.renderOrders(currentTableId);
+    }
+
+    tableHandler.updateTableStatus(currentTableId);
+    tableHandler.updatePendingStatus(currentTableId);
 })
 
 // Hàm gửi sự kiện 
 function sendSocket() {
-    socket.emit("update order");
+    const tableId = GLOBAL.tableId;
+    socket.emit("update order", tableId);
 }
 
 function updateCustomerRoom() {
-    const tableId = loadOrdersHandler.tableId;
+    const tableId = GLOBAL.tableId;
     socket.emit("change room", tableId);
 }

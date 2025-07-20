@@ -1,12 +1,13 @@
 window.addEventListener("DOMContentLoaded", async () => {
     loadOrdersHandler.init();
+    tableHandler.init();
 });
 
+const GLOBAL = {
+    tableId: parseInt(document.querySelector('.table-card').getAttribute("data-table-id"))
+}
+
 const loadOrdersHandler = {
-    tableId: document.querySelector('.table-card').getAttribute("data-table-id"),
-
-    ad_tableCards: document.querySelectorAll('.table-card'),
-
     d_ordersContainer: document.getElementById('order-list'),
     d_saveBtn: document.querySelector("#save-button"),
 
@@ -22,13 +23,11 @@ const loadOrdersHandler = {
     },
 
     init() {
-        this.addTableCardsOnClick();
         this.addSaveBtnOnClick();
 
         // Render orders và add active card 
-        this.renderOrders(this.tableId);
+        this.renderOrders(GLOBAL.tableId);
         document.querySelector(".table-card").classList.add("active-table");
-        this.updateTablesStatus();
     },
 
     // Methods
@@ -36,7 +35,7 @@ const loadOrdersHandler = {
         try {
             // Gọi API lấy danh sách orders theo bàn 
             this.d_ordersContainer.innerHTML = "";
-            const res = await fetch(`/api/current-order/${tableId}`);
+            const res = await fetch(`/api/current-order/table/${tableId}`);
             const data = await res.json();
             const orders = data.orders;
 
@@ -83,37 +82,6 @@ const loadOrdersHandler = {
         }
     },
 
-    async updateTablesStatus() {
-        const res = await fetch("/api/current-order/occupied-table-orders-status");
-        const data = await res.json();
-
-        for (const table of data.results) {
-            const tableId = table.ma_ban;
-            const isAllCompleted = table.orders.every(order => order.trang_thai === "Hoàn thành");
-
-            const d_tableCard = document.querySelector(`.table-card[data-table-id="${tableId}"]`)
-            
-            if (!isAllCompleted) {
-                d_tableCard.classList.add('pending');
-                d_tableCard.querySelector('.card-header').innerHTML = `
-                    <p class="card-text m-0 font-weight-light">Đang sử dụng</p>
-                    <i class="fa fa-clock"></i>
-                    <a href="#" class="stretched-link">
-                        <i style="font-size:16px" class="fa fas fa-chevron-right"></i>
-                    </a>
-                `;
-            } else {
-                d_tableCard.classList.remove('pending');
-                d_tableCard.querySelector('.card-header').innerHTML = `
-                    <p class="card-text m-0 font-weight-light">Đang sử dụng</p>
-                    <a href="#" class="stretched-link">
-                        <i style="font-size:16px" class="fa fas fa-chevron-right"></i>
-                    </a>
-                `;
-            }
-        }
-    },
-
     addStatusBtnsOnClick() {
         this.ad_statusBtns.forEach(btn => {
             btn.addEventListener("click", () => {
@@ -134,26 +102,7 @@ const loadOrdersHandler = {
         })
     },
 
-    addTableCardsOnClick() {
-        this.ad_tableCards.forEach(card => {
-            card.addEventListener('click', () => {
-                // 1. Lấy id của bàn
-                this.tableId = card.getAttribute('data-table-id');
-
-                // 2. Cập nhật trạng thái active cho bàn được click 
-                this.ad_tableCards.forEach(c => c.classList.remove('active-table'));
-                card.classList.add('active-table');
-
-                // 3. Cập nhật tiêu đề bàn
-                document.getElementById('table-title').textContent = card.querySelector(".table-name").textContent;
-
-                // 4. Gọi API để lấy chi tiết món ăn của bàn
-                this.renderOrders(this.tableId);
-                updateCustomerRoom();
-            });
-        });
-    },
-
+    // One time function 
     addSaveBtnOnClick() {
         this.d_saveBtn.addEventListener("click", async () => {
             const orders = [];
@@ -175,8 +124,8 @@ const loadOrdersHandler = {
             const data = await res.json();
 
             if (data.success) {
-                await this.renderOrders(this.tableId);
-                await this.updateTablesStatus();
+                await this.renderOrders(GLOBAL.tableId);
+                await tableHandler.updatePendingStatus(GLOBAL.tableId);
                 sendSocket();
             } else {
                 alert(data.message);
@@ -209,5 +158,107 @@ const loadOrdersHandler = {
         if (status === 'Hoàn thành') return `<span class="badge bg-success">Hoàn thành</span>`;
 
         return ''; // Nếu status không khớp
+    },
+}
+
+const tableHandler = {
+    ad_tableCards: document.querySelectorAll('.table-card'),
+
+    init() {
+        this.addTableCardsOnClick();
+        this.renderPendingIcon();
+    },
+
+    // One time function
+    addTableCardsOnClick() {
+        this.ad_tableCards.forEach(card => {
+            card.addEventListener('click', () => {
+                // 1. Set id của bàn được click 
+                GLOBAL.tableId = card.getAttribute('data-table-id');
+
+                // 2. Cập nhật trạng thái active cho bàn được click 
+                this.ad_tableCards.forEach(c => c.classList.remove('active-table'));
+                card.classList.add('active-table');
+
+                // 3. Cập nhật tiêu đề bàn
+                document.getElementById('table-title').textContent = card.querySelector(".table-name").textContent;
+
+                // 4. Render món ăn của bàn 
+                loadOrdersHandler.renderOrders(GLOBAL.tableId);
+                updateCustomerRoom();
+            });
+        });
+    },
+
+    // One time function
+    async renderPendingIcon() {
+        // API lấy danh sách món ăn của những bàn có khách  
+        const res = await fetch("/api/current-order/occupied-table-orders-status");
+        const data = await res.json();
+
+        for (const table of data.results) {
+            const tableId = table.ma_ban;
+            const isAllCompleted = table.orders.every(order => order.trang_thai === "Hoàn thành");
+
+            const d_tableCard = document.querySelector(`.table-card[data-table-id="${tableId}"]`);
+
+            if (!isAllCompleted) {
+                this._addPendingIcon(d_tableCard);
+            } else {
+                this._removePendingIcon(d_tableCard);
+            }
+        }
+    },
+
+    async updatePendingStatus(tableId) {
+        // API lấy orders của 1 bàn 
+        const res = await fetch(`/api/current-order/table/${tableId}`);
+        const data = await res.json();
+        const orders = data.orders;
+
+        const isAllCompleted = orders.every(order => order.trang_thai === "Hoàn thành");
+        const d_tableCard = document.querySelector(`.table-card[data-table-id="${tableId}"]`);
+
+        if (!isAllCompleted) {
+            this._addPendingIcon(d_tableCard);
+        } else {
+            this._removePendingIcon(d_tableCard);
+        }
+    },
+
+    async updateTableStatus(tableId) {
+        // Gọi API lấy trạng thái bàn 
+        const res = await fetch(`/api/bans/${tableId}`);
+        const data = await res.json();
+
+        const tableStatus = data.ban.trang_thai;
+        const d_tableCard = document.querySelector(`.table-card[data-table-id="${tableId}"]`);
+
+        if (tableStatus === "Có khách") {
+            d_tableCard.setAttribute("data-status", "occupied");
+        } else {
+            d_tableCard.setAttribute("data-status", "empty");
+        }
+    },
+
+    _addPendingIcon(d_tableCard) {
+        d_tableCard.classList.add('pending');
+        d_tableCard.querySelector('.card-header').innerHTML = `
+            <p class="card-text m-0 font-weight-light">Đang sử dụng</p>
+            <i class="fa fa-clock"></i>
+            <a href="#" class="stretched-link">
+                <i style="font-size:16px" class="fa fas fa-chevron-right"></i>
+            </a>
+        `;
+    },
+
+    _removePendingIcon(d_tableCard) {
+        d_tableCard.classList.remove('pending');
+        d_tableCard.querySelector('.card-header').innerHTML = `
+            <p class="card-text m-0 font-weight-light">Đang sử dụng</p>
+            <a href="#" class="stretched-link">
+                <i style="font-size:16px" class="fa fas fa-chevron-right"></i>
+            </a>
+        `;
     },
 }

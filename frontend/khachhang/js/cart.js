@@ -277,7 +277,7 @@ const orderedCartHandler = {
     async renderOrders() {
         try {
             const tableId = window.location.href.split('/')[5];
-            const res = await fetch(`/api/current-order/${tableId}`);
+            const res = await fetch(`/api/current-order/table/${tableId}`);
             const data = await res.json();
 
             this.d_orderedCartContainer.innerHTML = "";

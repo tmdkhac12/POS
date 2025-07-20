@@ -51,18 +51,23 @@ const initSocketIO = (server) => {
             customerRoom = "customer-" + tableId;
         })
 
-        socket.on("place order", () => {
-            io.to("staff").emit("place order");
-            io.to("kitchen").emit("place order");
+        socket.on("place order", (tableId) => {
+            io.to("staff").emit("place order", tableId);
+            io.to("kitchen").emit("place order", tableId);
         })
 
-        socket.on("update order", () => {
+        socket.on("update order", (tableId) => {
             if (role === "kitchen") {
-                io.to("staff").emit("update order");
+                io.to("staff").emit("update order", tableId);
             } else if (role === "staff") {
-                io.to("kitchen").emit("update order");
+                io.to("kitchen").emit("update order", tableId);
             }
             io.to(customerRoom).emit("update order");
+        })
+
+        socket.on("change table", (oldTableId, newTableId) => {
+            io.to(customerRoom).emit("change table");
+            io.to("kitchen").emit("change table", oldTableId, newTableId);
         })
     })
 }

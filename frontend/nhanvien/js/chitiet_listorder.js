@@ -75,7 +75,9 @@ const cartHandler = {
     async renderOrders() {
         try {
             const tableId = window.location.href.split('/')[5];
-            const res = await fetch(`/api/current-order/${tableId}`);
+
+            // API lấy danh sách orders của bàn 
+            const res = await fetch(`/api/current-order/table/${tableId}`);
             const data = await res.json();
 
             this.d_cartContainer.innerHTML = "";
@@ -312,7 +314,7 @@ const tableHandler = {
             }
 
             // 1. Lấy thông tin bàn muốn chuyển 
-            const oldTableId = parseInt(window.location.href.split('/')[5]);
+            const oldTableId = window.location.href.split('/')[5];
             const newTableId = document.querySelector("#change-table-modal select").value;
 
             // 2. Gọi API chuyển bàn  
@@ -329,7 +331,7 @@ const tableHandler = {
             alert(data.message);
             if (data.success) {
                 await cartHandler.renderOrders();
-                sendSocket();
+                sendChangeTableSocket(oldTableId, newTableId);
                 bootstrap.Modal.getOrCreateInstance(document.querySelector("#change-table-modal")).hide();
             }
         })

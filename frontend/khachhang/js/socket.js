@@ -10,7 +10,13 @@ socket.on("update order", async () => {
     await orderedCartHandler.renderOrders();
 })
 
+// Nghe sự kiện chuyển bàn của nhân viên 
+socket.on("change table", async () => {
+    await orderedCartHandler.renderOrders();
+})
+
 // Hàm gửi sự kiện 
 function placeOrder() {
-    socket.emit("place order");
+    const tableId = window.location.href.split('/')[5];
+    socket.emit("place order", tableId);
 }
