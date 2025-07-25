@@ -1,3 +1,5 @@
+import cartHandler from "./cart.js";
+
 window.addEventListener("DOMContentLoaded", () => {
     foodCardHandler.init();
 })
@@ -101,3 +103,5 @@ const foodCardHandler = {
         })
     }
 }
+
+export default foodCardHandler;

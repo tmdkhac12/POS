@@ -1,7 +1,5 @@
-const express = require("express");
+const bepRouter = require('express').Router();
 const bepController = require("../../controller/ssr/bepController");
-
-const bepRouter = express.Router();
 
 bepRouter.get("/", (req, res) => {
     bepController.getHomePage(req, res);

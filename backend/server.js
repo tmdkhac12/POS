@@ -10,6 +10,9 @@ const server = http.createServer(app);
 const initiator = require("./configs/initiator");
 const configViewEngine = require("./configs/viewEngine");
 
+// Config View Engine
+configViewEngine(app); 
+
 // Serving static file 
 initiator.initStaticFilesServing(app);
 
@@ -20,9 +23,6 @@ initiator.initRouters(app);
 app.use(express.json());
 initiator.initApiRouters(app);
 
-// Config View Engine
-configViewEngine(app); 
-
 // Config Socket IO
 initiator.initSocketIO(server);
 
@@ -32,7 +32,7 @@ app.get("*", function (req, res) {
 })
 
 // Running server 
-const port = process.env.PORT || 3000;
-server.listen(port, () => {
-    console.log(`Server is running at "http://localhost:${port}/<module_name>"`);
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, () => {
+    console.log(`Server is running at "http://localhost:${PORT}/<module_name>"`);
 })

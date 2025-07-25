@@ -24,6 +24,18 @@ const getTaiKhoans = async (limit, offset) => {
     }
 }
 
+const getRoleId = async (username) => {
+    const sql = "select ma_nhom_quyen from taikhoan where username = ? and is_deleted = 0";
+
+    try {
+        const [result] = await pool.execute(sql, [username]);
+
+        return result[0].ma_nhom_quyen;
+    } catch (error) {
+        console.error("Get Role Id (TaiKhoanModel): " + error.message);
+    }
+}
+
 const searchTaiKhoans = async (name, limit, offset) => {
     const sql = `select * from taikhoan 
                 where (username like ? or ma_nhom_quyen like ?) and is_deleted = 0 limit ? offset ?`;
@@ -74,7 +86,7 @@ const isExistUsernameExcept = async (username, id) => {
     }
 }
 
-const getAdminPassword = async (username) => {
+const getPassword = async (username) => {
     const sql = "select hashPassword from taikhoan where username = ? and is_deleted = 0";
 
     try {
@@ -138,7 +150,7 @@ const softDeleteTaiKhoan = async (id) => {
 }
 
 module.exports = {
-    getAllTaiKhoans, getNumberOfTaiKhoan, getTaiKhoans, getAdminPassword,
+    getAllTaiKhoans, getNumberOfTaiKhoan, getTaiKhoans, getPassword, getRoleId,
     isExistUsername, isExistUsernameExcept,
     insertTaiKhoan,
     updateTaiKhoan, updateWithoutPassword,

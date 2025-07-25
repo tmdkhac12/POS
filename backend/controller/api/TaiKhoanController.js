@@ -10,6 +10,25 @@ const getPaginatedTaiKhoans = async (name, limit, offset) => {
     }
 }
 
+const checkLogin = async (username, inputPassword) => {
+    try {
+        if (!await taiKhoanModel.isExistUsername(username)) {
+            return -1; // Username does not exist
+        }
+
+        const userPassword = await taiKhoanModel.getPassword(username);
+        if (!await bcrypt.compare(inputPassword, userPassword)) {
+            return -2; // Incorrect password
+        }
+
+        const roleId = await taiKhoanModel.getRoleId(username);
+        return roleId;
+    } catch (error) {
+        console.error("Check Login (TaiKhoanController): " + error.message);
+        throw error;
+    }
+}
+
 const addTaiKhoan = async (username, password, roleId) => {
     try {
         if (await taiKhoanModel.isExistUsername(username))
@@ -30,7 +49,7 @@ const updateTaiKhoan = async (username, newPassword, adminUsername, adminPasswor
             return -1;
 
         // Kiểm tra mật khẩu admin có chính xác 
-        const adminHashed = await taiKhoanModel.getAdminPassword(adminUsername); 
+        const adminHashed = await taiKhoanModel.getPassword(adminUsername); 
         if (!await bcrypt.compare(adminPassword, adminHashed)) {
             return -2;
         }
@@ -69,6 +88,7 @@ const countTaiKhoan = async (name = "") => {
 
 module.exports = {
     getPaginatedTaiKhoans,
+    checkLogin,
     addTaiKhoan,
     updateTaiKhoan,
     deleteTaiKhoan,

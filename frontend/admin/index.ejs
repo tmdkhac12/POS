@@ -47,6 +47,26 @@
         </div>
     </div>
 
+    <!-- Logout modal -->
+    <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #212529; color: #FFFFFF; border-bottom: none;">
+                    <h5 class="modal-title" id="logoutModalLabel">Xác nhận đăng xuất</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center py-4">
+                    <i class="fas fa-sign-out-alt fa-3x text-secondary mb-3"></i>
+                    <p class="mb-0">Bạn có chắc chắn muốn đăng xuất?</p>
+                </div>
+                <div class="modal-footer justify-content-center border-top-0">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-primary text-white" style="background-color: #343A40; border-color: #343A40;" id="confirmLogout">Đồng ý</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <!-- My JS -->
     <script src="/admin/js/category.js"></script>
     <script src="/admin/js/customer.js"></script>
@@ -55,6 +75,7 @@
     <script src="/admin/js/product.js"></script>
     <script src="/admin/js/account.js"></script>
     <script src="/admin/js/table.js"></script>
+    <script src="/admin/js/logout.js"></script>
 
     <script>
         document.querySelectorAll("form").forEach(form => {

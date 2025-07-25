@@ -1,3 +1,5 @@
+import foodCardHandler from "./foodCard.js";
+
 document.addEventListener("DOMContentLoaded", () => {
     NavItemsHandler.init();
 
@@ -129,3 +131,5 @@ const ScrollBarHandler = {
         this.nextBtn.disabled = this.menuContainer.scrollLeft >= maxScroll;
     }
 }
+
+export default NavItemsHandler;

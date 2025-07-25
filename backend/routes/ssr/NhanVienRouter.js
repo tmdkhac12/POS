@@ -1,7 +1,5 @@
-const express = require("express");
+const nhanvienRouter = require('express').Router();
 const nhanvienController = require("../../controller/ssr/nhanvienController");
-
-const nhanvienRouter = express.Router();
 
 nhanvienRouter.get("/", (req, res) => {
     nhanvienController.getHomePage(req, res);
