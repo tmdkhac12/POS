@@ -2,6 +2,8 @@ document.addEventListener("DOMContentLoaded", () => {
     NavItemsHandler.init();
 
     ScrollBarHandler.init();
+
+    addPaymentBtnEvent();
 })
 
 const NavItemsHandler = {
@@ -109,4 +111,13 @@ const ScrollBarHandler = {
         this.prevBtn.disabled = this.menuContainer.scrollLeft <= 0;
         this.nextBtn.disabled = this.menuContainer.scrollLeft >= maxScroll;
     }
+}
+
+function addPaymentBtnEvent() {
+    const d_paymentBtn = document.querySelector('#payment-btn');
+    d_paymentBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const tableId = window.location.href.split('/')[5];
+        window.location.href = '/nhanvien/payment/' + tableId;
+    });
 }

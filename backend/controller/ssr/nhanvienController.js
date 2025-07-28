@@ -1,6 +1,7 @@
 const banModel = require("../../models/BanModel");
 const monanModel = require("../../models/MonAnModel");
 const nhomModel = require('../../models/NhomModel');
+const currentOrderModel = require("../../models/CurrentOrderModel");
 
 const getHomePage = async function (req, res) {
     try {
@@ -57,7 +58,22 @@ const getChiTietPage = async function (req, res) {
     }
 }
 
+const getPaymentPage = async function (req, res) {
+    try {
+        const tableId = req.params.tableId;
+
+        // Lấy orders của bàn
+        const orders = await currentOrderModel.getCurrentOrdersByTableJoinDish(tableId);
+
+        res.render("./nhanvien/payment", { orders});
+    } catch (error) {
+        console.error("Error in getPaymentPage: " + error.message);
+        res.status(500).send("Lỗi Server");
+    }
+}
+
 module.exports = {
     getHomePage,
-    getChiTietPage
+    getChiTietPage,
+    getPaymentPage
 };

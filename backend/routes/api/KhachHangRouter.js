@@ -21,6 +21,18 @@ khachHangRouter.get("/", async (req, res) => {
     }
 })
 
+khachHangRouter.get("/phone/:phoneNumber", async (req, res) => {
+    try {
+        const phone = req.params.phoneNumber;
+        const khachHang = await khachHangController.getKhachHangByPhoneNumber(phone);
+
+        res.status(200).json({ success: true, khachHang });
+    } catch (error) {
+        console.error("GET Route: '/api/khachhangs/phone/:phoneNumber' - (KhachHangRouter): " + error.message);
+        res.status(500).json({ success: false, message: "Lỗi Server" });
+    }
+})
+
 khachHangRouter.post("/", validateKhachHang, async (req, res) => {
     try {
         const name = req.body.name;

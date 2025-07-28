@@ -11,6 +11,19 @@ const getCurrentOrdersByTable = async (tableId) => {
     }
 }
 
+const getCurrentOrdersByTableJoinDish = async (tableId) => {
+    const sql = `SELECT c.*, m.ten_mon_an, m.hinh_anh FROM currentorder c
+                INNER JOIN monan m ON c.ma_mon_an = m.ma_mon_an
+                WHERE c.ma_ban = ?`;
+
+    try {
+        const [result] = await pool.execute(sql, [tableId]);
+        return result;
+    } catch (error) {
+        throw new Error("Get Current Orders By Table Join Dish (CurrentOrderModel): " + error.message)
+    }
+}
+
 const getCurrentOrdersStatusByTable = async (tableId) => {
     const sql = "SELECT ma_order, trang_thai FROM currentorder where ma_ban = ?";
 
@@ -86,9 +99,21 @@ const hardDeleteOrder = async (orderId) => {
     }
 }
 
+const hardDeleteOrderByTable = async (tableId, conn = pool) => {
+    const sql = `delete from currentorder where ma_ban = ?`;
+
+    try {
+        const [result] = await conn.execute(sql, [tableId]);
+
+        return result.affectedRows > 0;
+    } catch (error) {
+        throw new Error("Delete Order By Table (CurrentOrderModel): " + error.message)
+    }
+}
+
 module.exports = {
-    getCurrentOrdersByTable, getCurrentOrdersStatusByTable,
+    getCurrentOrdersByTable, getCurrentOrdersStatusByTable, getCurrentOrdersByTableJoinDish,
     insertOrder,
     updateOrder, updateOrderStatus, changeTable,
-    hardDeleteOrder
+    hardDeleteOrder, hardDeleteOrderByTable
 }

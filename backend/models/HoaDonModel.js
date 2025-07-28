@@ -95,7 +95,21 @@ const getNumberOfHoaDon = async (key, start, end) => {
     }
 }
 
+const insertHoaDon = async (total, newAccu, usedMoney, paymentMethod, khachHangId, conn = pool) => {
+    const sql = `insert into hoadon(tong_tien, tien_tich_duoc, tien_da_dung, hinh_thuc_thanh_toan, ma_khach_hang)
+                values (?,?,?,?,?)`;
+
+    try {
+        const [result] = await conn.execute(sql, [total, newAccu, usedMoney, paymentMethod, khachHangId]);
+
+        return result.insertId;        
+    } catch (error) {
+        throw new Error("Insert Hoa Don (HoaDonModel): " + error.message);
+    }               
+}
+
 module.exports = { 
     getAllHoaDons, getNumberOfHoaDon, getHoaDonOfKhachHang, getHoaDonById, getHoaDonJoinKhachHangById, getHoaDonsJoinKhachHang,
-    searchHoaDon
+    searchHoaDon,
+    insertHoaDon
 }

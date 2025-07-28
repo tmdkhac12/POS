@@ -36,6 +36,18 @@ const searchKhachHangs = async (name, limit, offset) => {
     }
 }
 
+const getKhachHangByPhone = async (phone) => {
+    const sql = "select * from khachhang where so_dien_thoai = ? and is_deleted = 0";
+
+    try {
+        const [result] = await pool.execute(sql, [phone]);
+
+        return result[0] || null;
+    } catch (error) {
+        throw new Error("Get Khach Hang By Phone (KhachHangModel): " + error.message);
+    }
+}
+
 const getNumberOfKhachHang = async (name) => {
     const sql = `select count(*) as soluong from khachhang
                  where ten_khach_hang like ? or so_dien_thoai like ? or cap_bac like ? and is_deleted = 0`;
@@ -75,6 +87,19 @@ const updateKhachHang = async (name, phone, total, accu, rank, id) => {
     }
 }
 
+const updateTotalAccuRank = async (total, accu, rank, id, conn = pool) => {
+    const sql = `update khachhang set tong_chi_tieu = ?, tien_tich_luy = ?, cap_bac = ? 
+                where ma_khach_hang = ?`;
+
+    try {
+        const [result] = await conn.execute(sql, [total, accu, rank, id]);
+
+        return result.affectedRows > 0;
+    } catch (error) {
+        throw new Error("Update Khach Hang Total Accu Rank (KhachHangModel): " + error.message)
+    }
+}
+
 const softDeleteKhachHang = async (id) => {
     const sql = "update khachhang set is_deleted = 1 where ma_khach_hang = ?";
 
@@ -88,9 +113,9 @@ const softDeleteKhachHang = async (id) => {
 }
 
 module.exports = {
-    getAllKhachHangs, getNumberOfKhachHang, getKhachHangs,
+    getAllKhachHangs, getNumberOfKhachHang, getKhachHangs, getKhachHangByPhone,
     insertKhachHang5P,
-    updateKhachHang,
+    updateKhachHang, updateTotalAccuRank,
     softDeleteKhachHang,
     searchKhachHangs 
 }

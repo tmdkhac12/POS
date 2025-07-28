@@ -36,4 +36,20 @@ hoaDonRouter.get("/invoice-details/:id", async (req, res) => {
     }
 })
 
+hoaDonRouter.post("/payment", async (req, res) => {
+    try {
+        const tableId = parseInt(req.body.tableId);
+        const usedMoney = parseFloat(req.body.usedMoney) || 0;
+        const phone = req.body.phone;
+        const paymentMethod = req.body.paymentMethod;
+
+        const isSuccess = await hoaDonController.payment(tableId, usedMoney, phone, paymentMethod);
+
+        res.status(200).json({success: isSuccess, message: "Thanh toán thành công" });
+    } catch (error) {
+        console.error("POST Route: '/api/hoadons/payment' - (HoaDonRouter): " + error.message);
+        res.status(500).json({success: false, message: "Lỗi Server"});
+    }
+})
+
 module.exports = hoaDonRouter;

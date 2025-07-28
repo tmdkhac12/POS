@@ -1,8 +1,11 @@
 require('dotenv').config({path: require('path').join(__dirname, '../.env')});
 const session = require('express-session');
 
+const FileStore = require('session-file-store')(session);
+
 // Middleware to start a session
 const startSession = session({
+    store: new FileStore(),
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,

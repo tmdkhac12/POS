@@ -20,5 +20,3 @@ function placeOrder() {
     const tableId = window.location.href.split('/')[5];
     socket.emit("place order", tableId);
 }
-
-export default placeOrder;

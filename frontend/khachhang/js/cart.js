@@ -1,6 +1,3 @@
-import placeOrder from "./socket.js";
-import NavItemsHandler from "./nav.js";
-
 document.addEventListener("DOMContentLoaded", () => {
     cartHandler.init();
     orderedCartHandler.init();
@@ -443,5 +440,3 @@ const updateModalHandler = {
 function formatCurrency(value) {
     return value.toLocaleString('vi-VN') + 'đ';
 }
-
-export default cartHandler;

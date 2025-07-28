@@ -108,11 +108,11 @@ const updateTable = async (name, id) => {
     }
 }
 
-const updateTableStatus = async (status, id) => {
+const updateTableStatus = async (status, id, conn = pool) => {
     const sql = "update ban set trang_thai = ? where ma_ban = ?";
 
     try {
-        const [result] = await pool.execute(sql, [status, id]);
+        const [result] = await conn.execute(sql, [status, id]);
 
         return result.affectedRows > 0;
     } catch (error) {

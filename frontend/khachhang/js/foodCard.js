@@ -1,5 +1,3 @@
-import cartHandler from "./cart.js";
-
 window.addEventListener("DOMContentLoaded", () => {
     foodCardHandler.init();
 })
@@ -86,7 +84,7 @@ const foodCardHandler = {
 
         // Bắt sự kiện không cho user nhập dấu '-'
         const notAllowedKey = ["-", "."];
-        input.addEventListener("keydown", (e) =>  {
+        input.addEventListener("keydown", (e) => {
             if (notAllowedKey.includes(e.key)) {
                 e.preventDefault();
             }
@@ -103,5 +101,3 @@ const foodCardHandler = {
         })
     }
 }
-
-export default foodCardHandler;

@@ -9,6 +9,15 @@ const getPaginatedKhachHangs = async (name, limit, offset) => {
     }
 }
 
+const getKhachHangByPhoneNumber = async (phone) => {
+    try {
+        return await khachHangModel.getKhachHangByPhone(phone);
+    } catch (error) {
+        console.error("Get Khach Hang By Phone Number (KhachHangController): " + error.message);
+        throw error;
+    }
+}
+
 const countKhachHang = async (name = "") => {
     try {
         return await khachHangModel.getNumberOfKhachHang(name);
@@ -46,7 +55,7 @@ const deleteKhachHang = async (id) => {
 }
 
 module.exports = {
-    getPaginatedKhachHangs,
+    getPaginatedKhachHangs, getKhachHangByPhoneNumber,
     countKhachHang,
     addKhachHang,
     updateKhachHang,

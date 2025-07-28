@@ -9,4 +9,8 @@ nhanvienRouter.get("/chitiet/:id", (req, res) => {
     nhanvienController.getChiTietPage(req, res);
 })
 
+nhanvienRouter.get("/payment/:tableId", (req, res) => {
+    nhanvienController.getPaymentPage(req, res);
+})
+
 module.exports = nhanvienRouter;

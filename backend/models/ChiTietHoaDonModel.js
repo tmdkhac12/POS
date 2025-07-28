@@ -15,6 +15,20 @@ const getChiTietsOfHoaDon = async (id) => {
     }
 }
 
+const insertChiTiet = async (dishId, invoiceId, quantity, money, unitPrice, orderTime, conn = pool) => {
+    const sql = `insert into chitiethoadon (ma_mon_an, ma_hoa_don, so_luong, thanh_tien, gia_mon_an, thoi_gian_dat)
+                values (?,?,?,?,?,?)`;    
+
+    try {
+        const [result] = await conn.execute(sql, [dishId, invoiceId, quantity, money, unitPrice, orderTime]);
+
+        return result.affectedRows > 0;        
+    } catch (error) {
+        throw new Error("Insert Chi Tiet (ChiTietHoaDonModel): " + error.message);
+    }   
+}
+
 module.exports = {
-    getChiTietsOfHoaDon
+    getChiTietsOfHoaDon,
+    insertChiTiet
 }
