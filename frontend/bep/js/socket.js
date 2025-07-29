@@ -13,8 +13,8 @@ socket.on("update order", async (tableId) => {
         await loadOrdersHandler.renderOrders(currentTableId);
     }
 
-    tableHandler.updateTableStatus(currentTableId);
-    tableHandler.updatePendingStatus(currentTableId);
+    tableHandler.updateTableStatus(tableId);
+    tableHandler.updatePendingStatus(tableId);
 })
 
 // Nghe sự kiện chuyển bàn của nhân viên 
@@ -42,8 +42,8 @@ socket.on("place order", async (tableId) => {
         await loadOrdersHandler.renderOrders(currentTableId);
     }
 
-    tableHandler.updateTableStatus(currentTableId);
-    tableHandler.updatePendingStatus(currentTableId);
+    tableHandler.updateTableStatus(tableId);
+    tableHandler.updatePendingStatus(tableId);
 })
 
 // Hàm gửi sự kiện 

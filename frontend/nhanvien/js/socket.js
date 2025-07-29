@@ -7,17 +7,27 @@ const socket = io({
 
 // Nghe sự kiện đặt món của khách hàng 
 socket.on("place order", async (tableId) => {
-    const currentId = window.location.href.split('/')[5];
-    if (currentId === tableId) {
-        await cartHandler.renderOrders();
+    if (window.location.pathname === "/nhanvien/") {
+        const data = await tableHandler.updateCardTableStatus(tableId);
+        alert(`${data.ban.ten_ban} vừa gọi món`);
+    } else {
+        const currentId = window.location.href.split('/')[5];
+        if (currentId === tableId) {
+            await cartHandler.renderOrders();
+        }
     }
 })
 
 // Nghe sự kiện cập nhật của bếp 
 socket.on("update order", async (tableId) => {
-    const currentId = window.location.href.split('/')[5];
-    if (currentId === tableId) {
-        await cartHandler.renderOrders();
+    if (window.location.pathname === "/nhanvien/") {
+        const data = await tableHandler.updateCardTableStatus(tableId);
+        alert(`Món ăn ở ${data.ban.ten_ban} vừa được bếp cập nhật trạng thái`);
+    } else {
+        const currentId = window.location.href.split('/')[5];
+        if (currentId === tableId) {
+            await cartHandler.renderOrders();
+        }
     }
 })
 

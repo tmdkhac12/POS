@@ -354,6 +354,19 @@ const tableHandler = {
                 alert(data.message);
             }
         }
+    },
+
+    async updateCardTableStatus(cardTableId) {
+        const res = await fetch(`/api/bans/${cardTableId}`);
+        const data = await res.json();
+
+        if (data.ban.trang_thai === "Có khách") {
+            const tableCard = document.querySelector(`.table-card[data-table-id="${cardTableId}"]`); 
+            tableCard.setAttribute("data-status", "occupied");
+            tableCard.querySelector(".card-text").textContent = "Xem chi tiết";
+        }
+
+        return data;
     }
 }
 
