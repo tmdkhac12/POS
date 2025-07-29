@@ -58,6 +58,10 @@ const initSocketIO = (server) => {
             customerRoom = "customer-" + tableId;
         })
 
+        socket.on("payment", (tableId) => {
+            io.to("staff").emit("payment", tableId);
+        })
+
         socket.on("place order", (tableId) => {
             io.to("staff").emit("place order", tableId);
             io.to("kitchen").emit("place order", tableId);

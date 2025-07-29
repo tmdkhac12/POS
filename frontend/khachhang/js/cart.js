@@ -263,6 +263,7 @@ const cartHandler = {
 
 const orderedCartHandler = {
     d_orderedCartContainer: document.querySelector("#ordered-cart-items"),
+    d_paymentBtn: document.querySelector("#payment-btn"),
 
     // Getters
     get ad_orderedCartItems() {
@@ -271,6 +272,7 @@ const orderedCartHandler = {
 
     init() {
         this.renderOrders();
+        this._addPaymentBtnEvent();
     },
 
     // Methods
@@ -377,6 +379,15 @@ const orderedCartHandler = {
                 alert(data.message);
             }
         }
+    },
+
+    _addPaymentBtnEvent() {
+        this.d_paymentBtn.addEventListener("click", () => {
+            if (confirm("Bạn có chắc muốn gọi nhân viên để thanh toán?")) {
+                sendPaymentSocket();
+                alert("Đã gửi thông báo, sẽ có nhân viên đến hướng dẫn thanh toán!");
+            }
+        })
     }
 }
 

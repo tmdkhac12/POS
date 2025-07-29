@@ -20,3 +20,8 @@ function placeOrder() {
     const tableId = window.location.href.split('/')[5];
     socket.emit("place order", tableId);
 }
+
+function sendPaymentSocket() {
+    const tableId = window.location.href.split('/')[5];
+    socket.emit("payment", tableId);
+}
