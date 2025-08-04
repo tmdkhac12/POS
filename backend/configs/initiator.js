@@ -35,6 +35,8 @@ const initApiRouters = (app) => {
     app.use("/api/khuyenmais", require('../routes/api/KhuyenMaiRouter.js'));
     app.use("/api/hoadons", require('../routes/api/HoaDonRouter.js'));
     app.use("/api/current-order", require('../routes/api/CurrentOrderRouter.js'));
+    app.use("/api/notification", require('../routes/api/ThongBaoRouter.js'));
+
     app.use("/api/login", sessionConfiguration.startSession, require('../routes/api/LoginRouter.js'));
 }
 
@@ -58,8 +60,12 @@ const initSocketIO = (server) => {
             customerRoom = "customer-" + tableId;
         })
 
-        socket.on("payment", (tableId) => {
-            io.to("staff").emit("payment", tableId);
+        socket.on("notification", (notificationId) => {
+            io.to("staff").emit("notification", notificationId);
+        })
+
+        socket.on("payment", (notificationId) => {
+            io.to("staff").emit("payment", notificationId);
         })
 
         socket.on("place order", (tableId) => {

@@ -8,8 +8,7 @@ const socket = io({
 // Nghe sự kiện đặt món của khách hàng 
 socket.on("place order", async (tableId) => {
     if (window.location.pathname === "/nhanvien/") {
-        const data = await updateCardTableStatus(tableId);
-        alert(`${data.ban.ten_ban} vừa gọi món`);
+        await updateCardTableStatus(tableId);
     } else {
         const currentId = window.location.href.split('/')[5];
         if (currentId === tableId) {
@@ -20,10 +19,7 @@ socket.on("place order", async (tableId) => {
 
 // Nghe sự kiện cập nhật của bếp 
 socket.on("update order", async (tableId) => {
-    if (window.location.pathname === "/nhanvien/") {
-        const data = await updateCardTableStatus(tableId);
-        alert(`Món ăn ở ${data.ban.ten_ban} vừa được bếp cập nhật trạng thái`);
-    } else {
+    if (window.location.pathname !== "/nhanvien/") {
         const currentId = window.location.href.split('/')[5];
         if (currentId === tableId) {
             await cartHandler.renderOrders();
@@ -31,10 +27,13 @@ socket.on("update order", async (tableId) => {
     }
 })
 
-socket.on("payment", async (tableId) => {
-    const data = await updateCardTableStatus(tableId);
-    alert(`Khách hàng ở ${data.ban.ten_ban} yêu cầu thanh toán`);
+socket.on("payment", async (notificationId) => {
+    await NotificationHandler.appendNotification(notificationId);
 })
+
+socket.on("notification", async (notificationId) => {
+    await NotificationHandler.appendNotification(notificationId);
+});
 
 // Hàm gửi sự kiện 
 function sendSocket() {

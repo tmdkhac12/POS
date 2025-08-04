@@ -12,7 +12,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer> </script>
 
     <!-- My CSS -->
-    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="/nhanvien/css/style.css">
+    <link rel="stylesheet" href="/nhanvien/css/notification.css">
 
     <!-- Icon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -20,8 +21,40 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-sm bg-danger justify-content-center p-2">
-        <p class="m-0 text-white flex-fill text-center">Bàn</p>
+    <nav class="navbar navbar-expand-sm bg-danger justify-content-end p-2">
+        <span class="m-0 text-white" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">Bàn</span>
+
+        <div class="notification-container me-2">
+            <button class="notification-btn" id="notificationBtn">
+                <i class="bi-bell-fill"></i>
+                <span class="notification-badge" style="display: none;">0</span>
+            </button>
+
+            <div class="notification-dropdown" id="notificationDropdown">
+                <div class="notification-header">
+                    <h6 class="notification-title">Notifications</h6>
+                </div>
+
+                <ul class="notification-list">
+                    <% for (const noti of notifications) { %>
+                    <li class="notification-item <%= noti.trang_thai === 0 ? "unread" : "read" %>" data-id="<%= noti.ma_thong_bao %>" data-time="<%= noti.thoi_gian_tao %>">
+                        <div class="notification-icon <%= noti.phan_loai === "Gọi món" ? "order" : "payment" %>">
+                            <i class="<%= noti.phan_loai === "Gọi món" ? "bi bi-bag" : "bi bi-credit-card" %>"></i>
+                        </div>
+                        <div class="notification-text">
+                            <p class="notification-message"><%= noti.noi_dung %></p>
+                            <span class="notification-time">0 minutes ago</span>
+                        </div>
+                        <button class="check-btn <%= noti.trang_thai === 1 ? "checked" : "" %>">
+                            <i class="bi bi-check"></i>
+                        </button>
+                    </li>
+                    <% } %>
+                    <div id="loading" style="text-align:center; opacity: 0.5; display:none;">Đang tải...</div>
+                </ul>
+            </div>
+        </div>
+
         <button class="btn btn-light ml-auto" data-bs-toggle="modal" data-bs-target="#logoutModal">Đăng xuất</button>
     </nav>
 
@@ -66,6 +99,7 @@
     </div>
 
     <script src="/nhanvien/js/logout.js"></script>
+    <script src="/nhanvien/js/notification.js"></script>
     <script src="/nhanvien/js/util.js"></script>
 
     <script src="/socket.io/socket.io.js"></script>

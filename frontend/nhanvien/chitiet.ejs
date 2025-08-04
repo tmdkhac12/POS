@@ -12,6 +12,7 @@
 
     <!-- My CSS -->
     <link rel="stylesheet" href="/nhanvien/css/chitiet.css">
+    <link rel="stylesheet" href="/nhanvien/css/notification.css">
     <link rel="stylesheet" href="/nhanvien/css/nav.css">
 
     <!-- Icon -->
@@ -25,6 +26,36 @@
     <nav class="navbar navbar-expand-sm bg-danger p-2">
         <a href="/nhanvien" class=""><i class="fa fa-arrow-left" aria-hidden="true"></i></a>
         <p class="m-auto text-white">Chi Tiết <%= tableInfo.ten_ban %></p>
+        <div class="notification-container">
+            <button class="notification-btn" id="notificationBtn">
+                <i class="bi-bell-fill"></i>
+                <span class="notification-badge">0</span>
+            </button>
+
+            <div class="notification-dropdown" id="notificationDropdown">
+                <div class="notification-header">
+                    <h6 class="notification-title">Notifications</h6>
+                </div>
+
+                <ul class="notification-list">
+                     <% for (const noti of notifications) { %>
+                    <li class="notification-item <%= noti.trang_thai === 0 ? "unread" : "read" %>" data-id="<%= noti.ma_thong_bao %>" data-time="<%= noti.thoi_gian_tao %>">
+                        <div class="notification-icon <%= noti.phan_loai === "Gọi món" ? "order" : "payment" %>">
+                            <i class="<%= noti.phan_loai === "Gọi món" ? "bi bi-bag" : "bi bi-credit-card" %>"></i>
+                        </div>
+                        <div class="notification-text">
+                            <p class="notification-message"><%= noti.noi_dung %></p>
+                            <span class="notification-time">0 minutes ago</span>
+                        </div>
+                        <button class="check-btn <%= noti.trang_thai === 1 ? "checked" : "" %>">
+                            <i class="bi bi-check"></i>
+                        </button>
+                    </li>
+                    <% } %>
+                    <div id="loading" style="text-align:center; opacity: 0.5; display:none;">Đang tải...</div>
+                </ul>
+            </div>
+        </div>
     </nav>
 
     <div class="container-fluid h-90">
@@ -111,7 +142,7 @@
                         <option value="0">-- Chọn bàn --</option>
                         <!-- EJS render danh sách bàn động ở đây -->
                         <% for (const table of tables) { %>
-                            <option value="<%= table.ma_ban %>"><%= table.ten_ban %></option>
+                        <option value="<%= table.ma_ban %>"><%= table.ten_ban %></option>
                         <% } %>
                     </select>
                 </div>
@@ -233,6 +264,7 @@
     <!-- My JS -->
     <script src="/nhanvien/js/chitiet_listorder.js"></script>
     <script src="/nhanvien/js/chitiet_nav.js"></script>
+    <script src="/nhanvien/js/notification.js"></script>
     <script src="/nhanvien/js/util.js"></script>
 
     <script src="/socket.io/socket.io.js"></script>

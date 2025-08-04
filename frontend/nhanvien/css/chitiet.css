@@ -1,6 +1,6 @@
 #food-items {
     overflow-y: auto;
-    max-height: calc(100vh - 180px);
+    max-height: calc(100vh - 193px);
 }
 
 .fa-arrow-left {
@@ -33,13 +33,13 @@
     position: fixed;
     top: 40;
     right: 0;
-    height: calc(100vh - 40px);
+    height: calc(100vh - 53px);
 }
 
 /* Cart CSS */
 #cart-container {
     overflow-y: auto;
-    max-height: calc(100vh - 125px - 55px - 40px);
+    max-height: calc(100vh - 125px - 55px - 53px);
 }
 
 .list-group-item {

@@ -296,6 +296,7 @@ const foodCardHandler = {
                 modalHeader.textContent = header;
                 modalPrice.textContent = price;
             })
+            
         })
     },
 }

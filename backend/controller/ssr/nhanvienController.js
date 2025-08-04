@@ -1,6 +1,7 @@
 const banModel = require("../../models/BanModel");
 const monanModel = require("../../models/MonAnModel");
 const nhomModel = require('../../models/NhomModel');
+const thongBaoModel = require('../../models/ThongBaoModel');
 const currentOrderModel = require("../../models/CurrentOrderModel");
 
 const getHomePage = async function (req, res) {
@@ -8,8 +9,14 @@ const getHomePage = async function (req, res) {
         // Lấy danh sách bàn
         const tables = await banModel.getAllBans();
 
+        // Lấy danh sách thông báo
+        const LIMIT = 5;
+        const OFFSET = 0;
+        const notifications = await thongBaoModel.getNotifications(LIMIT, OFFSET);
+
         const homePageData = {
-            tables
+            tables,
+            notifications
         }
 
         // console.log(tables)
@@ -43,11 +50,17 @@ const getChiTietPage = async function (req, res) {
             dishes.push(await monanModel.getDishesByGroup(group.ma_nhom));
         }
 
+        // Lấy danh sách thông báo
+        const LIMIT = 5;
+        const OFFSET = 0;
+        const notifications = await thongBaoModel.getNotifications(LIMIT, OFFSET);
+
         const chiTietPageData = {
             tables,
             tableInfo,
             groups,
-            dishes
+            dishes,
+            notifications
         }
 
         // console.log(dishes[0]);
