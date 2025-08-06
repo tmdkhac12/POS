@@ -157,6 +157,7 @@ const PaymentHandler = {
                     this.d_customerPhoneInput.value = phone;
                     this.d_customerNameInput.value = name;
                     this.d_customerAccuInput.value = accu.toLocaleString("vi-VN");
+                    this.d_customerAccuInput.setAttribute("data-accu", accu);
 
                     bootstrap.Modal.getInstance(document.querySelector('#add-customer-modal')).hide();
                 }

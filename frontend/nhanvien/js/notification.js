@@ -167,8 +167,8 @@ const NotificationHandler = {
         getNotificationHTML(o_notification) {
             return `
                 <li class="notification-item ${o_notification.trang_thai === 0 ? "unread" : "read"}" data-id="${o_notification.ma_thong_bao}" data-time="${o_notification.thoi_gian_tao}">
-                    <div class="notification-icon ${o_notification.phan_loai === "Gọi món" ? "order" : "payment"}">
-                        <i class="${o_notification.phan_loai === "Gọi món" ? "bi bi-bag" : "bi bi-credit-card"}"></i>
+                    <div class="notification-icon ${this.getNotificationTypeClass(o_notification.phan_loai)}">
+                        <i class="${this.getNotificationIconClass(o_notification.phan_loai)}"></i>
                     </div>
                     <div class="notification-text">
                         <p class="notification-message">${o_notification.noi_dung}</p>
@@ -179,6 +179,32 @@ const NotificationHandler = {
                     </button>
                 </li>
             `;
+        },
+
+        getNotificationIconClass(type) {
+            switch (type) {
+                case "Gọi món":
+                    return "bi bi-bag";
+                case "Thanh toán":
+                    return "bi bi-credit-card";
+                case "Hỗ trợ":
+                    return "bi bi-headset";
+                default:
+                    return "";
+            }
+        },
+
+        getNotificationTypeClass(type) {
+            switch (type) {
+                case "Gọi món":
+                    return "order";
+                case "Thanh toán":
+                    return "payment";
+                case "Hỗ trợ":
+                    return "support";
+                default:
+                    return "";
+            }
         }
     },
 }

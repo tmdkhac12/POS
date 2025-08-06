@@ -21,10 +21,6 @@ function placeOrder() {
     socket.emit("place order", tableId);
 }
 
-function sendPaymentSocket(notificationId) {
-    socket.emit("payment", notificationId);
-}
-
 function sendNotificationSocket(notificationId) {
     socket.emit("notification", notificationId);
 }

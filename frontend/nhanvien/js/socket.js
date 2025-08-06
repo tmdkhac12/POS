@@ -27,10 +27,6 @@ socket.on("update order", async (tableId) => {
     }
 })
 
-socket.on("payment", async (notificationId) => {
-    await NotificationHandler.appendNotification(notificationId);
-})
-
 socket.on("notification", async (notificationId) => {
     await NotificationHandler.appendNotification(notificationId);
 });

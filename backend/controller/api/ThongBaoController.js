@@ -1,6 +1,8 @@
 const banModel = require('../../models/BanModel.js');
 const thongBaoModel = require('../../models/ThongBaoModel.js');
 
+const thongBaoUtil = require('../../util/NotificationUtil.js');
+
 const getNotifications = async (limit, offset) => {
     try {
         return await thongBaoModel.getNotifications(limit, offset);
@@ -28,14 +30,7 @@ const createNotification = async (tableId, category) => {
         }
         const tableName = table.ten_ban;
 
-        let content = "";
-        if (category === "Gọi món") {
-            content = `Có món mới từ bàn ${tableName}`;
-        } else if (category === "Thanh toán") {
-            content = `${tableName} yêu cầu thanh toán`;
-        } else {
-            throw new Error("Invalid category");
-        }
+        let content = thongBaoUtil.getNotificationMessage(category, tableName);
         const status = 0; // Unread
 
         return await thongBaoModel.createNotification(tableId, content, status, category);

@@ -64,8 +64,12 @@ currentOrderRouter.put("/:orderId", async (req, res) => {
 
 currentOrderRouter.patch("/move-table", async (req, res) => {
     try {
-        const oldId = req.body.oldTableId;
-        const newId = req.body.newTableId;
+        const oldId = parseInt(req.body.oldTableId);
+        const newId = parseInt(req.body.newTableId);
+
+        if (newId === 0) {
+            return res.status(400).json({ success: false, message: "Vui lòng chọn bàn mới!" });
+        }
 
         const isSuccess = await currentOrderController.changeTable(oldId, newId);
         if (isSuccess) {

@@ -1,3 +1,31 @@
+<% 
+function getNotificationIconClass(type) {
+    switch (type) {
+        case "Gọi món":
+            return "bi bi-bag";
+        case "Thanh toán":
+            return "bi bi-credit-card";
+        case "Hỗ trợ":
+            return "bi bi-headset";
+        default:
+            return "";
+    }
+}
+
+function getNotificationTypeClass(type) {
+    switch (type) {
+        case "Gọi món":
+            return "order";
+        case "Thanh toán":
+            return "payment";
+        case "Hỗ trợ":
+            return "support";
+        default:
+            return "";
+    }
+}
+%>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -38,8 +66,8 @@
                 <ul class="notification-list">
                     <% for (const noti of notifications) { %>
                     <li class="notification-item <%= noti.trang_thai === 0 ? "unread" : "read" %>" data-id="<%= noti.ma_thong_bao %>" data-time="<%= noti.thoi_gian_tao %>">
-                        <div class="notification-icon <%= noti.phan_loai === "Gọi món" ? "order" : "payment" %>">
-                            <i class="<%= noti.phan_loai === "Gọi món" ? "bi bi-bag" : "bi bi-credit-card" %>"></i>
+                        <div class="notification-icon <%= getNotificationTypeClass(noti.phan_loai) %>">
+                            <i class="<%= getNotificationIconClass(noti.phan_loai) %>"></i>
                         </div>
                         <div class="notification-text">
                             <p class="notification-message"><%= noti.noi_dung %></p>

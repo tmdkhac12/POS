@@ -175,20 +175,7 @@ const cartHandler = {
                     localStorage.clear();
                     this.loadCart();
                     placeOrder();
-
-                    // Tạo thông báo để thông báo và gửi cho nhân viên
-                    const notiRes = await fetch(`/api/notification`, {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify({
-                            tableId: tableId,
-                            category: "Gọi món"
-                        })
-                    });
-                    const notiData = await notiRes.json();
-                    sendNotificationSocket(notiData.insertedId);
+                    NotificationHandler.sendOrderNotification(tableId);
                 } else {
                     alert(data.message);
                 }
@@ -398,19 +385,8 @@ const orderedCartHandler = {
     _addPaymentBtnEvent() {
         this.d_paymentBtn.addEventListener("click", async () => {
             if (confirm("Bạn có chắc muốn gọi nhân viên để thanh toán?")) {
-                const res = await fetch(`/api/notification`, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({ 
-                        tableId: window.location.href.split('/')[5],
-                        category: "Thanh toán",
-                     })
-                });
-                const data = await res.json();
-                sendPaymentSocket(data.insertedId);
-                alert("Đã gửi thông báo, sẽ có nhân viên đến hướng dẫn thanh toán!");
+                const tableId = window.location.href.split('/')[5];
+                await NotificationHandler.sendPaymentNotification(tableId);
             }
         })
     }

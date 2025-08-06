@@ -34,6 +34,6 @@ loginForm.addEventListener("submit", async (event) => {
             alert(data.message || "Đăng nhập thất bại!");
         }
     } catch (error) {
-        console.log(error);
+        alert("Đăng nhập thất bại! Vui lòng thử lại sau.");
     }
 });

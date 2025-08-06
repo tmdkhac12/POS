@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 04, 2025 at 05:58 PM
+-- Generation Time: Aug 06, 2025 at 04:25 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -39,19 +39,18 @@ CREATE TABLE `ban` (
 --
 
 INSERT INTO `ban` (`ma_ban`, `ten_ban`, `trang_thai`, `is_deleted`) VALUES
-(1, 'Bàn 1', 'Có khách', 0),
-(2, 'Bàn 2', 'Có khách', 0),
-(3, 'Bàn 3', 'Có khách', 0),
+(1, 'Bàn 1', 'Trống', 0),
+(2, 'Bàn 2', 'Trống', 0),
+(3, 'Bàn 3', 'Trống', 0),
 (4, 'Bàn 4', 'Trống', 0),
 (5, 'Bàn 5', 'Trống', 0),
-(6, 'Bàn 6', 'Có khách', 0),
-(7, 'Bàn 7', 'Có khách', 0),
+(6, 'Bàn 6', 'Trống', 0),
+(7, 'Bàn 7', 'Trống', 0),
 (8, 'Bàn 8', 'Trống', 0),
 (9, 'Bàn 9', 'Trống', 0),
 (10, 'Bàn 10', 'Trống', 0),
 (11, 'Bàn 11', 'Trống', 0),
-(12, 'Bàn 12', 'Trống', 0),
-(13, 'Bàn 25', 'Trống', 1);
+(12, 'Bàn 12', 'Trống', 0);
 
 -- --------------------------------------------------------
 
@@ -115,18 +114,7 @@ INSERT INTO `chitiethoadon` (`ma_chi_tiet`, `ma_mon_an`, `ma_hoa_don`, `so_luong
 (38, 19, 14, 2, 50000, 25000, '2025-05-14 12:02:00', NULL),
 (39, 20, 15, 3, 75000, 25000, '2025-05-15 13:30:00', NULL),
 (40, 6, 15, 1, 98000, 98000, '2025-05-15 13:31:00', NULL),
-(41, 2, 15, 2, 136000, 68000, '2025-05-15 13:32:00', NULL),
-(60, 16, 31, 1, 35000, 35000, '2025-07-28 18:38:33', NULL),
-(61, 13, 31, 2, 156000, 78000, '2025-07-28 18:38:39', NULL),
-(62, 20, 31, 2, 50000, 25000, '2025-07-28 18:38:42', NULL),
-(63, 3, 32, 2, 116000, 58000, '2025-07-04 17:53:11', NULL),
-(64, 18, 33, 2, 50000, 25000, '2025-07-20 12:23:21', NULL),
-(65, 15, 33, 1, 58000, 58000, '2025-07-20 12:23:27', NULL),
-(66, 2, 35, 2, 122400, 61200, '2025-07-06 12:43:29', NULL),
-(67, 3, 35, 1, 58000, 58000, '2025-07-19 18:53:56', NULL),
-(68, 15, 36, 1, 58000, 58000, '2025-07-28 20:18:54', NULL),
-(69, 18, 37, 1, 25000, 25000, '2025-07-29 18:18:34', NULL),
-(70, 19, 38, 1, 25000, 25000, '2025-08-03 14:03:49', NULL);
+(41, 2, 15, 2, 136000, 68000, '2025-05-15 13:32:00', NULL);
 
 -- --------------------------------------------------------
 
@@ -144,18 +132,6 @@ CREATE TABLE `currentorder` (
   `ghi_chu` text DEFAULT NULL,
   `trang_thai` enum('Đã nhận','Đang chế biến','Hoàn thành') DEFAULT 'Đã nhận'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Mã món ăn, mã bàn có tham chiếu';
-
---
--- Dumping data for table `currentorder`
---
-
-INSERT INTO `currentorder` (`ma_order`, `ma_mon_an`, `ma_ban`, `don_gia_ap_dung`, `so_luong`, `thoi_gian_dat`, `ghi_chu`, `trang_thai`) VALUES
-(103, 3, 1, 58000, 1, '2025-07-28 19:00:14', '', 'Đã nhận'),
-(104, 15, 1, 58000, 1, '2025-07-28 19:00:14', '', 'Đã nhận'),
-(108, 8, 3, 65000, 1, '2025-07-28 19:03:20', '', 'Đã nhận'),
-(114, 4, 2, 70200, 1, '2025-07-28 20:10:05', '', 'Đã nhận'),
-(115, 18, 6, 25000, 1, '2025-07-28 20:10:49', '', 'Hoàn thành'),
-(130, 3, 7, 58000, 1, '2025-08-04 16:47:55', '', 'Đã nhận');
 
 -- --------------------------------------------------------
 
@@ -192,14 +168,7 @@ INSERT INTO `hoadon` (`ma_hoa_don`, `thoi_gian_tao`, `tong_tien`, `tien_tich_duo
 (12, '2025-05-12 10:10:00', 244000, 2200, 0, 'Tiền mặt', 5),
 (13, '2025-05-13 19:20:00', 151000, 1960, 0, 'Thẻ', 6),
 (14, '2025-05-14 12:00:00', 115000, 4100, 15000, 'Chuyển khoản', 1),
-(15, '2025-05-15 13:30:00', 309000, 3500, 0, 'Tiền mặt', 2),
-(31, '2025-07-28 18:46:19', 200000, 14000, 41000, 'Tiền mặt', 4),
-(32, '2025-07-28 18:47:29', 0, 0, 116000, 'Chuyển khoản', 4),
-(33, '2025-07-28 18:50:59', 108000, 7560, 0, 'Thẻ', 4),
-(35, '2025-07-28 18:58:56', 180400, 3608, 0, 'Tiền mặt', 14),
-(36, '2025-07-28 20:19:30', 58000, 1160, 0, 'Tiền mặt', 14),
-(37, '2025-07-29 18:46:10', 25000, 500, 0, 'Tiền mặt', 14),
-(38, '2025-08-03 14:10:53', 25000, 500, 0, 'Tiền mặt', 14);
+(15, '2025-05-15 13:30:00', 309000, 3500, 0, 'Tiền mặt', 2);
 
 -- --------------------------------------------------------
 
@@ -234,7 +203,8 @@ INSERT INTO `khachhang` (`ma_khach_hang`, `ten_khach_hang`, `so_dien_thoai`, `to
 (10, 'Đoàn Ánh Tuyết', '0990123456', 3000000, 90000, 'Bạc', 0),
 (11, 'Nguyễn Khắc Khổ', '0585869347', 0, 0, 'Đồng', 1),
 (12, 'Lý Cửng', '0933356723', 0, 0, 'Đồng', 1),
-(14, 'Đông Khất', '0585869346', 288400, 5768, 'Đồng', 0);
+(14, 'Đông Khất', '0585869346', 349600, 6992, 'Đồng', 0),
+(15, 'Nguyễn Thanh Tùng', '0988333567', 128200, 2564, 'Đồng', 0);
 
 -- --------------------------------------------------------
 
@@ -326,8 +296,7 @@ INSERT INTO `nhom` (`ma_nhom`, `ten_nhom`, `hinh_anh`, `is_deleted`) VALUES
 (1, 'Ramen', 'ramen.jfif', 0),
 (2, 'Cơm', 'rice.jfif', 0),
 (3, 'Món chiên', 'fried.jfif', 0),
-(4, 'Đồ uống', 'juice.avif', 0),
-(5, 'abc', 'z6696451241980_659c4c7ec4d5fb60da5f6ccb7852d835_1749967291170.jpg', 1);
+(4, 'Đồ uống', 'juice.avif', 0);
 
 -- --------------------------------------------------------
 
@@ -350,8 +319,7 @@ CREATE TABLE `taikhoan` (
 INSERT INTO `taikhoan` (`ma_tai_khoan`, `username`, `hashPassword`, `ma_nhom_quyen`, `is_deleted`) VALUES
 (1, 'admin', '$2a$12$Wce/k61KhS2Bx86aaoZZYOTnw.ylrSHEYmutpZz0wVOKJHz4Z3q0y', 1, 0),
 (2, 'nhanvien', '$2a$12$Wce/k61KhS2Bx86aaoZZYOTnw.ylrSHEYmutpZz0wVOKJHz4Z3q0y', 2, 0),
-(3, 'bep', '$2a$12$Wce/k61KhS2Bx86aaoZZYOTnw.ylrSHEYmutpZz0wVOKJHz4Z3q0y', 3, 0),
-(4, 'abc12', '$2b$12$PfA1vYgLVL8j/qO4lMjRKOBYxxCRQdPKWGxSkedO382YBcuC0Mgyq', 1, 0);
+(3, 'bep', '$2a$12$Wce/k61KhS2Bx86aaoZZYOTnw.ylrSHEYmutpZz0wVOKJHz4Z3q0y', 3, 0);
 
 -- --------------------------------------------------------
 
@@ -364,25 +332,9 @@ CREATE TABLE `thongbao` (
   `ma_ban` int(11) DEFAULT NULL,
   `noi_dung` text DEFAULT NULL,
   `trang_thai` tinyint(1) DEFAULT NULL,
-  `phan_loai` enum('Gọi món','Thanh toán') DEFAULT NULL,
+  `phan_loai` enum('Gọi món','Thanh toán','Hỗ trợ') DEFAULT NULL,
   `thoi_gian_tao` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `thongbao`
---
-
-INSERT INTO `thongbao` (`ma_thong_bao`, `ma_ban`, `noi_dung`, `trang_thai`, `phan_loai`, `thoi_gian_tao`) VALUES
-(1, 1, 'Có order từ Bàn 1', 1, 'Gọi món', '2025-08-01 17:45:27'),
-(2, 1, 'Bàn 1 yêu cầu thanh toán', 1, 'Thanh toán', '2025-08-01 17:45:49'),
-(3, 6, 'Bàn 6 yêu cầu thanh toán', 1, 'Thanh toán', '2025-08-01 17:47:25'),
-(4, 7, 'Bàn 7 yêu cầu thanh toán ', 1, 'Thanh toán', '2025-08-01 17:47:25'),
-(5, 2, 'Có order từ Bàn 2', 1, 'Gọi món', '2025-08-01 17:47:58'),
-(6, 7, 'Có món mới từ bàn Bàn 7', 1, 'Gọi món', '2025-08-03 14:01:13'),
-(7, 7, 'Có món mới từ bàn Bàn 7', 1, 'Gọi món', '2025-08-03 14:03:49'),
-(8, 7, 'Bàn Bàn 7 yêu cầu thanh toán', 1, 'Thanh toán', '2025-08-03 14:08:44'),
-(9, 7, 'Bàn 7 yêu cầu thanh toán', 1, 'Thanh toán', '2025-08-03 14:09:24'),
-(10, 7, 'Có món mới từ bàn Bàn 7', 0, 'Gọi món', '2025-08-04 16:47:55');
 
 --
 -- Indexes for dumped tables
@@ -466,31 +418,31 @@ ALTER TABLE `thongbao`
 -- AUTO_INCREMENT for table `ban`
 --
 ALTER TABLE `ban`
-  MODIFY `ma_ban` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `ma_ban` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `chitiethoadon`
 --
 ALTER TABLE `chitiethoadon`
-  MODIFY `ma_chi_tiet` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=71;
+  MODIFY `ma_chi_tiet` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- AUTO_INCREMENT for table `currentorder`
 --
 ALTER TABLE `currentorder`
-  MODIFY `ma_order` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=131;
+  MODIFY `ma_order` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `hoadon`
 --
 ALTER TABLE `hoadon`
-  MODIFY `ma_hoa_don` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `ma_hoa_don` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `khachhang`
 --
 ALTER TABLE `khachhang`
-  MODIFY `ma_khach_hang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `ma_khach_hang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `khuyenmai`
@@ -508,19 +460,19 @@ ALTER TABLE `monan`
 -- AUTO_INCREMENT for table `nhom`
 --
 ALTER TABLE `nhom`
-  MODIFY `ma_nhom` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `ma_nhom` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `taikhoan`
 --
 ALTER TABLE `taikhoan`
-  MODIFY `ma_tai_khoan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `ma_tai_khoan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `thongbao`
 --
 ALTER TABLE `thongbao`
-  MODIFY `ma_thong_bao` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `ma_thong_bao` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables

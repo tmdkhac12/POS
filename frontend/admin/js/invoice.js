@@ -145,6 +145,8 @@ const viewInvoiceHandler = {
         this.d_inputPayment.value = hoadon.hinh_thuc_thanh_toan;
 
         this.d_tableBody.innerHTML = "";
+
+        let total = 0;
         for (const chitiet of chitiets) {
             this.d_tableBody.innerHTML += `
                 <tr>
@@ -156,10 +158,19 @@ const viewInvoiceHandler = {
                     <td>${chitiet.so_luong}</td>
                     <td>${chitiet.thanh_tien.toLocaleString("vi-VN")}</td>
                 </tr>
-            `
+            `;
+            total += chitiet.thanh_tien;
         }
 
         this.d_tableBody.innerHTML += `
+            <tr>
+                <td class="text-start fst-italic" colspan="3">Tổng thành tiền:</td>
+                <td>${total.toLocaleString("vi-VN")}</td>
+            </tr>
+            <tr>
+                <td class="text-start fst-italic" colspan="3">Tiền tích lũy sử dụng:</td>
+                <td>${hoadon.tien_da_dung.toLocaleString("vi-VN")}</td>
+            </tr>
             <tr>
                 <td class="text-start fw-bold" colspan="3">Tổng tiền:</td>
                 <td>${hoadon.tong_tien.toLocaleString("vi-VN")}</td>

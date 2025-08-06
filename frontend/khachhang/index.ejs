@@ -15,6 +15,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer> </script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha512-DxV+EoADOkOygM4IR9yXP8Sb2qwgidEmeqAEmDKIOfPRQZOWbXCzLC6vjbZyy0vPisbH2SyW27+ddLVCN+OMzQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body>
@@ -22,7 +25,12 @@
         <div class="row g-0">
             <!-- Content Section -->
             <div class="col-8">
-                <h4 class="ms-4 my-0 p-2" style="color: #2c3a57;"><%= tableInfo.ten_ban %></h4>
+                <div class="header-container d-flex justify-content-between align-items-center" >
+                    <h4 class="ms-4 my-0 p-2" style="color: #2c3a57;"><%= tableInfo.ten_ban %></h4>
+                    <button class="btn btn-outline-primary m-2" id="support-btn" title="Gọi nhân viên" style="background-color: #2c3a57;">
+                        <i class="fa-solid fa-headset" style="color: white;"></i>
+                    </button>
+                </div>
 
                 <!-- Navs bar -->
                 <nav class="py-2" style="background-color: #f8f8f8;">
@@ -221,7 +229,8 @@
     <script src="/khachhang/js/foodCard.js"></script>
     <script src="/khachhang/js/nav.js"></script>
     <script src="/khachhang/js/cart.js"></script>
-    
+    <script src="/khachhang/js/notification.js"></script>
+
     <script src="/socket.io/socket.io.js"></script>
     <script src="/khachhang/js/socket.js"></script>
 </body>

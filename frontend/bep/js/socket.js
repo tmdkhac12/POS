@@ -21,8 +21,6 @@ socket.on("update order", async (tableId) => {
 socket.on("change table", async (oldTableId, newTableId) => {
     const currentTableId = GLOBAL.tableId;
 
-    console.log({currentTableId, oldTableId, newTableId});
-
     if (currentTableId === newTableId || currentTableId === oldTableId) {
         await loadOrdersHandler.renderOrders(currentTableId);
     }
