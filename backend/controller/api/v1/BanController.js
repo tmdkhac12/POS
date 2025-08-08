@@ -1,5 +1,5 @@
 // API Controller
-const banModel = require("../../models/BanModel.js");
+const banModel = require("../../../models/BanModel.js");
 
 const getPaginatedBans = async (name, limit, offset) => {
     try {

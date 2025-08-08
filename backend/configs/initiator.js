@@ -27,17 +27,20 @@ const initRouters = function (app) {
 }
 
 const initApiRouters = (app) => {
-    app.use("/api/bans", require("../routes/api/BanRouter.js"));
-    app.use("/api/monans", require('../routes/api/MonAnRouter.js'));
-    app.use("/api/khachhangs", require('../routes/api/KhachHangRouter.js'));
-    app.use("/api/taikhoans", require('../routes/api/TaiKhoanRouter.js'));
-    app.use("/api/phanloais", require('../routes/api/PhanLoaiRouter.js'));
-    app.use("/api/khuyenmais", require('../routes/api/KhuyenMaiRouter.js'));
-    app.use("/api/hoadons", require('../routes/api/HoaDonRouter.js'));
-    app.use("/api/current-order", require('../routes/api/CurrentOrderRouter.js'));
-    app.use("/api/notification", require('../routes/api/ThongBaoRouter.js'));
+    // API version 1
+    app.use("/api/bans", require("../routes/api/v1/BanRouter.js"));
+    app.use("/api/monans", require('../routes/api/v1/MonAnRouter.js'));
+    app.use("/api/khachhangs", require('../routes/api/v1/KhachHangRouter.js'));
+    app.use("/api/taikhoans", require('../routes/api/v1/TaiKhoanRouter.js'));
+    app.use("/api/phanloais", require('../routes/api/v1/PhanLoaiRouter.js'));
+    app.use("/api/khuyenmais", require('../routes/api/v1/KhuyenMaiRouter.js'));
+    app.use("/api/hoadons", require('../routes/api/v1/HoaDonRouter.js'));
+    app.use("/api/current-order", require('../routes/api/v1/CurrentOrderRouter.js'));
+    app.use("/api/notification", require('../routes/api/v1/ThongBaoRouter.js'));
+    app.use("/api/login", sessionConfiguration.startSession, require('../routes/api/v1/LoginRouter.js'));
 
-    app.use("/api/login", sessionConfiguration.startSession, require('../routes/api/LoginRouter.js'));
+    // API version 2
+    app.use("/api/v2/current-order", require('../routes/api/v2/CurrentOrderRouter.js'));
 }
 
 const initSocketIO = (server) => {

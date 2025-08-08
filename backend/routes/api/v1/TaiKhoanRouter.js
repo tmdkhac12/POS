@@ -1,8 +1,8 @@
 const taiKhoanRouter = require("express").Router();
-const taiKhoanController = require('../../controller/api/TaiKhoanController.js');
+const taiKhoanController = require('../../../controller/api/v1/TaiKhoanController.js');
 
-const validate  = require('../../middleware/TaiKhoanMiddlerware.js').validate;
-const updateValidate  = require('../../middleware/TaiKhoanMiddlerware.js').updateValidate;
+const validate  = require('../../../middleware/TaiKhoanMiddlerware.js').validate;
+const updateValidate  = require('../../../middleware/TaiKhoanMiddlerware.js').updateValidate;
 
 taiKhoanRouter.get("/", async (req, res) => {
     // localhost:3000/api/taikhoans?page=2&search=

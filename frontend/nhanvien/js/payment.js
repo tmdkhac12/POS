@@ -174,6 +174,11 @@ const PaymentHandler = {
             const usedMoney = parseFloat(this.d_customerUseInput.value) || 0;
             const paymentMethod = document.querySelector(".payment-method.selected").getAttribute("data-method");
 
+            if (!this._validateCustomerPhone(phone) || this.d_customerNameInput.value.trim() === "" || this.d_customerAccuInput.value.trim() === "") {
+                alert("Thông tin khách hàng không hợp lệ.");
+                return;
+            }
+
             const res = await fetch("/api/hoadons/payment", {
                 headers: {
                     "Content-Type": "application/json"

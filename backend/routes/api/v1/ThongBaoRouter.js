@@ -1,5 +1,5 @@
 const thongBaoRouter = require('express').Router();
-const thongBaoController = require('../../controller/api/ThongBaoController.js');
+const thongBaoController = require('../../../controller/api/v1/ThongBaoController.js');
 
 thongBaoRouter.get("/", async (req, res) => {
     const page = parseInt(req.query.page);

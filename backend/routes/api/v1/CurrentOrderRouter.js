@@ -1,5 +1,5 @@
 const currentOrderRouter = require('express').Router();
-const currentOrderController = require('../../controller/api/CurrentOrderController.js');
+const currentOrderController = require('../../../controller/api/v1/CurrentOrderController.js');
 
 currentOrderRouter.get("/occupied-table-orders-status", async (req, res) => {
     try {

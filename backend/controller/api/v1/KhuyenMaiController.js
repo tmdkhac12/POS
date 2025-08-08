@@ -1,4 +1,4 @@
-const khuyenMaiModel = require('../../models/KhuyenMaiModel.js');
+const khuyenMaiModel = require('../../../models/KhuyenMaiModel.js');
 
 const getPaginatedKhuyenMais = async (name, start, end, limit, offset) => {
     try {

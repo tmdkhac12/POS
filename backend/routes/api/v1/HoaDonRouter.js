@@ -1,5 +1,5 @@
 const hoaDonRouter = require("express").Router();
-const hoaDonController = require('../../controller/api/HoaDonController.js');
+const hoaDonController = require('../../../controller/api/v1/HoaDonController.js');
 
 hoaDonRouter.get("/", async (req, res) => {
     // localhost:3000/api/hoadons?page=2

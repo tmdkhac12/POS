@@ -1,8 +1,8 @@
 const monAnRouter = require('express').Router();
-const monAnController = require('../../controller/api/MonAnController.js');
+const monAnController = require('../../../controller/api/v1/MonAnController.js');
 
-const upload = require('../../util/UploadImage.js').uploadMonAn;
-const { validate } = require('../../middleware/MonAnMiddleware.js');
+const upload = require('../../../util/UploadImage.js').uploadMonAn;
+const { validate } = require('../../../middleware/MonAnMiddleware.js');
 
 monAnRouter.get("/", async (req, res) => {
     // localhost:3000/api/monans?page=2

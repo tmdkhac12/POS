@@ -1,8 +1,8 @@
 const banRouter = require("express").Router();
-const banController = require('../../controller/api/BanController.js');
+const banController = require('../../../controller/api/v1/BanController.js');
 
-const { validate } = require("../../middleware/BanMiddleware.js");
-const { validateUpdateStatus } = require("../../middleware/BanMiddleware.js");
+const { validate } = require("../../../middleware/BanMiddleware.js");
+const { validateUpdateStatus } = require("../../../middleware/BanMiddleware.js");
 
 banRouter.get("/", async (req, res) => {
     // localhost:3000/api/bans?page=2&search=

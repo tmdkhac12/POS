@@ -1,4 +1,4 @@
-const monAnModel = require('../../models/MonAnModel.js');
+const monAnModel = require('../../../models/MonAnModel.js');
 
 const getPaginatedMonAns = async (name, limit, offset) => {
     try {

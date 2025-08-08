@@ -1,8 +1,8 @@
 const phanLoaiRouter = require('express').Router();
-const phanLoaiController = require('../../controller/api/PhanLoaiController.js');
+const phanLoaiController = require('../../../controller/api/v1/PhanLoaiController.js');
 
-const upload = require("../../util/UploadImage.js").uploadPhanLoai;
-const { validate } = require('../../middleware/PhanLoaiMiddleware.js');
+const upload = require("../../../util/UploadImage.js").uploadPhanLoai;
+const { validate } = require('../../../middleware/PhanLoaiMiddleware.js');
 
 phanLoaiRouter.get("/", async (req, res) => {
     // localhost:3000/api/phanloais?page=2&saerch=

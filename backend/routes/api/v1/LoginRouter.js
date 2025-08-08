@@ -1,5 +1,5 @@
 const loginRouter = require('express').Router();
-const taiKhoanController = require('../../controller/api/TaiKhoanController');
+const taiKhoanController = require('../../../controller/api/v1/TaiKhoanController');
 
 loginRouter.post("/", async (req, res) => {
     try {

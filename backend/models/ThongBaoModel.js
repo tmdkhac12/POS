@@ -45,6 +45,17 @@ const createNotification = async (tableId, content, status, category) => {
     }
 }
 
+const createUnreadNotification = async (tableId, content, category) => {
+    const sql = "INSERT INTO thongbao (ma_ban, noi_dung, trang_thai, phan_loai) VALUES (?, ?, ?, ?)";
+
+    try {
+        const [result] = await pool.execute(sql, [tableId, content, 0, category]);
+        return result.insertId;
+    } catch (error) {
+        throw new Error("Create Notification (ThongBaoModel): " + error.message);
+    }
+}
+
 const updateStatusAsRead = async (id) => {
     const sql = "UPDATE thongbao SET trang_thai = 1 WHERE ma_thong_bao = ?";
 
@@ -59,6 +70,6 @@ const updateStatusAsRead = async (id) => {
 
 module.exports = {
     getAllNotifications, getNotifications, getNotificationById,
-    createNotification,
+    createNotification, createUnreadNotification,
     updateStatusAsRead
 }

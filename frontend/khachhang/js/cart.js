@@ -142,6 +142,11 @@ const cartHandler = {
             if (confirm("Bạn có chắc muốn gọi những món trên?")) {
                 // 1. Lấy thông tin các món ăn và đẩy vào orders
                 const cart = this.ao_cart;
+                if (cart.length === 0) {
+                    alert("Giỏ hàng của bạn đang trống!");
+                    return;
+                }
+
                 const orders = [];
 
                 for (const dish of cart) {
@@ -155,29 +160,34 @@ const cartHandler = {
                 const tableId = window.location.href.split('/')[5];
 
                 // 2. Gọi API đặt món  
-                const res = await fetch("/api/current-order", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        maBan: tableId,
-                        orders
+                try {
+                    const res = await fetch("/api/v2/current-order/place-orders", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            maBan: tableId,
+                            orders,
+                            category: "Gọi món"
+                        })
                     })
-                })
-                const data = await res.json();
+                    const data = await res.json();
 
-                // 3. Cập nhật thông tin trên cart, orderedCart, xóa localStorage.
-                if (data.success) {
-                    this.updateTotal();
-                    await orderedCartHandler.updateTableStatus("Có khách");
-                    await orderedCartHandler.renderOrders();
-                    localStorage.clear();
-                    this.loadCart();
-                    placeOrder();
-                    NotificationHandler.sendOrderNotification(tableId);
-                } else {
-                    alert(data.message);
+                    // 3. Cập nhật thông tin trên cart, orderedCart, xóa localStorage.
+                    if (data.success) {
+                        this.updateTotal();
+                        await orderedCartHandler.updateTableStatus("Có khách");
+                        await orderedCartHandler.renderOrders();
+                        localStorage.clear();
+                        this.loadCart();
+                        placeOrder();
+                        sendNotificationSocket(data.notificationId);
+                    } else {
+                        alert(data.message);
+                    }
+                } catch (error) {
+                    alert("Lỗi khi đặt món, vui lòng thử lại sau.");
                 }
             }
         });

@@ -1,14 +1,14 @@
 // API Controller
-const hoaDonModel = require("../../models/HoaDonModel.js");
-const chiTietHoaDonModel = require('../../models/ChiTietHoaDonModel.js');
-const currentOrderModel = require('../../models/CurrentOrderModel.js');
-const khachHangModel = require('../../models/KhachHangModel.js');
-const banModel = require('../../models/BanModel.js');
+const hoaDonModel = require("../../../models/HoaDonModel.js");
+const chiTietHoaDonModel = require('../../../models/ChiTietHoaDonModel.js');
+const currentOrderModel = require('../../../models/CurrentOrderModel.js');
+const khachHangModel = require('../../../models/KhachHangModel.js');
+const banModel = require('../../../models/BanModel.js');
 
 
-const hoaDonUtil = require('../../util/HoaDonUtil.js');
+const hoaDonUtil = require('../../../util/HoaDonUtil.js');
 
-const pool = require("../../configs/connection.js").promise();
+const pool = require("../../../configs/connection.js").promise();
 
 const getPaginatedHoaDons = async (key, start, end, limit, offset) => {
     try {
@@ -48,6 +48,9 @@ const payment = async (tableId, usedMoney, phone, paymentMethod) => {
 
         let total = 0;
         const khachHang = await khachHangModel.getKhachHangByPhone(phone);
+        if (!khachHang) {
+            throw new Error("Khách hàng không tồn tại");
+        }
         
         // Lấy orders của bàn 
         const orders = await currentOrderModel.getCurrentOrdersByTable(tableId);

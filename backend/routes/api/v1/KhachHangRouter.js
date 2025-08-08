@@ -1,8 +1,8 @@
 const khachHangRouter = require('express').Router();
-const khachHangController = require('../../controller/api/KhachHangController.js');
+const khachHangController = require('../../../controller/api/v1/KhachHangController.js');
 
-const validateKhachHang = require("../../middleware/KhachHangMiddleware.js").validateKhachHang;
-const parser = require('../../util/Parser.js');
+const validateKhachHang = require("../../../middleware/KhachHangMiddleware.js").validateKhachHang;
+const parser = require('../../../util/Parser.js');
 
 khachHangRouter.get("/", async (req, res) => {
     // localhost:3000/api/khachangs?page=2

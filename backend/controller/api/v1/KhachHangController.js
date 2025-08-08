@@ -1,4 +1,4 @@
-const khachHangModel = require('../../models/KhachHangModel.js');
+const khachHangModel = require('../../../models/KhachHangModel.js');
 
 const getPaginatedKhachHangs = async (name, limit, offset) => {
     try {

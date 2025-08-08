@@ -1,4 +1,4 @@
-const taiKhoanModel = require('../../models/TaiKhoanModel.js');
+const taiKhoanModel = require('../../../models/TaiKhoanModel.js');
 const bcrypt = require('bcrypt');
 
 const getPaginatedTaiKhoans = async (name, limit, offset) => {

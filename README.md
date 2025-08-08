@@ -1,98 +1,111 @@
-# POS (Point of Sale)
-POS (Point of Sale) là một hệ thống quản lý bán hàng được thiết kế đặc biệt cho các nhà hàng, quán ăn, quán bida,... Với giao diện thân thiện và các tính năng mạnh mẽ, hệ thống này giúp tối ưu hóa quy trình quản lý đơn hàng cũng như quản lý thu chi cho người sử dụng từ đó phục vụ khách hàng và quản lý được tối ưu hóa và hiệu quả hơn.
+# Fast Food POS 🍔🍜☕
+An effective **Point of Sale (POS)** system tailored for restaurants, fast food shops, and cafes. This system allows **customers to place orders** directly from tablets, while **staff and kitchen** teams manage and track order statuses on their own devices.
 
+## 📚 Table of Contents
 
-## Mục lục
-- [Giới thiệu](#giới-thiệu)
-- [Tính năng chính](#tính-năng-chính)
-- [Công nghệ sử dụng](#công-nghệ-sử-dụng)
-- [Cấu trúc thư mục](#cấu-trúc-thư-mục)
-- [Hướng dẫn cài đặt](#hướng-dẫn-cài-đặt)
+- [🌟 Features](#-features)
+- [📸 Demo & Screenshots](#-demo--screenshots)
+- [👩‍💼 User Roles & Demo Accounts](#-user-roles--demo-accounts)
+- [🛠 Technologies Used](#-technologies-used)
+- [📁 Project Structure](#-project-structure)
+- [🔧 Installation Guide](#-installation-guide)
 
-## Giới thiệu
-Hệ thống POS (Point of Sale) của dự án này là một hệ thống quản lý nhà hàng bán thức ăn nhanh, được thiết kế nhằm tối ưu hóa quy trình quản lý đơn hàng và phục vụ khách hàng. Hệ thống cung cấp các giao diện thân thiện và trực quan cho khách hàng, nhân viên và bếp.
+## 🌟 Features
 
-## Tính năng chính
-- **Đặt món ăn**: Khách hàng sử dụng máy tính bảng để chọn và đặt món một cách nhanh chóng.  
-- **Quản lý đơn hàng**: Theo dõi danh sách các món ăn đã đặt, trạng thái thực hiện, và thông tin theo từng bàn.  
-- **Phân quyền**:
-  - **Khách hàng**: Chỉ có quyền đặt món.  
-  - **Nhân viên**: Chỉ có quyền xem trạng thái món ăn.  
-  - **Bếp**: Có quyền đánh dấu món ăn là "Đã hoàn thành".  
-  - **Admin**: Có quyền xem doanh thu cũng như thống kê doanh thu của nhà hàng, thêm xóa sửa các món ăn. 
-- **Giao diện tách biệt**:
-  - `fastfoodpos.com/khachhang` dành cho khách hàng.  
-  - `fastfoodpos.com/bep` dành cho bếp.  
-  - `fastfoodpos.com/nhanvien` dành cho nhân viên. 
-  - `fastfoodpos.com/admin` dành cho người quản trị.  
-- **Quản lý món ăn**: Chủ nhà hàng có thể thêm, sửa, hoặc xóa món ăn qua giao diện quản trị.
+- 🖥️ Customer interface to place orders easily
+- 👩‍💼 Staff interface to monitor completed dishes for serving
+- 🧑‍🍳 Kitchen interface to manage and complete dishes
+- 🧑‍💼 Admin interface to manage menu, bills, user accounts, ...
+- 🧾 Real-time order updates
+- 🔒 Role-based interface access using login authentication
 
-## Công nghệ sử dụng
+## 📸 Demo & Screenshots
+
+For a complete demo and project description, check out the LinkedIn post here:
+🔗 [POS Introduction]()
+
+## 👩‍💼 User Roles & Demo Accounts
+Here are the pre-created accounts available in the system:
+
+| Username  | Password   | Role       |
+|-----------|------------|------------|
+| `admin`   | `admin123` | Admin      |
+| `nhanvien`| `admin123` | Staff      |
+| `bep`     | `admin123` | Kitchen    |
+
+> You can use these accounts to test different interfaces and functionalities.
+
+## Technologies Used
 - **Frontend**: HTML, CSS, JavaScript, Bootstrap 5.  
 - **Backend**: Node.js, Express.js.  
-- **Ứng dụng**: Web Application.
+- **Application Type**: Web Application.
 
-## Cấu trúc thư mục
+## Project Structure 
 ```
 POS/
 ├── backend/
-│   ├── configs/        # Chứa các files cấu hình cho server và các modules 
-│   ├── controllers/    # Chứa các files controller cho các routes 
-│   ├── database/       # Chứa thư các files khởi tạo database 
-│   ├── routes/         # Chứa các files định tuyến và API cho các routes 
-│   └── .env            # Chứa các biến môi trường cần thiết
-│   └── server.js       # File chính tạo server 
+│   ├── configs/        # Configuration files for server and modules
+│   ├── controllers/    # Logic for handling API requests
+│   ├── database/       # File to create database
+│   ├── middleware/     # Custom middleware for authentication, logging etc.
+│   ├── models/         # Database models 
+│   ├── routes/         # API, SSR route definitions
+│   ├── util/           # Utility/helper functions
+│   ├── .env            # Environment variable configuration file
+│   ├── server.js       # Entry point of the backend server
 ├── frontend/
-│   ├── admin/          # Chứa giao diện admin 
-│   ├── bep/            # Chứa giao diện bếp  
-│   ├── nhanvien/       # Chứa giao diện nhân viên
-│   ├── khachhang/      # Chứa giao diện khách hàng
-├── .env.example 
-├── .gitignore
-├── package-lock.json
-├── package.json
-└── README.md
+│   ├── admin/          # Admin interface
+│   ├── bep/            # Kitchen interface
+│   ├── images/         # Static image assets
+│   ├── khachhang/      # Customer interface
+│   ├── login/          # Login page interface
+│   ├── nhanvien/       # Staff interface
+├── .env.example        # Example environment configuration file
+├── .gitignore          
+├── package-lock.json   
+├── package.json        
+├── README.md           
+
 ```  
 
-## Hướng dẫn cài đặt
+## 🔧 Installation Guide
 
-### 1. Cài đặt Node.JS
-Nếu máy tính của bạn đã có Node.JS, có thể bỏ qua phần này và đến với phần tiếp theo, nếu chưa có thì [cài đặt Node.JS](https://nodejs.org/en) theo hướng dẫn sau nhé  
+### 1. Install Node.js
+If Node.js is already installed, you can skip this step. Otherwise, please install it by following the guide at https://nodejs.org/en. 
 
-### 2. Cài đặt dự án 
-Đầu tiên, bạn cần clone repository về máy tính của mình:
+### 2. Clone the Project
+Clone the repository to your local machine:
 ```
-# Clone dự án 
+# Clone the project
 git clone https://github.com/tmdkhac12/POS.git
 
-# Move vào thư mục dự án 
+# Navigate into the project directory
 cd POS
 
-# Cài đặt các thư viện phụ thuộc 
-npm install 
+# Install dependencies
+npm install
 ```
 
-### 3. Cấu hình file .env
-Dự án sử dụng các biến môi trường để lưu trữ thông tin nhạy cảm, do đó tôi không thể public file **_.env_**, vì thế bạn hãy tự cấu hình nó theo hướng dẫn sau nhé:
+### 3. Configure the .env File
+This project uses environment variables for sensitive information, so the .env file is not included. Please create and configure it as follows:
 
-- Tạo file .env: `cp .env.example ./backend/.env`
-- Mở file .env và cấu hình các thông số phù hợp
+- Create the .env file: `cp .env.example ./backend/.env`
+- Open .env and set the appropriate values:
 ```
 PORT=your_port
 ...
-DATABASE_URL=your_db_url
+SESSION_SECRET=your_session_secret
 ```
 
-### 4. Khởi chạy server backend
-Chạy lệnh sau để khởi chạy server backend:
+### 4. Start the Backend Server
+To run the backend server:
 ```
 npm run dev 
 ```
 
-### 5. Truy cập ứng dụng
-Sau khi server khởi động thành công, bạn có thể truy cập ứng dụng qua trình duyệt tại:
-`http://localhost:<port>/<frontend_module_name>` (truyền các tham số tương ứng mà bạn đã cấu hình trong .env). Ví dụ trong trường hợp của tôi:  
-- Truy cập `http://localhost:3000/nhanvien` để vào giao diện nhân viên.
-- Truy cập `http://localhost:3000/khachhang` để vào giao diện khách hàng.
-- Truy cập `http://localhost:3000/bep` để vào giao diện của bếp.
-- Truy cập `http://localhost:3000/admin` để vào giao diện người quản trị.
+### 5. Run the app
+Once the server is up and running, open your browser and access:
+`http://localhost:<port>/<frontend_module_name>`<br><br>
+Example (based on default setup):
+- `http://localhost:3000/khachhang` – Customer interface
+- `http://localhost:3000/login` – Login interface (use the username and password at [👩‍💼 User Roles & Demo Accounts](#-user-roles--demo-accounts) to access the interface you want)

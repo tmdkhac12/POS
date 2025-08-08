@@ -1,8 +1,8 @@
-const currentOrderModel = require('../../models/CurrentOrderModel.js');
-const monAnModel = require('../../models/MonAnModel.js'); 
-const banModel = require('../../models/BanModel.js');
+const currentOrderModel = require('../../../models/CurrentOrderModel.js');
+const monAnModel = require('../../../models/MonAnModel.js'); 
+const banModel = require('../../../models/BanModel.js');
 
-const pool = require('../../configs/connection.js').promise();
+const pool = require('../../../configs/connection.js').promise();
 
 const getCurrentOrdersByTable = async (tableId) => {
     try {

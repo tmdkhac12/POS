@@ -1,7 +1,7 @@
 const khuyenMaiRouter = require('express').Router();
-const khuyenMaiController = require('../../controller/api/KhuyenMaiController.js');
+const khuyenMaiController = require('../../../controller/api/v1/KhuyenMaiController.js');
 
-const validate = require('../../middleware/KhuyenMaiMiddleware.js').validateKhuyenMai;
+const validate = require('../../../middleware/KhuyenMaiMiddleware.js').validateKhuyenMai;
 
 khuyenMaiRouter.get("/", async (req, res) => {
     // localhost:3000/api/khuyenmais?page=2

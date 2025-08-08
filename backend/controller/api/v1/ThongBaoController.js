@@ -1,7 +1,7 @@
-const banModel = require('../../models/BanModel.js');
-const thongBaoModel = require('../../models/ThongBaoModel.js');
+const banModel = require('../../../models/BanModel.js');
+const thongBaoModel = require('../../../models/ThongBaoModel.js');
 
-const thongBaoUtil = require('../../util/NotificationUtil.js');
+const thongBaoUtil = require('../../../util/NotificationUtil.js');
 
 const getNotifications = async (limit, offset) => {
     try {

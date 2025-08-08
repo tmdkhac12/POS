@@ -1,4 +1,4 @@
-const nhomModel = require('../../models/NhomModel.js');
+const nhomModel = require('../../../models/NhomModel.js');
 
 const getPaginatedPhanLoais = async (name, limit, offset) => {
     try {
