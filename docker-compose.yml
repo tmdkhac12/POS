@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  backend:
+    build: . 
+    ports:
+      - "3005:3005"
+    environment:
+      PORT: 3005
+      DB_PORT: 3306
+      DB_HOST: mariadb
+      DB_NAME: pos
+      DB_USER: pos_user
+      DB_PASSWORD: 123456
+      SESSION_SECRET: abc
+    depends_on:
+      - mariadb 
+
+  mariadb:
+    image: mariadb:12
+    environment:
+      LANG: C.UTF-8 
+      TZ: Asia/Ho_Chi_Minh
+      MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: yes     # Allow the root password to be empty
+      MARIADB_DATABASE: pos                      # Name of the default database to create
+      MARIADB_USER: pos_user                     # Create a user that can only operate in the MARIADB_DATABASE
+      MARIADB_PASSWORD: 123456
+    ports:
+      - "3307:3306"
+    command: --lower_case_table_names=1
+    volumes:
+      - ./backend/database:/docker-entrypoint-initdb.d  
