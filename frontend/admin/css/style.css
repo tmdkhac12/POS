@@ -1,45 +1,52 @@
 .col-2 {
-    height: 100vh;
-    position: fixed;
-    display: flex;
-    flex-direction: column;
+  height: 100vh;
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+}
+
+.col-2.statistical-btn {
+  height: inherit;
+  position: inherit;
+  display: inherit;
+  flex-direction: inherit;
 }
 
 /* Left Nav */
 ul.nav {
-    flex: 1;
+  flex: 1;
 }
 
 .nav-link {
-    font-size: 1.1rem !important;
-    color: black !important;
-    border: none !important;
+  font-size: 1.1rem !important;
+  color: black !important;
+  border: none !important;
 }
 
 .nav-link.active {
-    border: none !important;
-    color: #dc3545 !important;
+  border: none !important;
+  color: #dc3545 !important;
 }
 
 .nav-item {
-    padding: 0 12px;
+  padding: 0 12px;
 }
 
 .content-area {
-    position: absolute;
-    right: 0;
-    overflow-y: auto;
-    max-height: 100vh;
+  position: absolute;
+  right: 0;
+  overflow-y: auto;
+  max-height: 100vh;
 }
 
 /* Tab pane */
 .tab-pane {
-    padding: 0 !important;
+  padding: 0 !important;
 }
 
 /* Table */
 table th,
 table td {
-    text-align: center;
-    vertical-align: middle;
+  text-align: center;
+  vertical-align: middle;
 }

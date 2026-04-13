@@ -1,115 +1,157 @@
 const pool = require('../configs/connection.js').promise();
 
 const getAllHoaDons = async () => {
-    const sql = "select * from hoadon";
+  const sql = "select * from hoadon";
 
-    try {
-        const [result] = await pool.query(sql);
+  try {
+    const [result] = await pool.query(sql);
 
-        return result;        
-    } catch (error) {
-        throw new Error("Get All Hoa Don (HoaDonModel): " + error.message);
-    }
+    return result;
+  } catch (error) {
+    throw new Error("Get All Hoa Don (HoaDonModel): " + error.message);
+  }
 }
 
 const getHoaDonOfKhachHang = async (id) => {
-    const sql = "select * from hoadon where ma_khach_hang = ?";    
+  const sql = "select * from hoadon where ma_khach_hang = ?";
 
-    try {
-        const [result] = await pool.execute(sql, [id]);
+  try {
+    const [result] = await pool.execute(sql, [id]);
 
-        return result;        
-    } catch (error) {
-        throw new Error("Get Hoa Don Of Khach Hang (HoaDonModel): " + error.message);
-    }
+    return result;
+  } catch (error) {
+    throw new Error("Get Hoa Don Of Khach Hang (HoaDonModel): " + error.message);
+  }
 }
 
 const getHoaDonById = async (id) => {
-    const sql = "select * from hoadon where ma_hoa_don = ?";    
+  const sql = "select * from hoadon where ma_hoa_don = ?";
 
-    try {
-        const [result] = await pool.execute(sql, [id]);
+  try {
+    const [result] = await pool.execute(sql, [id]);
 
-        return result[0];        
-    } catch (error) {
-        throw new Error("Get Hoa Don By Id (HoaDonModel): " + error.message);
-    }
+    return result[0];
+  } catch (error) {
+    throw new Error("Get Hoa Don By Id (HoaDonModel): " + error.message);
+  }
 }
 
 const getHoaDonJoinKhachHangById = async (id) => {
-    const sql = `select hd.*, kh.ten_khach_hang, kh.so_dien_thoai
+  const sql = `select hd.*, kh.ten_khach_hang, kh.so_dien_thoai
                 from hoadon hd inner join khachhang kh on hd.ma_khach_hang = kh.ma_khach_hang
-                where ma_hoa_don = ?`;    
+                where ma_hoa_don = ?`;
 
-    try {
-        const [result] = await pool.execute(sql, [id]);
+  try {
+    const [result] = await pool.execute(sql, [id]);
 
-        return result[0];        
-    } catch (error) {
-        throw new Error("Get Hoa Don By Id (HoaDonModel): " + error.message);
-    }
+    return result[0];
+  } catch (error) {
+    throw new Error("Get Hoa Don By Id (HoaDonModel): " + error.message);
+  }
 }
 
 const getHoaDonsJoinKhachHang = async (limit, offset) => {
-    const sql = `select hd.*, kh.ten_khach_hang, kh.so_dien_thoai 
+  const sql = `select hd.*, kh.ten_khach_hang, kh.so_dien_thoai 
                 from hoadon hd inner join khachhang kh on hd.ma_khach_hang = kh.ma_khach_hang
                 limit ? offset ?`;
 
-    try {
-        const [result] = await pool.execute(sql, [limit, offset]);
+  try {
+    const [result] = await pool.execute(sql, [limit, offset]);
 
-        return result;        
-    } catch (error) {
-        throw new Error("Get Hoa Don Limit Offset (HoaDonModel): " + error.message);
-    }
+    return result;
+  } catch (error) {
+    throw new Error("Get Hoa Don Limit Offset (HoaDonModel): " + error.message);
+  }
 }
 
 const searchHoaDon = async (key, start, end, limit, offset) => {
-    const sql = `select hd.*, kh.ten_khach_hang, kh.so_dien_thoai 
+  const sql = `select hd.*, kh.ten_khach_hang, kh.so_dien_thoai 
                 from hoadon hd inner join khachhang kh on hd.ma_khach_hang = kh.ma_khach_hang
                 where (kh.ten_khach_hang like ? or kh.so_dien_thoai like ?) 
                     and (? is null or thoi_gian_tao >= ?) and (? is null or thoi_gian_tao <= ?)
                 limit ? offset ?`;
 
-    try {
-        const [result] = await pool.execute(sql, [`%${key}%`, `%${key}%`, start, start, end, end, limit, offset]);
+  try {
+    const [result] = await pool.execute(sql, [`%${key}%`, `%${key}%`, start, start, end, end, limit, offset]);
 
-        return result;        
-    } catch (error) {
-        throw new Error("Search Hoa Don (HoaDonModel): " + error.message);
-    }
+    return result;
+  } catch (error) {
+    throw new Error("Search Hoa Don (HoaDonModel): " + error.message);
+  }
 }
 
 const getNumberOfHoaDon = async (key, start, end) => {
-    const sql = `select count(*) as soluong 
+  const sql = `select count(*) as soluong 
                 from hoadon hd inner join khachhang kh on hd.ma_khach_hang = kh.ma_khach_hang
                 where (kh.ten_khach_hang like ? or kh.so_dien_thoai like ?) 
                 and (? is null or thoi_gian_tao >= ?) and (? is null or thoi_gian_tao <= ?)`;
 
-    try {
-        const [result] = await pool.execute(sql, [`%${key}%`, `%${key}%`, start, start, end, end]);
+  try {
+    const [result] = await pool.execute(sql, [`%${key}%`, `%${key}%`, start, start, end, end]);
 
-        return result[0].soluong;        
-    } catch (error) {
-        throw new Error("Get Number of Hoa Don (HoaDonModel): " + error.message);
-    }
+    return result[0].soluong;
+  } catch (error) {
+    throw new Error("Get Number of Hoa Don (HoaDonModel): " + error.message);
+  }
 }
 
 const insertHoaDon = async (total, newAccu, usedMoney, paymentMethod, khachHangId, conn = pool) => {
-    const sql = `insert into hoadon(tong_tien, tien_tich_duoc, tien_da_dung, hinh_thuc_thanh_toan, ma_khach_hang)
+  const sql = `insert into hoadon(tong_tien, tien_tich_duoc, tien_da_dung, hinh_thuc_thanh_toan, ma_khach_hang)
                 values (?,?,?,?,?)`;
 
-    try {
-        const [result] = await conn.execute(sql, [total, newAccu, usedMoney, paymentMethod, khachHangId]);
+  try {
+    const [result] = await conn.execute(sql, [total, newAccu, usedMoney, paymentMethod, khachHangId]);
 
-        return result.insertId;        
-    } catch (error) {
-        throw new Error("Insert Hoa Don (HoaDonModel): " + error.message);
-    }               
+    return result.insertId;
+  } catch (error) {
+    throw new Error("Insert Hoa Don (HoaDonModel): " + error.message);
+  }
 }
 
-module.exports = { 
-    getAllHoaDons, getNumberOfHoaDon, getHoaDonOfKhachHang, getHoaDonById, getHoaDonJoinKhachHangById, getHoaDonsJoinKhachHang,
-    searchHoaDon,
-    insertHoaDon
+const getRevenueByDateRange = async (startDate, endDate) => {
+  let sql = "";
+  const params = [startDate, endDate];
+
+  // Kiểm tra xem có phải cùng 1 ngày không (cắt chuỗi lấy YYYY-MM-DD)
+  const isSameDay = startDate.split(' ')[0] === endDate.split(' ')[0];
+
+  if (isSameDay) {
+    // SQL cho trường hợp TRÙNG NGÀY: Lấy theo giờ
+    sql = `
+            SELECT 
+                HOUR(thoi_gian_tao) as hour, 
+                SUM(tong_tien) as revenue, 
+                COUNT(ma_hoa_don) as totalInvoices
+            FROM HoaDon 
+            WHERE thoi_gian_tao BETWEEN ? AND ?
+            GROUP BY HOUR(thoi_gian_tao)
+            ORDER BY HOUR(thoi_gian_tao) ASC
+        `;
+  } else {
+    // SQL cho trường hợp NHIỀU NGÀY: Lấy theo ngày
+    sql = `
+            SELECT 
+                DATE(thoi_gian_tao) as date, 
+                SUM(tong_tien) as revenue, 
+                COUNT(ma_hoa_don) as totalInvoices
+            FROM HoaDon 
+            WHERE thoi_gian_tao BETWEEN ? AND ?
+            GROUP BY DATE(thoi_gian_tao)
+            ORDER BY DATE(thoi_gian_tao) ASC
+        `;
+  }
+
+  try {
+    const [result] = await pool.execute(sql, params);
+    return result;
+  } catch (error) {
+    throw new Error("Get Revenue (HoaDonModel): " + error.message);
+  }
+};
+
+module.exports = {
+  getAllHoaDons, getNumberOfHoaDon, getHoaDonOfKhachHang, getHoaDonById, getHoaDonJoinKhachHangById,
+  getHoaDonsJoinKhachHang, getRevenueByDateRange,
+  searchHoaDon,
+  insertHoaDon
 }

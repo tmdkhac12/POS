@@ -1,11 +1,84 @@
-<!-- Statistical tab -->
+<!-- Statistical Tab -->
 <div class="tab-pane fade" id="statistical">
-    <div class="card border-0">
-        <div class="card-header bg-info text-white rounded-top">
-            <h5 class="mb-0"><i class="bi bi-bar-chart-fill me-2"></i>Thống Kê Doanh Thu</h5>
-        </div>
-        <div class="card-body">
-            <p>Đây là khu vực thống kê. Bạn có thể xem báo cáo doanh thu và các số liệu tại đây.</p>
-        </div>
+  <header>
+    <h3>Thống kê & Báo cáo</h3>
+  </header>
+
+  <!-- Form for filter -->
+  <form id="filter-statistical-form" class="row align-items-end mb-4">
+    <div class="col-3">
+      <label class="form-label">Từ ngày</label>
+      <input type="date" class="form-control" id="stat-startDate">
     </div>
+    <div class="col-3">
+      <label class="form-label">Đến ngày</label>
+      <input type="date" class="form-control" id="stat-endDate">
+    </div>
+    <!-- <div class="col-3">
+      <label class="form-label">Loại báo cáo</label>
+      <select class="form-select" id="stat-type">
+        <option value="revenue">Doanh thu</option>
+        <option value="product">Món ăn bán chạy</option>
+      </select>
+    </div> -->
+    <div class="col-2 statistical-btn">
+      <button class="btn btn-primary w-100" type="submit">Xem báo cáo</button>
+    </div>
+  </form>
+
+  <!-- 3 overview cards  -->
+  <div class="row mb-4">
+    <div class="col-md-4">
+      <div class="card shadow-sm border-0 bg-light">
+        <div class="card-body text-center">
+          <h6 class="text-muted">Tổng doanh thu</h6>
+          <h4 class="text-danger fw-bold" id="total-revenue">0đ</h4>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card shadow-sm border-0 bg-light">
+        <div class="card-body text-center">
+          <h6 class="text-muted">Tổng hóa đơn</h6>
+          <h4 class="text-dark fw-bold" id="total-invoices">0</h4>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card shadow-sm border-0 bg-light">
+        <div class="card-body text-center">
+          <h6 class="text-muted">Món bán chạy nhất</h6>
+          <h4 class="text-success fw-bold" id="top-product">-</h4>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <!-- Chart -->
+    <div class="col-lg-7 mb-3">
+      <div class="p-3 border border-1 bg-white" style="min-height: 400px;">
+        <h5 class="mb-3">Biểu đồ tăng trưởng</h5>
+        <canvas id="revenueChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Popular Dishes Table -->
+    <div class="col-lg-5 mb-3">
+      <div class="table-container p-3 border border-1 bg-white">
+        <h5 class="mb-3">Top món bán chạy</h5>
+        <table class="table table-hover mb-0" id="top-products-table">
+          <thead class="table-dark">
+            <tr>
+              <th>Tên món</th>
+              <th>Số lượng</th>
+              <th>Doanh thu</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 </div>

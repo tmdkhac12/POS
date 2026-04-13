@@ -1,0 +1,29 @@
+/* Statistical Tab Styles */
+#statistical .card {
+  transition: transform 0.2s ease-in-out;
+}
+
+#statistical .card:hover {
+  transform: translateY(-5px);
+}
+
+#statistical .statistical-btn {
+  margin-bottom: 3px;
+}
+
+#statistical .table-container {
+  border-radius: 8px;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  height: 100%;
+}
+
+#statistical canvas {
+  max-height: 350px;
+  width: 100% !important;
+}
+
+#statistical .text-muted {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
